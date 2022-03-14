@@ -1,13 +1,19 @@
 # Welcome to the Reality Toolkit by the Reality Collective
 (an official fork of the XRTK - Mixed Reality Toolkit)
 
-<!-- ![The Mixed Reality Toolkit](https://raw.githubusercontent.com/XRTK/XRTK-Core/development/images/Branding/XRTK_Logo_1200x250.png)-->
+![The Reality Toolkit by the Reality Collective](/assets/branding/Reality-Collective.png)
 
 The Toolkit's primary focus is to make it extremely easy to get started creating Mixed Reality applications and to accelerate deployment to multiple platforms from the same Unity project.
+
+### [Check out the project here](https://github.com/realitycollective/realitytoolkit.dev)
 
 ## Getting Started
 
 (Coming Soon))
+
+Some documentation for generating additional UPM platforms for the Reality Toolkit:
+
+* [Using the Reality Collective repository generator to create new platforms](/_posts/2022-03-13-using-project-template-generator.md)
 
 ## Overview
 
