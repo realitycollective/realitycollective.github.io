@@ -1,7 +1,7 @@
 # Welcome to the Reality Toolkit by the Reality Collective
 (an official fork of the XRTK - Mixed Reality Toolkit)
 
-![The Reality Toolkit by the Reality Collective](/assets/branding/Reality-Collective.png)
+![The Reality Toolkit by the Reality Collective](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollective_HorizontalLogo_1024.png?raw=true)
 
 The Toolkit's primary focus is to make it extremely easy to get started creating Mixed Reality applications and to accelerate deployment to multiple platforms from the same Unity project.
 
