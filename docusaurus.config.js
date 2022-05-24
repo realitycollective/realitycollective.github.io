@@ -9,7 +9,7 @@ const config = {
   title: 'Reality Toolkit',
   tagline: 'Official documentation for the Reality Toolkit by the Reality Collective',
   url: 'https://realitycollective.github.io',
-  baseUrl: '/realitycollective.github.io/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
