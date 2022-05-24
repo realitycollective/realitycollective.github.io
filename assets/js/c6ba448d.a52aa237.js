@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkreality_toolkit_docs=self.webpackChunkreality_toolkit_docs||[]).push([[849],{4101:function(t){t.exports=JSON.parse('{"label":"upm","permalink":"/blog/tags/upm","allTagsPath":"/blog/tags","count":1}')}}]);
