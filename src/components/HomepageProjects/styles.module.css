@@ -1,0 +1,30 @@
+.projects {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.projectItem {
+  background-color: var(--ifm-color-primary);
+  color: #fff;
+  cursor: pointer;
+}
+
+.projectItem_Content {
+  padding: 16px;
+  height: 164px;
+}
+
+.projectItem_Link {
+  background-color: #303846;
+  padding: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.projectItem_Link_SVG {
+  width: 24px;
+  height: 24px;
+}

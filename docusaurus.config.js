@@ -6,9 +6,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Reality Toolkit',
-  tagline: 'Official documentation for the Reality Toolkit by the Reality Collective',
-  url: 'https://realitycollective.github.io',
+  title: 'Reality Collective',
+  tagline: 'Official website of the Reality Collective',
+  url: 'https://realitycollective.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -46,26 +46,23 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Reality Toolkit',
+        title: 'Reality Collective',
         logo: {
           alt: 'Reality Collective',
           src: 'img/logo.png',
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'get-started',
-            position: 'left',
-            label: 'Documentation',
-          },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/about', label: 'About Us', position: 'left'},
+          {to: '/mission', label: 'Our Mission', position: 'left'},
+          {to: '/contribution', label: 'Contribution', position: 'left'},
           {
             href: 'https://discord.gg/YjHAQD2XT8',
             label: 'Join Us On Discord',
             position: 'left',
           },
           {
-            href: 'https://github.com/realitycollective/realitytoolkit.dev',
+            href: 'https://github.com/realitycollective',
             label: 'GitHub',
             position: 'right',
           },
@@ -75,11 +72,23 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Documentation',
+            title: 'Pages',
             items: [
               {
-                label: 'Get Started',
-                to: '/docs/get-started',
+                label: 'Blog',
+                to: '/blog',
+              },
+              {
+                label: 'About Us',
+                to: '/about',
+              },
+              {
+                label: 'Our Mission',
+                to: '/mission',
+              },
+              {
+                label: 'Contribution',
+                to: '/contribution',
               },
             ],
           },
@@ -93,19 +102,15 @@ const config = {
               {
                 label: 'Twitter',
                 href: 'https://twitter.com/realitytoolkit',
-              },
+              }
             ],
           },
           {
             title: 'More',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
                 label: 'GitHub',
-                href: 'https://github.com/realitycollective/realitytoolkit.dev',
+                href: 'https://github.com/realitycollective',
               },
             ],
           },
