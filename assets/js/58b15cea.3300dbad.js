@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkreality_toolkit_docs=self.webpackChunkreality_toolkit_docs||[]).push([[649],{2299:function(l){l.exports=JSON.parse('{"label":"collective","permalink":"/blog/tags/collective","allTagsPath":"/blog/tags","count":1}')}}]);
