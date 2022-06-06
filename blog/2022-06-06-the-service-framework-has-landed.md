@@ -5,7 +5,7 @@ authors: [simon, rony, dino]
 tags: [welcome, service, framework]
 ---
 
-![Reality Collective Logo](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveBanner_600x300.png)
+[![Reality Collective Logo](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveBanner_600x300.png)](https://realitycollective.io/)
 
 # A brave new world
 
@@ -37,7 +37,7 @@ However, due to its integral nature, it was not available outside of these toolk
 
 ## Enter the **new and improved** [Service Framework](https://service-framework.realitycollective.io/)
 
-![](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveLogo_256.png)
+[![](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveLogo_256.png)](https://service-framework.realitycollective.io/)
 
 In essence, everything that was good and fantastic about the implementation in other frameworks has been extracted, improved and enhanced so that it is now available for **ANY Unity project**, not limited to XR.
 
@@ -55,7 +55,7 @@ There is so much more than can really be noted in a simple blog post, so we enco
 
 ## The beginning of the journey
 
-![](https://media.giphy.com/media/1jl0Xuj9wEptDaNTjT/giphy.gif)
+[![](https://media.giphy.com/media/1jl0Xuj9wEptDaNTjT/giphy.gif)](https://service-framework.realitycollective.io/)
 
 As of today, the first public preview of the Service Framework is now available for use, published on OpenUPM.  The Framework is fully supported and tested on all current LTS versions of Unity and is the most tested thing ever.
 
@@ -97,4 +97,4 @@ Our mission at the collective is not limited to any one platform, framework or i
 
 Join us on our [Discord Server](https://discord.gg/YjHAQD2XT8) if you have questions or just want to chat about where we are headed.
 
-![](https://media.giphy.com/media/JUMagNHzWMeAkx9pyV/giphy.gif)
+[![](https://media.giphy.com/media/JUMagNHzWMeAkx9pyV/giphy.gif)](https://discord.gg/YjHAQD2XT8)
