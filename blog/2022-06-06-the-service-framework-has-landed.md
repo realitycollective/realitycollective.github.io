@@ -62,7 +62,7 @@ The answer for the Service Framework is a little bit open as it can be used for 
 Some of the use cases where the Service Framework has been used by our current partners and consumers include:
 
 * A settings framework to track and maintain the current state of the application. (far better than a random static class)
-* A communications service, that can provider different implementations based on the platform it is running on with no impact to the running application.
+* A communications service, that can provide different implementations based on the platform it is running on with no impact to the running application.
 * A storage service with connections to several providers, such as Azure, Sketchfab, local storage and more.
 * A data processing service that supports many different file types and content, all delivered in a common format inside the application.
 * A scene loading service, maintaining the states and order of screens loaded / unloaded and more.
@@ -77,17 +77,17 @@ The options are almost endless and some of the above you may see published as pa
 
 As of today, the first public preview of the Service Framework is now available for use, published on OpenUPM.  The Framework is fully supported and tested on all current LTS versions of Unity and is the most tested thing ever.
 
-> The service framework preview is actively being used in production projects by our sponsors and some of our private preview partners.  Just remember it is still technically "in preview" but we have found no critical issues to date, since its foundation has been running for years now.
+> The service framework preview is actively being used in production projects by our sponsors and some of our private preview partners.  Just remember it is still technically "in preview" but we have found no critical issues to date since its foundation has been running for years now.
 
 [![openupm](https://img.shields.io/npm/v/com.realitycollective.service-framework?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.realitycollective.service-framework/)
 
-It can be installed quickly in to your project from the command-line using the OpenUPM CLI, once you have installed it and its dependencies (you can also register it manually in your manifest).
+It can be installed quickly into your project from the command-line using the OpenUPM CLI, once you have installed it and its dependencies (you can also register it manually in your manifest).
 
 ```text
 `openupm add com.realitycollective.service-framework`
 ```
 
-> For more details for installing the Service Framework, check out the "[**Getting Started**](https://service-framework.realitycollective.io/docs/basics/getting_started#installing-the-service-framework)" docs on the Service-Frameworks page.
+> For more details on installing the Service Framework, check out the "[**Getting Started**](https://service-framework.realitycollective.io/docs/basics/getting_started#installing-the-service-framework)" docs on the Service-Frameworks page.
 
 Once installed, configuration and implementation is quick and easy.
 
