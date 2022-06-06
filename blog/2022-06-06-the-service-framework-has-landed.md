@@ -53,6 +53,24 @@ On top of the previous capabilities, we have added and improved the framework wi
 
 There is so much more than can really be noted in a simple blog post, so we encourage you to check it out from our [new Homepage](https://realitycollective.io/)
 
+## But what can I use it for?
+
+The first and most obvious question for any framework, tool or utility is what can it be used for?
+
+The answer for the Service Framework is a little bit open as it can be used for almost anything where you need a component in your project to run in the background or interact with external services.
+
+Some of the use cases where the Service Framework has been used by our current partners and consumers include:
+
+* A settings framework to track and maintain the current state of the application. (far better than a random static class)
+* A communications service, that can provider different implementations based on the platform it is running on with no impact to the running application.
+* A storage service with connections to several providers, such as Azure, Sketchfab, local storage and more.
+* A data processing service that supports many different file types and content, all delivered in a common format inside the application.
+* A scene loading service, maintaining the states and order of screens loaded / unloaded and more.
+* A battle management system (for the gamers) which runs battle simulations, spits out reports and updates leaderboards / etc
+* An achievement system with connectivity to different platforms and services.
+
+The options are almost endless and some of the above you may see published as packages in the future.  The extensibility of the implementation means that it greatly simplifies consumption of services in projects, especially if you then re-use those same services in multiple projects.
+
 ## The beginning of the journey
 
 [![](https://media.giphy.com/media/1jl0Xuj9wEptDaNTjT/giphy.gif)](https://service-framework.realitycollective.io/)
