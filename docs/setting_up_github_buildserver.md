@@ -1,5 +1,8 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
+sidebar_label: 'Setting up a GitHub Build Server'
+title: Setting up a GitHub Build Server
+description: The process and requirements to create a build server for the Reality Collective
 ---
 
 # Setting up a GitHub Build Server

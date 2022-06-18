@@ -80,7 +80,7 @@ const config = {
               },
               {
                 label: 'About Us',
-                to: '/about',
+                to: '/docs/welcome-to-the-reality-collective',
               },
               {
                 label: 'Our Mission',
