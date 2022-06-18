@@ -53,6 +53,7 @@ const config = {
         },
         items: [
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/docs/welcome-to-the-reality-collective', label: 'Documentation', position: 'left'},
           {to: '/about', label: 'About Us', position: 'left'},
           {to: '/mission', label: 'Our Mission', position: 'left'},
           {to: '/contribution', label: 'Contribution', position: 'left'},
@@ -79,9 +80,13 @@ const config = {
                 to: '/blog',
               },
               {
-                label: 'About Us',
-                to: '/docs/welcome-to-the-reality-collective',
+                label: 'Documentation',
+                to: '/docs',
               },
+              {
+                label: 'About Us',
+                to: '/about',
+              },              
               {
                 label: 'Our Mission',
                 to: '/mission',

@@ -7,7 +7,7 @@ description: The process and requirements to create a new UPM project using the 
 
 # Repository Template Generator
 
-![](/assets/branding/Reality-Collective.png)
+![](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveLogo_256.png)
 
 To generate a new project for the Reality Toolkit, we have provided a handy repository generator that includes everything you need to get started.
 
