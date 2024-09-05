@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Reality Collective',
   tagline: 'Official website of the Reality Collective',
-  url: 'https://realitycollective.io',
+  url: 'https://www.realitycollective.net',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
