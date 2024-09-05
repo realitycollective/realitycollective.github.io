@@ -5,7 +5,7 @@ authors: [simon, rony, dino]
 tags: [welcome, service, framework]
 ---
 
-[![Reality Collective Logo](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveBanner_600x300.png)](https://realitycollective.io/)
+[![Reality Collective Logo](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveBanner_600x300.png)](https://www.realitycollective.net/)
 
 # A brave new world
 
@@ -51,7 +51,7 @@ On top of the previous capabilities, we have added and improved the framework wi
 * Easy migration from other frameworks, only requiring namespace and base implementation changes (migration docs to follow)
 * [Documentation!!](https://service-framework.realitycollective.io/docs/get-started) - still a Work in Progress but advancing quickly
 
-There is so much more than can really be noted in a simple blog post, so we encourage you to check it out from our [new Homepage](https://realitycollective.io/)
+There is so much more than can really be noted in a simple blog post, so we encourage you to check it out from our [new Homepage](https://www.realitycollective.net/)
 
 ## But what can I use it for?
 

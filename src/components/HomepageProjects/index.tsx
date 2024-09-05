@@ -25,7 +25,7 @@ const FeatureList: ProjectItem[] = [
         An extensible service framework to build highly performant components for your Unity projects
       </>
     ),
-    url: 'https://realitycollective.io/com.realitycollective.service-framework-docs'
+    url: 'https://serviceframework.realitycollective.net/'
   },
   {
     title: 'Utilities',
@@ -34,7 +34,7 @@ const FeatureList: ProjectItem[] = [
         A collection of useful utilities for Unity Projects
       </>
     ),
-    url: 'https://realitycollective.io/com.realitycollective.utilities-docs'
+    url: 'https://serviceframework.realitycollective.net/'
   },
 ];
 
