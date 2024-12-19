@@ -16,7 +16,7 @@ const FeatureList: ProjectItem[] = [
         The Reality Toolkit was designed from the ground up to aid with AR, VR or XR development in Unity
       </>
     ),
-    url: 'https://realitytoolkit.io'
+    url: 'https://realitytoolkit.realitycollective.net/'
   },
   {
     title: 'Service Framework',
