@@ -1,4 +1,6 @@
 ---
+mdx:
+  format: md
 sidebar_position: 2
 ---
 

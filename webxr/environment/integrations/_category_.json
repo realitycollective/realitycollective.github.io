@@ -1,0 +1,10 @@
+{
+  "label": "Host integrations",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "slug": "/environment/integrations",
+    "title": "Environment: Host integrations",
+    "description": "One page per npm package: the engine-free core and the thin adapter for each engine it runs in."
+  }
+}

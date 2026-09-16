@@ -1,6 +1,6 @@
 ---
-sidebar_label: 'Get Started'
-sidebar_position: 1
+sidebar_label: 'Reality Toolkit (Unity) quick start'
+sidebar_position: 5
 ---
 
 # Getting Started
