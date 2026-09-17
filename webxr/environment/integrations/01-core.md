@@ -17,7 +17,7 @@ Nothing. The core never imports an engine, never imports a sibling package and n
 You do not install this package directly. Install the adapter for your engine and it re-exports everything here:
 
 ```bash
-npm install @realitycollective/threejs-environment@preview three
+npm install @realitycollective/threejs-environment three
 ```
 
 ## Setup

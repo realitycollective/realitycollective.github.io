@@ -21,7 +21,7 @@ Not yet exercised against a real Babylon runtime. The adapter is written against
 ## Install
 
 ```sh
-npm install @realitycollective/babylon-interactions@preview
+npm install @realitycollective/babylon-interactions
 ```
 
 No peer dependency. Babylon is matched structurally rather than imported, so any Babylon version whose objects carry the members this adapter reads will work.

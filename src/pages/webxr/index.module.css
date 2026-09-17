@@ -184,6 +184,16 @@
   color: var(--rc-gold);
   font-size: 0.875rem;
   font-weight: 600;
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.engineChip:hover,
+.engineChip:focus-visible {
+  background: var(--rc-gold);
+  color: var(--rc-ink);
+  text-decoration: none;
+  outline: none;
 }
 
 .steps {

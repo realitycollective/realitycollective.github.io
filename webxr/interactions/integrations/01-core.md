@@ -17,10 +17,10 @@ Behaviours (`press`, `pulse`, `hinge`, `dial`, `slide`, `grab`, `tossScore`) as 
 Two cases. Writing a new engine adapter: you need `TransformPort`, `HitTester`, `InputProvider` and the runtime, with none of a specific engine's types pulled in. Writing headless tests for your own behaviours or descriptors, where a three.js or Babylon dependency would buy nothing.
 
 ```sh
-npm install @realitycollective/webxr-interactions@preview
+npm install @realitycollective/webxr-interactions
 ```
 
-Everyone else installs one adapter instead; each adapter re-exports this package wholesale, so an app depends on exactly one package.
+Everyone else installs one adapter instead; each adapter re-exports the whole of this package, so an app depends on exactly one package.
 
 ## The architecture test
 

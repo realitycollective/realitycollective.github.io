@@ -43,7 +43,7 @@ npm run serve        # serve ./build
 
 ## Choosing which WebXR version to document
 
-`api-sources.json` pins a repository and a ref (branch, tag or commit) for each family. Those are the defaults for CI and for `npm run local`. Change the file to move the published site to a new version.
+`api-sources.json` pins a repository and a ref (branch, tag or commit) for each family. Those are the defaults for CI and for `npm run local`. Every family is pinned to `main`, which each repository moves with a release, so the published API reference always describes what npm has. Change the file to document another ref.
 
 For a one-off run against another branch, pass the ref on the command line or through the environment:
 
@@ -66,7 +66,15 @@ The API section is generated at build time and is not committed. Pages are produ
 
 ## Playground links and release status
 
-Each family's playground is deployed to two Cloudflare Pages projects: production (`webxr-<name>.pages.dev`, from the repository's `main` branch) and staging (`webxr-<name>-test.pages.dev`). `playgroundLinkMode` in `src/links.ts` decides which host the site links: `'live'` (the current setting) links the production hosts everywhere, and `'status'` links a pre-release family to its staging host until its `released` flag in `src/data/families.ts` is set. The Start here page always lists both hosts. The markdown pages never carry a literal playground URL: they use the `<DemoLink>`, `<DemoHosts>`, `<PlaygroundTable>` and `<PlaygroundNote>` components from `src/components/DemoLinks`, registered for every page in `src/theme/MDXComponents.tsx`. When a family ships its first stable release, set its `released` flag to `true` and every page switches to the production host on the next build. Nothing else changes.
+Each family's playground is deployed to two Cloudflare Pages projects: production (`webxr-<name>.pages.dev`, from the repository's `main` branch) and staging (`webxr-<name>-test.pages.dev`). `playgroundLinkMode` in `src/links.ts` decides which host the site links: `'live'` (the current setting) links the production hosts everywhere, and `'status'` links a pre-release family to its staging host until its `released` flag in `src/data/families.ts` is set. The Start here page always lists both hosts. The markdown pages never carry a literal playground URL: they use the `<DemoLink>`, `<DemoHosts>`, `<PlaygroundTable>` and `<PlaygroundNote>` components from `src/components/DemoLinks`, registered for every page in `src/theme/MDXComponents.tsx`. All four families are released, so every flag is `true`. Each demo in `links.demos` also carries `previewServes`: the staging projects of WebXR-Interactions and WebXR-Environment do not answer at their root (their CI deploys staging with `--branch=pr-<n>`), so the Start here table shows those two hosts as text rather than links until the repositories change that.
+
+## Search, the blog strip and the build pipeline
+
+Search is `@easyops-cn/docusaurus-search-local`: the index is built at build time from the Collective docs, the WebXR docs, the blog and the pages, so it works on PR previews with no account. The API reference is deliberately not indexed. The homepage's "From the blog" strip comes from `plugins/latest-posts.ts`, which reads the blog plugin's own loaded content and exposes the newest posts through global data, so a new post appears there without a code change. `future.faster` (Rspack and SWC) is on, with the one v4 flag its worker threads require.
+
+## Playground screenshots
+
+The `/webxr` page rolls a strip of screenshots of the live playgrounds between the engine chips and the three steps. The images are in `static/img/webxr/shots` (640x360 WebP for the strip, plus full-size shots the docs pages use) and the strip's order, captions and links are in `src/data/demoShots.ts`. The component is `src/components/DemoCarousel`: pure CSS, right to left, seamless because the set is rendered twice, paused on hover and focus, and static under `prefers-reduced-motion`. To refresh the images, take new 1280x720 shots of the desktop builds and resize them into that folder under the same names; nothing else changes.
 
 ## Previewing a pull request
 

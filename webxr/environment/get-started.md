@@ -21,7 +21,7 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 - Any modern browser with WebXR for headsets; a passthrough or hit-test feature also needs a session that requests it.
 - TypeScript is recommended but not required; the packages ship type declarations.
 
-Current release: `0.1.0` previews on npm, published under the `preview` tag.
+Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 
 ### Packages
 
@@ -36,13 +36,13 @@ Install exactly one adapter; each one re-exports the core, so you never install 
 
 ```sh
 # Plain three.js and raw WebXR apps
-npm install @realitycollective/threejs-environment@preview three
+npm install @realitycollective/threejs-environment three
 
 # Meta IWSDK apps
-npm install @realitycollective/iwsdk-environment@preview
+npm install @realitycollective/iwsdk-environment
 
 # Google XR Blocks apps, experimental
-npm install @realitycollective/xrblocks-environment@preview three
+npm install @realitycollective/xrblocks-environment three
 ```
 
 ## Use cases

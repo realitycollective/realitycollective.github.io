@@ -2,8 +2,8 @@
 slug: webxr
 title: "Reality Toolkit WebXR: four families for the web"
 authors: [simon]
-tags: [webxr, reality, toolkit]
-image: /img/webxr-social-card.png
+tags: [webxr]
+image: /img/webxr-social-card-og.png
 ---
 
 ![Reality Toolkit WebXR](/img/webxr-social-card.png)
@@ -25,4 +25,4 @@ The documentation lives on this site, with a Start here page, the concepts that 
 
 [Start with the overview](/webxr), or put one of the playgrounds on a headset first: the <DemoLink demo="interactions">interaction playground</DemoLink>, the <DemoLink demo="environment">environment playground</DemoLink>, the <DemoLink demo="uiShowcase">UI Extensions showcase</DemoLink> and the <DemoLink demo="uiLab">multiplatform lab</DemoLink>.
 
-WebXR-Input is released on npm. The other three families are pre-release by design while their APIs settle; install them with the `@preview` tag and tell us what you find on the [Reality Collective Discord](https://discord.gg/YjHAQD2XT8).
+All four families are released on npm: WebXR-Input at `0.1.4`, and Interactions, UI Extensions and Environment at `0.1.0`. A plain `npm install` of any adapter gets you the stable version. Build something with them and tell us what you find on the [Reality Collective Discord](https://discord.gg/YjHAQD2XT8).

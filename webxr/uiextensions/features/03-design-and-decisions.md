@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 title: Design and decisions
 sidebar_label: "Design and decisions"
 description: Why the core stays engine-free, how adapters and contracts are shared, and what a new adapter must prove to conform.
@@ -117,6 +117,6 @@ Scene content, meshes, prefabs and placement, is never built here; it stays with
 ## More information
 
 - [Introduction](../basics/01-introduction.md)
-- [The adapter contract](../basics/06-adapter-contract.md)
+- [The adapter contract](../basics/07-adapter-contract.md)
 - [Developer cycle](./01-developer-cycle.md)
 - [API reference](pathname:///webxr/api/uiextensions/)

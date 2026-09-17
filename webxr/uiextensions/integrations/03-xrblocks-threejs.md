@@ -13,7 +13,7 @@ This is an experimental adapter for [Google XR Blocks](https://github.com/google
 ## Install
 
 ```bash
-npm install @realitycollective/xrblocks-uiextensions@preview three
+npm install @realitycollective/xrblocks-uiextensions three
 ```
 
 This workspace pins `three` so XR Blocks and this adapter's own peer range resolve to a single copy; see the package README's note on the `super-three` fork if versions drift apart.
@@ -73,8 +73,8 @@ npm test   # scale/follow/pointer math, plus a headless host lifecycle suite
 
 ## More information
 
-- [Roadmap](../basics/07-roadmap.md)
-- [The adapter contract](../basics/06-adapter-contract.md)
+- [Roadmap](../basics/08-roadmap.md)
+- [The adapter contract](../basics/07-adapter-contract.md)
 - [Multiplatform lab example](../examples/02-multiplatform-lab.md)
 - npm: [@realitycollective/xrblocks-uiextensions](https://www.npmjs.com/package/@realitycollective/xrblocks-uiextensions)
 - [API reference](pathname:///webxr/api/uiextensions/)

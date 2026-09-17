@@ -17,7 +17,7 @@ description: The Meta Immersive Web SDK adapter, using IWSDK's own targeting and
 ## Install
 
 ```sh
-npm install @realitycollective/iwsdk-interactions@preview @iwsdk/core
+npm install @realitycollective/iwsdk-interactions @iwsdk/core
 ```
 
 Peer dependencies: `@iwsdk/core >=0.5.0 <0.6.0`, `@iwsdk/xr-input >=0.5.0 <0.6.0` and `three >=0.170.0`. Every IWSDK application already carries all three.

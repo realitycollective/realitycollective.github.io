@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 title: Controls and markup
 description: The uix-* control elements, the UixElement interface, and how a loaded panel becomes a set of working controls.
 ---
@@ -15,6 +15,21 @@ A control is declared as a custom element, for example `<uix-stepper>`, and its 
 :::warning
 The `@realitycollective/iwsdk-uiextensions` package README and its shipped `Examples/controls` markup still show the older `data-uix="stepper"` attribute form. The current core upgrades custom elements only, as recorded in the CHANGELOG, so use the element form on this page.
 :::
+
+## Registering the elements on IWSDK
+
+IWSDK 0.5 parses panels with a component schema and rejects any tag it does not know, so a panel that uses a control must tell the parser about the `<uix-*>` elements when the world is created. `uixComponentSet` from `@realitycollective/iwsdk-uiextensions` is that declaration; pass it in `spatialUI.componentSets`. Without it, a panel containing any control fails to parse and never attaches, with no error in the scene.
+
+```ts
+import { World } from '@iwsdk/core';
+import { uixComponentSet } from '@realitycollective/iwsdk-uiextensions';
+
+const world = await World.create(container, {
+  features: { spatialUI: { kit: 'horizon', componentSets: [uixComponentSet] } },
+});
+```
+
+A panel with no controls, only windows and title-bar chrome, needs no component set; `spatialUI: true` is enough, which is what the getting-started pages use. The three.js and XR Blocks adapter needs no equivalent, because its parser accepts an unregistered custom tag.
 
 ## The UixElement interface
 
@@ -55,7 +70,7 @@ controls.stepper('health').events.on('change', (value) => setHealth(value));
 
 ## More information
 
-- [The adapter contract](./06-adapter-contract.md)
+- [The adapter contract](./07-adapter-contract.md)
 - [Core adapter](../integrations/01-core.md)
 - [Package examples](../examples/04-package-examples.md)
 - [API reference](pathname:///webxr/api/uiextensions/)

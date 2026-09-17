@@ -57,6 +57,22 @@ const config: Config = {
   // Read by the React pages so API links only render when the reference was generated.
   customFields: {hasApiDocs},
 
+  // Rspack, SWC and the faster bundler pipeline: the site has about 1,500 pages once the API reference is
+  // generated, and this cuts the CI build time without changing the output.
+  future: {
+    faster: true,
+    // faster's SSG worker threads need this v4 flag; it removes a legacy postBuild "head" argument no
+    // plugin here uses.
+    v4: {removeLegacyPostBuildHeadAttribute: true},
+  },
+
+  // The Google Fonts stylesheet below is render-blocking; opening the two connections early shortens
+  // the time to first text.
+  headTags: [
+    {tagName: 'link', attributes: {rel: 'preconnect', href: 'https://fonts.googleapis.com'}},
+    {tagName: 'link', attributes: {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous'}},
+  ],
+
   onBrokenLinks: 'throw',
   markdown: {
     hooks: {
@@ -77,7 +93,27 @@ const config: Config = {
     locales: ['en'],
   },
 
-  plugins: [webxrDocsPlugin, ...(hasApiDocs ? [webxrApiPlugin] : [])],
+  plugins: [webxrDocsPlugin, ...(hasApiDocs ? [webxrApiPlugin] : []), ['./plugins/latest-posts.ts', {count: 2}]],
+
+  themes: [
+    // Offline search, built at build time, so it needs no account and works on the PR previews too. The
+    // API reference is left out of the index: 1,426 generated pages would swamp the results and the
+    // TypeDoc pages have their own module index.
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: true,
+        docsRouteBasePath: ['docs', 'webxr/docs'],
+        docsPluginIdForPreferredVersion: 'default',
+        ignoreFiles: [/^webxr-api\//],
+        highlightSearchTermsOnTargetPage: true,
+        searchResultLimits: 10,
+      },
+    ],
+  ],
 
   presets: [
     [
@@ -102,7 +138,8 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/webxr-social-card.png',
+    // 1200x630 (1.91:1), the ratio X, LinkedIn and Discord show uncropped. The wide 2000x800 art stays for the blog post.
+    image: 'img/webxr-social-card-og.png',
     navbar: {
       title: 'Reality Collective',
       logo: {
@@ -117,11 +154,21 @@ const config: Config = {
           to: '/webxr',
           items: webxrNavItems,
         },
-        {to: '/docs/welcome-to-the-reality-collective', label: 'Collective docs', position: 'left'},
+        // One dropdown for the Collective's own pages: seven top-level items wrapped the navbar onto two
+        // lines and truncated the site title between 997px and about 1250px.
+        {
+          type: 'dropdown',
+          label: 'Collective',
+          position: 'left',
+          to: '/docs/welcome-to-the-reality-collective',
+          items: [
+            {to: '/docs/welcome-to-the-reality-collective', label: 'Collective docs'},
+            {to: '/about', label: 'About Us'},
+            {to: '/mission', label: 'Our Mission'},
+            {to: '/contribution', label: 'Contribution'},
+          ],
+        },
         {to: '/blog', label: 'Blog', position: 'left'},
-        {to: '/about', label: 'About Us', position: 'left'},
-        {to: '/mission', label: 'Our Mission', position: 'left'},
-        {to: '/contribution', label: 'Contribution', position: 'left'},
         {
           href: 'https://discord.gg/YjHAQD2XT8',
           label: 'Discord',
@@ -133,6 +180,9 @@ const config: Config = {
           position: 'right',
           items: [
             {label: 'Reality Collective', href: 'https://github.com/realitycollective'},
+            {label: 'Reality Toolkit (Unity)', href: 'https://github.com/realitycollective/com.realitytoolkit.core'},
+            {label: 'Service Framework (Unity)', href: 'https://github.com/realitycollective/com.realitycollective.service-framework'},
+            {label: 'Service Framework (TypeScript)', href: 'https://github.com/realitycollective/com.realitycollective.service-framework.ts'},
             {label: 'WebXR-Input', href: 'https://github.com/realitycollective/WebXR-Input'},
             {label: 'WebXR-Interactions', href: 'https://github.com/realitycollective/WebXR-Interactions'},
             {label: 'WebXR-UIExtensions', href: 'https://github.com/realitycollective/WebXR-UIExtensions'},
@@ -179,7 +229,7 @@ const config: Config = {
           items: [
             {label: 'Discord', href: 'https://discord.gg/YjHAQD2XT8'},
             {label: 'GitHub', href: 'https://github.com/realitycollective'},
-            {label: 'Twitter', href: 'https://twitter.com/realitytoolkit'},
+            {label: 'X (Twitter)', href: 'https://x.com/realitytoolkit'},
           ],
         },
       ],

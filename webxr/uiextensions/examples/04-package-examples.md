@@ -41,7 +41,7 @@ Control upgrades on a plain panel, with no window required: the `UIControlsSyste
 const panel = world.createTransformEntity().addComponent(PanelUI, { config: './ui/controls.uikitml' });
 ```
 
-`controls.uikitml` lays out a stepper, a toggle, an expandable label and a log view; `main.ts` wires their handles once the panel loads, pushing a line into the log on every stepper change and toggle change. This example's shipped markup still uses the older `data-uix="stepper"` attribute form rather than the current `<uix-stepper>` custom-element contract; check it against [Controls and markup](../basics/05-controls-and-markup.md) before copying it into a new project.
+`controls.uikitml` lays out a stepper, a toggle, an expandable label and a log view; `main.ts` wires their handles once the panel loads, pushing a line into the log on every stepper change and toggle change. This example's shipped markup still uses the older `data-uix="stepper"` attribute form rather than the current `<uix-stepper>` custom-element contract; check it against [Controls and markup](../basics/06-controls-and-markup.md) before copying it into a new project.
 
 ## dock-regions
 
@@ -59,7 +59,7 @@ createUIWindow(world, { id: 'floating', title: 'Drag Me Into A Region', config: 
 
 ## More information
 
-- [Controls and markup](../basics/05-controls-and-markup.md)
+- [Controls and markup](../basics/06-controls-and-markup.md)
 - [Meta IWSDK adapter](../integrations/02-iwsdk.md)
 - [Showcase example](./01-showcase.md)
 - npm: [@realitycollective/iwsdk-uiextensions](https://www.npmjs.com/package/@realitycollective/iwsdk-uiextensions)

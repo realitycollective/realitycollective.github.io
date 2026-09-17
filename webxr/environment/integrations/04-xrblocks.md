@@ -15,7 +15,7 @@ Everything the three.js adapter binds, plus XR Blocks' `Depth` manager (`resumeD
 ## Install
 
 ```bash
-npm install @realitycollective/xrblocks-environment@preview three
+npm install @realitycollective/xrblocks-environment three
 ```
 
 The peer dependency is `three >= 0.170.0`, plus an XR Blocks build to hand in.

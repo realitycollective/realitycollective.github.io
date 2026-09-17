@@ -4,12 +4,20 @@ import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import SunsetHero from '@site/src/components/SunsetHero';
 import StackDiagram from '@site/src/components/StackDiagram';
+import DemoCarousel from '@site/src/components/DemoCarousel';
 import {demoUrl, families, familyById} from '@site/src/data/families';
 import {playgroundLinkMode} from '@site/src/links';
 import {links} from '@site/src/links';
 import styles from './index.module.css';
 
-const engines = ['three.js', 'raw WebXR', 'Babylon.js', 'Meta IWSDK', 'Google XR Blocks'];
+// The platform chips under the hero; each links to that engine's own developer documentation.
+const engines: Array<{name: string; href: string}> = [
+  {name: 'three.js', href: links.engines.threejs},
+  {name: 'raw WebXR', href: links.engines.webxr},
+  {name: 'Babylon.js', href: links.engines.babylon},
+  {name: 'Meta IWSDK', href: links.engines.iwsdk},
+  {name: 'Google XR Blocks', href: links.engines.xrblocks},
+];
 
 const steps = [
   {
@@ -19,7 +27,7 @@ const steps = [
   {
     title: 'Install one adapter per family',
     body: 'The adapter depends on its core, and on the shared input contracts where the family uses them, so npm installs those with it. It also re-exports them, so your app imports everything from the one package.',
-    code: 'npm install @realitycollective/threejs-interactions@preview',
+    code: 'npm install @realitycollective/threejs-interactions',
   },
   {
     title: 'Run the playground',
@@ -89,13 +97,15 @@ export default function WebXRHome(): ReactNode {
           </div>
         </SunsetHero>
 
-        <section className={styles.engineStrip}>
+        <section className={styles.engineStrip} aria-label="Supported engines">
           {engines.map((e) => (
-            <span key={e} className={styles.engineChip}>
-              {e}
-            </span>
+            <a key={e.name} className={styles.engineChip} href={e.href} title={`${e.name} developer documentation`}>
+              {e.name}
+            </a>
           ))}
         </section>
+
+        <DemoCarousel />
 
         <section className={styles.steps}>
           {steps.map((s, i) => (
@@ -169,9 +179,9 @@ export default function WebXRHome(): ReactNode {
         <section id="playgrounds" className={styles.playgroundsSection}>
           <h2 className={styles.heading}>Put it on a headset</h2>
           <p className={styles.sectionLead}>
-            These are the live hosts, deployed from each repository&apos;s main branch. A pre-release family&apos;s host becomes
-            active with its first stable release; the preview builds are listed on the Start here page. Open one on a
-            headset, or on a desktop with the mouse fallback, then come back for how it is built.
+            These are the live hosts, deployed from each repository&apos;s main branch with every release. Open one on a
+            headset, or on a desktop with the mouse fallback, then come back for how it is built. The preview builds of
+            the development branches are listed on the Start here page.
           </p>
           <div className={styles.playgrounds}>
             {playgrounds.map((p) => (

@@ -21,7 +21,7 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 - A bundler or framework of your choice.
 - TypeScript is recommended but not required; the packages ship type declarations.
 
-Current release: `0.1.0`, a preview installed under the `preview` dist-tag.
+Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 
 ### Packages
 
@@ -38,22 +38,22 @@ Every adapter declares its core, and `@realitycollective/webxr-input`, as an npm
 
 ```sh
 # three.js, the default and standalone choice
-npm install @realitycollective/threejs-interactions@preview three
+npm install @realitycollective/threejs-interactions three
 
 # Babylon.js
-npm install @realitycollective/babylon-interactions@preview
+npm install @realitycollective/babylon-interactions
 
 # Meta IWSDK
-npm install @realitycollective/iwsdk-interactions@preview @iwsdk/core
+npm install @realitycollective/iwsdk-interactions @iwsdk/core
 
 # Google XR Blocks
-npm install @realitycollective/xrblocks-interactions@preview three
+npm install @realitycollective/xrblocks-interactions three
 ```
 
 Writing a new adapter, or headless tests against your own interaction logic? Install the core directly instead:
 
 ```sh
-npm install @realitycollective/webxr-interactions@preview
+npm install @realitycollective/webxr-interactions
 ```
 
 ## Use cases

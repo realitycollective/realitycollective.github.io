@@ -20,7 +20,7 @@ The default, standalone adapter. It reads raw WebXR directly, so no other framew
 ## Install
 
 ```sh
-npm install @realitycollective/threejs-interactions@preview three
+npm install @realitycollective/threejs-interactions three
 ```
 
 Peer dependency: `three >= 0.170.0`. Optional peer: `three-mesh-bvh >= 0.9.14`, for accelerated raycasting against detailed meshes.

@@ -1,9 +1,9 @@
 ---
 sidebar_label: 'Reality Toolkit (Unity) quick start'
 sidebar_position: 5
+title: Reality Toolkit for Unity quick start
+description: Installing the Reality Toolkit core package for Unity through OpenUPM, and the three developer levels the toolkit is built for.
 ---
-
-# Getting Started
 
 Developing Mixed Reality Applications in Unity is hard, and we know there are many developers who are frustrated with the current state of both game and general application development within the Mixed Reality ecosystem: a quickly developing market that encompasses the whole spectrum from Mobile Augmented Reality to high-end Virtual Reality.
 
@@ -23,8 +23,8 @@ We’d like to invite all the major hardware vendors to help guide their platfor
 
 The simplest way to getting started using the core platform package in your project is via OpenUPM. Visit [OpenUPM](https://openupm.com/docs/) to learn more about it. Once you have the OpenUPM CLI set up use the following command to add the package to your project:
 
-```
-`openupm add com.realitytoolkit.core`
+```bash
+openupm add com.realitytoolkit.core
 ```
 
 > For more details on using [OpenUPM CLI, check the docs here](https://github.com/openupm/openupm-cli#installation).

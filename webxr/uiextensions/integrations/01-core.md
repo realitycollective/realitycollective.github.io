@@ -13,7 +13,7 @@ Nothing. The core imports no 3D engine; it is the contract that `iwsdk-uiextensi
 ## Install
 
 ```bash
-npm install @realitycollective/webxr-uiextensions@preview
+npm install @realitycollective/webxr-uiextensions
 ```
 
 Install this package directly only when writing headless logic, tests, developer tooling, or a new engine adapter. An app targeting IWSDK or XR Blocks installs the matching adapter instead; both re-export this package in full.
@@ -55,7 +55,7 @@ The core has no demo of its own; every live demo runs through an adapter. See [t
 ## More information
 
 - [Introduction](../basics/01-introduction.md)
-- [The adapter contract](../basics/06-adapter-contract.md)
+- [The adapter contract](../basics/07-adapter-contract.md)
 - [Meta IWSDK adapter](./02-iwsdk.md)
 - npm: [@realitycollective/webxr-uiextensions](https://www.npmjs.com/package/@realitycollective/webxr-uiextensions)
 - [API reference](pathname:///webxr/api/uiextensions/)

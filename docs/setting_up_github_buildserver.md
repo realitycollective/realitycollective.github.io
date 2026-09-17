@@ -5,8 +5,6 @@ title: Setting up a GitHub Build Server
 description: The process and requirements to create a build server for the Reality Collective
 ---
 
-# Setting up a GitHub Build Server
-
 All the Reality Collective projects are all automated using [self hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners) on GitHub using GitHub actions.  These make use of several [reusable workflows](https://github.com/realitycollective/reusableworkflows) to test, build and package all the projects.
 
 To operate these and reduce costs we self host our own build servers which need to be setup accordingly, which the following guide details the setup process.
@@ -15,9 +13,9 @@ To operate these and reduce costs we self host our own build servers which need 
 
 * [Unity Hub](https://unity.com/unity-hub) - plus clients
 * [Visual Studio](https://visualstudio.microsoft.com/) - any edition (can just use the version installed with Unity)
-* [NodeJS - V16+](https://nodejs.org/en/download/)
-* [Powershell 7](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2) (not just the version included with Win11)
-* [DotNet 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet)
+* [Node.js](https://nodejs.org/en/download/) - the current LTS release (the Collective's workflows run on Node 22)
+* [PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows) - the current release, not only the Windows PowerShell 5.1 that ships with Windows 11
+* [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet) - the current LTS release
 * [Java JRE 8+](https://www.java.com/en/download/)
 * [Git for Windows](https://gitforwindows.org/)
 * [Github Runner client](https://github.com/actions/runner/releases)
@@ -27,10 +25,10 @@ To operate these and reduce costs we self host our own build servers which need 
 
 For the main part, it is simply a case of getting all the software installed and registered in the following order:
 
-1. Install [NodeJS - V16+](https://nodejs.org/en/download/), making sure to also opt in to the additional Chocolatey dependencies.
-2. Install [Powershell 7](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2) to ensure all the paths and latest versions of the tools are installed.
+1. Install [Node.js](https://nodejs.org/en/download/) (current LTS), making sure to also opt in to the additional Chocolatey dependencies.
+2. Install [PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows) to ensure all the paths and latest versions of the tools are installed.
 3. Install [Git for Windows](https://gitforwindows.org/) for all Git related operations got the Actions.
-4. Install the [DotNet 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet), note it is the SDK for your platform, e.g. the 64bit client for most cases.
+4. Install the [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet) (current LTS), note it is the SDK for your platform, e.g. the 64bit client for most cases.
 5. Install the latest [Java JRE 8+](https://www.java.com/en/download/), required only for Android builds.
 6. Install the latest [Unity Hub](https://unity.com/unity-hub) and all the latest client versions your builds require. (The automation scripts will auto-install Unity versions, but it can be unreliable, because Unity...)
 7. Optionally, you can also install [VSCode](https://code.visualstudio.com/) which helps managing the environment and diagnosing any build issues on the server (plus its awesome)

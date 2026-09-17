@@ -3,7 +3,7 @@
   "input": {
     "label": "Input",
     "repo": "https://github.com/realitycollective/WebXR-Input.git",
-    "ref": "development",
+    "ref": "main",
     "dir": ".sources/WebXR-Input",
     "env": "WEBXR_INPUT",
     "install": "npm"
@@ -11,7 +11,7 @@
   "interactions": {
     "label": "Interactions",
     "repo": "https://github.com/realitycollective/WebXR-Interactions.git",
-    "ref": "development",
+    "ref": "main",
     "dir": ".sources/WebXR-Interactions",
     "env": "WEBXR_INTERACTIONS",
     "install": "npm"
@@ -19,7 +19,7 @@
   "uiextensions": {
     "label": "UI Extensions",
     "repo": "https://github.com/realitycollective/WebXR-UIExtensions.git",
-    "ref": "development",
+    "ref": "main",
     "dir": ".sources/WebXR-UIExtensions",
     "env": "WEBXR_UIEXTENSIONS",
     "install": "npm"
@@ -27,7 +27,7 @@
   "environment": {
     "label": "Environment",
     "repo": "https://github.com/realitycollective/WebXR-Environment.git",
-    "ref": "development",
+    "ref": "main",
     "dir": ".sources/WebXR-Environment",
     "env": "WEBXR_ENVIRONMENT",
     "install": "npm"

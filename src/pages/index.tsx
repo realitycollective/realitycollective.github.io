@@ -2,7 +2,9 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import SunsetHero from '@site/src/components/SunsetHero';
+import useGlobalData from '@docusaurus/useGlobalData';
 import {links} from '@site/src/links';
+import type {LatestPost} from '@site/plugins/latest-posts';
 import styles from './index.module.css';
 
 const projects = [
@@ -31,12 +33,11 @@ const projects = [
 
 const platforms = ['Unity 6', 'OpenXR', 'Meta Quest', 'Pico', 'visionOS', 'three.js', 'Babylon.js', 'Meta IWSDK', 'Google XR Blocks', 'React'];
 
-const posts = [
-  {date: '16 September 2026', title: 'Reality Toolkit WebXR: four families for the web', to: '/blog/webxr'},
-  {date: '6 June 2022', title: 'The Service Framework has landed', to: '/blog/serviceframework'},
-];
+const postDate = new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'});
 
 export default function Home(): ReactNode {
+  // The newest posts, supplied by plugins/latest-posts.ts from the blog's own loaded content.
+  const {posts} = useGlobalData()['latest-posts'].default as {posts: LatestPost[]};
   return (
     <Layout
       title="Build it once. Ship it everywhere."
@@ -117,8 +118,8 @@ export default function Home(): ReactNode {
           </div>
           <div className={styles.posts}>
             {posts.map((post) => (
-              <Link key={post.to} to={post.to} className={styles.post}>
-                <span className={styles.eyebrow}>{post.date}</span>
+              <Link key={post.permalink} to={post.permalink} className={styles.post}>
+                <span className={styles.eyebrow}>{postDate.format(new Date(post.date))}</span>
                 <h3 className={styles.postTitle}>{post.title}</h3>
               </Link>
             ))}

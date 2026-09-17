@@ -35,6 +35,6 @@ UI Extensions sits above the WebXR-Input contracts and beside the Interactions f
 ## More information
 
 - [Getting started](./02-getting-started.md)
-- [The adapter contract](./06-adapter-contract.md)
+- [The adapter contract](./07-adapter-contract.md)
 - [Core adapter](../integrations/01-core.md)
 - [API reference](pathname:///webxr/api/uiextensions/)

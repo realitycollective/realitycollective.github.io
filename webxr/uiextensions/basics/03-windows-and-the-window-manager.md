@@ -47,7 +47,7 @@ Every state change emits a typed event on `windows.events`: `opened`, `closed`, 
 
 ## More information
 
-- [Docking, regions and hand menus](./04-docking-regions-and-hand-menus.md)
-- [The adapter contract](./06-adapter-contract.md)
+- [Docking, regions and hand menus](./04-docking-and-regions.md)
+- [The adapter contract](./07-adapter-contract.md)
 - [Meta IWSDK adapter](../integrations/02-iwsdk.md)
 - [API reference](pathname:///webxr/api/uiextensions/)

@@ -72,7 +72,7 @@ The template ships with no `.meta` files, so Unity must generate them the first 
 
 ## Step 8: Check the package dependencies
 
-Confirm the packages your code actually uses are listed in `package.json`'s `dependencies` section; check the [com.realitytoolkit.core package.json](https://github.com/realitycollective/com.realitytoolkit.core/blob/rcdevelopment/package.json) for the expected format.
+Confirm the packages your code actually uses are listed in `package.json`'s `dependencies` section; check the [com.realitytoolkit.core package.json](https://github.com/realitycollective/com.realitytoolkit.core/blob/development/package.json) for the expected format.
 
 :::warning
 Do not add the new package as a dependency in the host Unity project's manifest. Dependencies belong only in the package's own `package.json`.

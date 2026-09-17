@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 title: Roadmap
 description: What is in place, what is experimental, the known in-headset verification gap, and what is not currently planned.
 ---

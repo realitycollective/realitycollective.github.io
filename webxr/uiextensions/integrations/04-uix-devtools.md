@@ -11,7 +11,7 @@ description: The edit-session gate, runtime UIKitML compilation and the uix-dev 
 `@realitycollective/uix-devtools` is developer-only tooling for the IWSDK adapter: an edit-session launch gate, runtime UIKitML compilation for live editing, and a CLI, `uix-dev`, that gets a local build onto a headset in one command through a Cloudflare quick tunnel. Install it as a `devDependency`. It is never meant to reach a player-facing bundle.
 
 ```bash
-npm install --save-dev @realitycollective/uix-devtools@preview
+npm install --save-dev @realitycollective/uix-devtools
 ```
 
 ## The edit gate, and why it is compiled out of production

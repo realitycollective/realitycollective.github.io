@@ -2,6 +2,7 @@
 mdx:
   format: md
 sidebar_position: 2
+description: The reusable GitHub Actions workflows the Reality Collective's Unity projects call, their inputs, and how to wire one into a new repository.
 ---
 
 # Reusable workflows

@@ -13,7 +13,7 @@ This is the reference adapter for [Meta's Immersive Web SDK](https://iwsdk.dev) 
 ## Install
 
 ```bash
-npm install @realitycollective/iwsdk-uiextensions@preview
+npm install @realitycollective/iwsdk-uiextensions
 # peers: @iwsdk/core >=0.5.0 <0.6.0 and three >=0.170.0 (every IWSDK app already has both)
 ```
 
@@ -39,6 +39,12 @@ createUIWindow(world, {
 ```
 
 `registerUIExtensions` registers every system this adapter needs and returns the `WindowManager`. Pass `{ drag: false }`, `{ nearDrag: false }`, `{ regions: false }`, `{ controls: false }` or `{ touchGuard: false }` to disable a piece of it.
+
+A panel that uses the `<uix-*>` controls needs the parser told about them: replace `spatialUI: true` with `spatialUI: { kit: 'horizon', componentSets: [uixComponentSet] }`, with `uixComponentSet` imported from this package. See [Controls and markup](../basics/06-controls-and-markup.md).
+
+## Reaching a panel
+
+`host.createWindow` returns an `IwsdkWindowHandle`: the portable `WindowHandle` (`id`, `panel`, `onReady`) plus the ECS `entity`. `onReady` fires once the document has attached, and immediately if it already has. For an entity you already hold, from `createUIWindow` or an ECS query, `getPanelHandle(entity)` returns its panel, or `undefined` while IWSDK is still loading the document; do not poll it on a timer, because a poll that gives up early leaves a window that draws and responds to nothing, with no error. `host.onPanelReady` announces every panel as it attaches: a managed window with `kind: 'window'`, and a bare `PanelUI` entity with no `UIWindow`, or a factory window created without an `id`, with `kind: 'panel'` and its config path as the id. A listener that only wants managed windows checks `kind`.
 
 ## What it adds over the core
 
@@ -68,7 +74,7 @@ npm test   # vitest, including packages/iwsdk-uiextensions/test/window-system.te
 ## More information
 
 - [Getting started](../basics/02-getting-started.md)
-- [The adapter contract](../basics/06-adapter-contract.md)
+- [The adapter contract](../basics/07-adapter-contract.md)
 - [Showcase example](../examples/01-showcase.md)
 - npm: [@realitycollective/iwsdk-uiextensions](https://www.npmjs.com/package/@realitycollective/iwsdk-uiextensions)
 - [API reference](pathname:///webxr/api/uiextensions/)

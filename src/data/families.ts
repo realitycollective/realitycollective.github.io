@@ -1,6 +1,6 @@
 // The four Reality Toolkit WebXR families, as shown on the /webxr page and the family overview pages.
-// Facts come from each repository's README on 2026-09-16. Versions are the working-tree values; the
-// pre-release families are installed with the @preview dist-tag.
+// Facts come from each repository's README and CHANGELOG on 2026-09-17, the day all four families had a
+// stable release on npm (Input 0.1.4, the other three 0.1.0), so plain `npm install` resolves each package.
 import {links, playgroundLinkMode} from '@site/src/links';
 
 export type AdapterStatus = 'full' | 'reference' | 'experimental' | 'untested' | 'pending' | 'released' | 'dev-only';
@@ -56,7 +56,7 @@ export const families: Family[] = [
     name: 'Input',
     headline: 'The contracts every adapter speaks.',
     lead: 'WebXR Input describes XR input in plain TypeScript types: where a hand or controller is pointing, what it is touching, and what the device can actually do. It has no dependency on any 3D engine and no runtime dependencies at all, and a test enforces both. That is what lets the Interactions and UI Extensions families share one description of input, so an engine adapter is written once and feeds both.',
-    chips: ['Released, 0.1.x on npm', 'MIT', 'Zero dependencies'],
+    chips: ['Released, 0.1.4 on npm', 'MIT', 'Zero dependencies'],
     core: {pkg: 'webxr-input', sub: 'types · capabilities · provider · pointer streams · velocity · conformance cases'},
     mapItems: [
       {pkg: 'webxr-interactions', sub: 'consumes it'},
@@ -103,7 +103,7 @@ export const families: Family[] = [
     name: 'Interactions',
     headline: 'Buttons, levers, dials and grabbable things.',
     lead: 'WebXR Interactions adds interactive objects to a WebXR scene. The interaction logic has no 3D engine code in it. You add one adapter for the engine you already use, and that adapter feeds the shared core. It is based wholly on the Reality Toolkit\'s interaction framework for Unity, revised for the web.',
-    chips: ['0.1.0 previews, install @preview', 'MIT', 'Pre-release by design'],
+    chips: ['Released, 0.1.0 on npm', 'MIT', 'Four engine adapters'],
     core: {pkg: 'webxr-interactions', sub: 'behaviours · targeting · gaze · events · feedback · descriptors'},
     mapItems: [
       {pkg: 'threejs-interactions', sub: 'adapter'},
@@ -136,8 +136,8 @@ export const families: Family[] = [
     demo: {label: 'Interaction playground', ...links.demos.interactions},
     cardBody: 'Interactables, interactors and behaviours: press, hinge, dial, slide, grab, toss-scoring, gaze dwell. Capability checks that switch a behaviour off and say why.',
     cardAdapters: 'three.js · Babylon.js · IWSDK · XR Blocks',
-    cardStatus: 'Preview',
-    released: false,
+    cardStatus: 'Released',
+    released: true,
   },
   {
     id: 'uiextensions',
@@ -154,7 +154,7 @@ export const families: Family[] = [
     name: 'UI Extensions',
     headline: 'Windows, docks, hand menus and controls, in the scene.',
     lead: 'WebXR UI Extensions is a library for building user interfaces inside a WebXR scene. It gives you movable, resizable windows that can be dragged, snapped into fixed regions of the scene, and filled with buttons, sliders and other controls. Panels are written in UIKitML, IWSDK\'s HTML and CSS-like markup for spatial panels. The core logic is plain TypeScript with no dependency on any 3D engine.',
-    chips: ['0.1.0 previews, install @preview', 'MIT', 'Pre-release by design'],
+    chips: ['Released, 0.1.0 on npm', 'MIT', 'Authored in UIKitML'],
     core: {pkg: 'webxr-uiextensions', sub: 'window manager · docking · regions · drag maths · controls · scene descriptor'},
     mapItems: [
       {pkg: 'iwsdk-uiextensions', sub: 'reference adapter'},
@@ -185,8 +185,8 @@ export const families: Family[] = [
     demo: {label: 'UI Extensions showcase', ...links.demos.uiShowcase},
     cardBody: 'Movable, dockable windows, layout regions, hand menus and controls for spatial UI, authored in UIKitML. Plus dev tooling for live editing on a headset.',
     cardAdapters: 'IWSDK · XR Blocks and three.js',
-    cardStatus: 'Preview',
-    released: false,
+    cardStatus: 'Released',
+    released: true,
   },
   {
     id: 'environment',
@@ -203,7 +203,7 @@ export const families: Family[] = [
     name: 'Environment',
     headline: 'The sky, the fog, the light, and the sound in it.',
     lead: 'WebXR Environment describes the world around the player, the sky, the fog and the light, and the sound in it, as plain data, and applies that description through a thin adapter for whichever engine is hosting. Every one of those is a platform facility that each host exposes differently. Content is never here: meshes, prefabs and placement belong to the app.',
-    chips: ['0.1.0 previews, install @preview', 'MIT', 'Core has zero dependencies'],
+    chips: ['Released, 0.1.0 on npm', 'MIT', 'Core has zero dependencies'],
     core: {pkg: 'webxr-environment', sub: 'environment document · presets · audio director · occlusion · light estimation · world sensing'},
     mapItems: [
       {pkg: 'threejs-environment', sub: 'adapter'},
@@ -234,8 +234,8 @@ export const families: Family[] = [
     demo: {label: 'Environment playground', ...links.demos.environment},
     cardBody: 'The world around the player as one document: sky, fog, light, image-based lighting, passthrough, occlusion, world sensing and the sound in it.',
     cardAdapters: 'three.js · IWSDK · XR Blocks',
-    cardStatus: 'Preview',
-    released: false,
+    cardStatus: 'Released',
+    released: true,
   },
 ];
 

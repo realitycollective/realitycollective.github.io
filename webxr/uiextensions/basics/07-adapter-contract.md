@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: The adapter contract
 description: PanelHost, WindowHost, HeadPoseSource and the conformance suite an adapter runs to prove it implements the contract.
 ---

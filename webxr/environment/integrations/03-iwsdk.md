@@ -15,7 +15,7 @@ The IWSDK adapter drives Meta's Immersive Web SDK's own environment, lighting an
 ## Install
 
 ```bash
-npm install @realitycollective/iwsdk-environment@preview
+npm install @realitycollective/iwsdk-environment
 ```
 
 Peer dependencies are `@iwsdk/core >= 0.5.0 < 0.6.0`, developed and tested against 0.5.3, and `three >= 0.170.0`, which every IWSDK application already carries. The adapter imports three.js classes from `three` directly rather than through `@iwsdk/core`'s star re-export, so it prebundles even when an app excludes `three` from Vite's dependency optimiser to transform its own source.

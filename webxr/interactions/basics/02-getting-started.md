@@ -11,10 +11,10 @@ This walkthrough uses the three.js adapter, the default and standalone choice: n
 ## Install an adapter
 
 ```sh
-npm install @realitycollective/threejs-interactions@preview three
+npm install @realitycollective/threejs-interactions three
 ```
 
-The adapter re-exports the core package wholesale, so this is the only interaction package the app depends on. Every preview family, including this one, installs from the `@preview` dist-tag.
+The adapter re-exports the whole core package, so this is the only interaction package the app depends on. The stable release is what a bare `npm install` resolves; see [Releases and versions](../../concepts/04-releases-and-versions.md) for the dist-tags.
 
 ## Create the runtime
 

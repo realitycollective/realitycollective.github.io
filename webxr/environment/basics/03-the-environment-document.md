@@ -10,7 +10,7 @@ An `EnvironmentSpec` describes a whole environment as one document, five slots w
 
 ## Sky
 
-A sky is one of three kinds. A **gradient** sky has a `top` colour at the zenith and a `bottom` colour at the nadir, with an optional `equator` colour where they meet at the horizon. Pass `equator` explicitly when you need both engines to agree on a bright band at eye level, because IWSDK's dome is a three-stop ramp and would otherwise guess the middle colour from the two-stop ramp three.js builds. A **solid** sky is a single flat colour, the cheapest sky there is. A **texture** sky wraps an authored equirectangular image around the world, with an intensity, a rotation and an optional blur for a sky used as a backdrop.
+A sky is one of three kinds. A **gradient** sky has a `top` colour at the zenith and a `bottom` colour at the nadir, with an optional `equator` colour where they meet at the horizon. Pass `equator` explicitly when you need both engines to agree on a bright band at eye level, because IWSDK's dome is a three-stop ramp and would otherwise guess the middle colour from the two-stop ramp three.js builds. A gradient also takes `horizon`, where the two colours meet as a fraction of the way up the sphere (default `0.5`), `exponent` to sharpen or soften the blend (default `1`, a linear ramp), and `intensity`. A **solid** sky is a single flat colour, the cheapest sky there is. A **texture** sky wraps an authored equirectangular image around the world, with an intensity, a rotation and an optional blur for a sky used as a backdrop.
 
 ## Fog
 

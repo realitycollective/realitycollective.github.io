@@ -21,7 +21,7 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 - A bundler of your choice; the demos use Vite.
 - TypeScript is recommended but not required; the packages ship type declarations.
 
-Current release: `0.1.0` previews on npm, published under the `preview` tag.
+Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 
 ### Packages
 
@@ -36,16 +36,16 @@ Each adapter re-exports the whole core, so an app installs one package:
 
 ```sh
 # Meta IWSDK apps (core re-exported)
-npm install @realitycollective/iwsdk-uiextensions@preview
+npm install @realitycollective/iwsdk-uiextensions
 
 # Google XR Blocks / plain three.js apps (core re-exported, experimental)
-npm install @realitycollective/xrblocks-uiextensions@preview three
+npm install @realitycollective/xrblocks-uiextensions three
 
 # Writing headless logic, tests, or a new engine adapter
-npm install @realitycollective/webxr-uiextensions@preview
+npm install @realitycollective/webxr-uiextensions
 
 # Developer tooling, dev dependency only, never shipped
-npm install --save-dev @realitycollective/uix-devtools@preview
+npm install --save-dev @realitycollective/uix-devtools
 ```
 
 ## Use cases
@@ -125,8 +125,8 @@ Questions and problems go to the [issue tracker](https://github.com/realitycolle
 
 ## Documentation
 
-- [Basics: Introduction](./basics/01-introduction.md), and the rest of the [Basics](/webxr/docs/uiextensions/basics) section, one page per topic
-- [Features: Developer cycle](./features/01-developer-cycle.md) and [Design and decisions](./features/02-design-and-decisions.md), in [Features](/webxr/docs/uiextensions/features)
+- [Basics: Introduction](./basics/01-introduction.md), [Hand menus](./basics/05-hand-menus.md) and the rest of the [Basics](/webxr/docs/uiextensions/basics) section, one page per topic
+- [Features: Developer cycle](./features/01-developer-cycle.md), [Near touch](./features/02-near-touch.md) and [Design and decisions](./features/03-design-and-decisions.md), in [Features](/webxr/docs/uiextensions/features)
 - [Host integrations: Core](./integrations/01-core.md), one page per npm package, in [Host integrations](/webxr/docs/uiextensions/integrations)
 - [Examples: Showcase](./examples/01-showcase.md), and the rest of the [Examples](/webxr/docs/uiextensions/examples) section
 - [WebXR UI Extensions overview](/webxr/uiextensions)

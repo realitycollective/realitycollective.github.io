@@ -11,7 +11,7 @@ This page installs one adapter and gets a single window on screen, using the ref
 ## Install
 
 ```bash
-npm install @realitycollective/iwsdk-uiextensions@preview
+npm install @realitycollective/iwsdk-uiextensions
 ```
 
 Peer dependencies, the packages your app installs alongside the adapter: `@iwsdk/core >=0.5.0 <0.6.0` and `three >=0.170.0`, which every IWSDK app already has.

@@ -28,6 +28,8 @@ world.onChange((change) => {
 });
 ```
 
+`planes()`, `meshes()` and `anchors()` read the registries directly, and `planesLabelled("floor")` and `meshesLabelled("wall")` filter by the label the runtime attached, matched without case. The labels are the host's vocabulary, not the framework's: a wall arrives as a detected mesh as often as a plane, so query both, and treat an unknown label as a string to log rather than an error.
+
 ## The report states
 
 Every sensor-backed feature reports one of four states, in the order things usually go wrong: `"unsupported"` (this host cannot do it at all), `"unavailable"` (the host can, but this session did not get it), `"pending"` (asked for and accepted, nothing measured yet) and `"active"` (working right now). Each report may carry a `detail` sentence for a human; it is never parsed or switched on.

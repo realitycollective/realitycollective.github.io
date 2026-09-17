@@ -50,10 +50,10 @@ The generator puts the app entry point in `src/index.ts` (its README says so, an
 
 ## Step 2: Install the UI Extensions adapter
 
-`@realitycollective/iwsdk-uiextensions` is the Meta IWSDK adapter for WebXR UI Extensions, currently a `0.1.0` preview on npm:
+`@realitycollective/iwsdk-uiextensions` is the Meta IWSDK adapter for WebXR UI Extensions, released as `0.1.0` on npm:
 
 ```bash
-npm install @realitycollective/iwsdk-uiextensions@preview
+npm install @realitycollective/iwsdk-uiextensions
 ```
 
 This one package is everything you need. It re-exports the engine-free core, `@realitycollective/webxr-uiextensions`, in full, along with the input contracts it depends on, so no separate core install is required. It peers on `@iwsdk/core >=0.5.0 <0.6.0` and `three >=0.170.0`, both of which the generated project already has. See [Getting started](/webxr/docs/uiextensions/basics/getting-started) for the full walkthrough of this adapter on its own.
@@ -182,7 +182,7 @@ const sphereEntity = world.createTransformEntity(sphere);
 `@realitycollective/iwsdk-interactions` is the Meta IWSDK adapter for the Reality Collective Interaction Extensions. It re-exports its engine-free core, so this one package is everything you need:
 
 ```bash
-npm install @realitycollective/iwsdk-interactions@preview
+npm install @realitycollective/iwsdk-interactions
 ```
 
 `registerInteractions(world)` is a one-call setup, idempotent per world, that registers the bridge system for you. `register` describes an interactable as data, an id and the behaviours it carries; `press` is a mechanical button that fires an `actuated` event on press and a `released` event on release, described on the core's [Behaviours](/webxr/docs/interactions/basics/behaviours) page.
@@ -204,7 +204,7 @@ Both this adapter and the UI Extensions adapter from step 2 implement the same e
 `@realitycollective/iwsdk-environment` is the Meta IWSDK adapter for WebXR Environment. It drives IWSDK's own sky, light and audio machinery rather than reaching past it to three.js:
 
 ```bash
-npm install @realitycollective/iwsdk-environment@preview
+npm install @realitycollective/iwsdk-environment
 ```
 
 `registerEnvironment(world, options)` is a one-call setup that also registers the system ticking both the sky and the audio. `STOCK_PRESETS` and `VOID` are example environments shipped for a new project's first five minutes; `transition` eases from the current sky to another over a duration. Passing `audio.cues` registers a sound the app can play by id later. There is no audio file in the package, so put any short `.mp3` you have at `public/audio/click.mp3`, the way the <DemoLink demo="environment">Environment playground</DemoLink> demo does:
@@ -244,7 +244,7 @@ interactions.runtime.onEvent((event) => {
 Both routes below come from the UI Extensions developer cycle and use the `uix-dev` CLI. Install it as a dev dependency first:
 
 ```bash
-npm install --save-dev @realitycollective/uix-devtools@preview
+npm install --save-dev @realitycollective/uix-devtools
 ```
 
 ### Route A: quick tunnel (wireless)

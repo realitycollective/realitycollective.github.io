@@ -10,10 +10,10 @@ This page takes you from an empty scene to a preset applied and eased on three.j
 
 ## Install one adapter
 
-Install exactly one engine **adapter**: the package that translates the environment's plain data onto your engine. Every adapter re-exports the engine-free core, so you never install the core yourself. The family is pre-release, so install with the `@preview` tag:
+Install exactly one engine **adapter**: the package that translates the environment's plain data onto your engine. Every adapter re-exports the engine-free core, so you never install the core yourself.:
 
 ```bash
-npm install @realitycollective/threejs-environment@preview three
+npm install @realitycollective/threejs-environment three
 ```
 
 ## Create the director with the three.js adapter

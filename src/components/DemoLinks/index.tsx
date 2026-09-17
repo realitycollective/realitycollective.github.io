@@ -39,9 +39,10 @@ export function DemoLink({demo, path = '', children}: {demo: DemoId; path?: stri
 // Both hosts side by side, for pages that explain where a demo lives.
 export function DemoHosts({demo}: {demo: DemoId}): ReactNode {
   const {live, preview, released} = demoHosts(demo);
+  const previewLink = links.demos[demo].previewServes ? <a href={preview}><code>{hostOf(preview)}</code></a> : <><code>{hostOf(preview)}</code> (not yet serving)</>;
   return (
     <>
-      Preview: <a href={preview}><code>{hostOf(preview)}</code></a>. Live: <a href={live}><code>{hostOf(live)}</code></a>
+      Preview: {previewLink}. Live: <a href={live}><code>{hostOf(live)}</code></a>
       {released ? '.' : ' (active once the family has a stable release).'}
     </>
   );
@@ -70,9 +71,15 @@ export function PlaygroundTable(): ReactNode {
                 <a href={`/webxr/${family.id}`}>{family.name}</a>
               </td>
               <td>
-                <a href={preview}>
-                  <code>{hostOf(preview)}</code>
-                </a>
+                {links.demos[id].previewServes ? (
+                  <a href={preview}>
+                    <code>{hostOf(preview)}</code>
+                  </a>
+                ) : (
+                  <span title="The staging project does not yet serve at its root; see the repository's CI for the deploy branch.">
+                    <code>{hostOf(preview)}</code> (not yet serving)
+                  </span>
+                )}
               </td>
               <td>
                 <a href={live}>

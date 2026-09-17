@@ -42,10 +42,10 @@ The generator puts the app entry point in `src/index.ts` (its README says so, an
 
 ## Step 2: Install the UI Extensions adapter
 
-`@realitycollective/iwsdk-uiextensions` is the Meta IWSDK adapter for WebXR UI Extensions, currently a `0.1.0` preview on npm:
+`@realitycollective/iwsdk-uiextensions` is the Meta IWSDK adapter for WebXR UI Extensions, released as `0.1.0` on npm:
 
 ```bash
-npm install @realitycollective/iwsdk-uiextensions@preview
+npm install @realitycollective/iwsdk-uiextensions
 ```
 
 This one package is everything you need. It re-exports the engine-free core, `@realitycollective/webxr-uiextensions`, in full, along with the input contracts it depends on, so no separate core install is required. It peers on `@iwsdk/core >=0.5.0 <0.6.0` and `three >=0.170.0`, both of which the generated project already has.
@@ -179,7 +179,7 @@ world.createTransformEntity(sphere);
 Both routes below come from the UI Extensions developer cycle and use the `uix-dev` CLI. Install it as a dev dependency first:
 
 ```bash
-npm install --save-dev @realitycollective/uix-devtools@preview
+npm install --save-dev @realitycollective/uix-devtools
 ```
 
 ### Route A: quick tunnel (wireless)

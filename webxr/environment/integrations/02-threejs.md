@@ -15,7 +15,7 @@ The three.js adapter binds the engine-free core to a three.js `Scene` and `Audio
 ## Install
 
 ```bash
-npm install @realitycollective/threejs-environment@preview three
+npm install @realitycollective/threejs-environment three
 ```
 
 The peer dependency is `three >= 0.170.0`; Meta's `super-three` fork satisfies it and is what the workspace develops against.

@@ -1,25 +1,21 @@
 ---
 sidebar_position: 4
 title: Releases and versions
-description: What released and pre-release mean across the four repositories, the publish order between them, and where to report an issue.
+description: The released versions, what the latest and preview dist-tags mean, the publish order between the four repositories, and where to report an issue.
 ---
 
 # Releases and versions
 
 All four repositories share the same release automation, so the pattern on this page applies whichever family you are reading about.
 
-:::important
-The WebXR framework is still in development at ths time and being heavily tested and put through its paces, although it is expected to hit V1 soon.
+## Released versions
 
-As such, the main packages: Interactions, Environment and UIExtensions are classified as "Previews" to denote their developmental phase.
-:::
+All four families have a stable release on npm. WebXR-Input is at `0.1.4`; WebXR-Interactions, WebXR-UIExtensions and WebXR-Environment shipped `0.1.0` on 17 September 2026. A bare `npm install` of any package resolves the stable release, because every package's `latest` dist-tag points at it. A dist-tag is npm's name for a release channel: `latest` is what a bare `npm install` resolves, and `preview` is what `@preview` resolves.
 
-## Released versus pre-release
-
-WebXR-Input is the one released family in the stack: its npm `latest` dist-tag is `0.1.4`. WebXR-Interactions, WebXR-UIExtensions and WebXR-Environment are pre-release by design, on `0.1.0` previews whose number moves with every publish. Install their adapters with the `@preview` tag, not the bare package name. A dist-tag is npm's name for a release channel: `latest` is what a bare `npm install` resolves, and `preview` is what `@preview` resolves.
+The `0.x` range is deliberate: the APIs are stable enough to build on, but a minor version may still change a signature, and the changelog of each repository records every such change under a **Changed** heading. Pin the versions you build against and read the changelog before moving up.
 
 :::note
-npm pins the `latest` dist-tag to a package's first publish, so `latest` for these three pre-release families still resolves to their first preview. Installing without `@preview` will not get you the current version.
+Every package also carries a `preview` dist-tag, published from each repository's `development` branch ahead of the next release. Install `@preview` only when you want to try a change before it ships; the previews are not supported.
 :::
 
 ## What latest and preview mean on npm

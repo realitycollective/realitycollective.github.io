@@ -20,7 +20,7 @@ Experimental. The XR Blocks pipeline is young and its API still moves. Treat thi
 ## Install
 
 ```sh
-npm install @realitycollective/xrblocks-interactions@preview three
+npm install @realitycollective/xrblocks-interactions three
 ```
 
 Peer dependency: `three >= 0.170.0`. xrblocks itself declares a peer of `three@^0.184`, while Meta's IWSDK mandates the `super-three@0.181` fork. A bundler resolves a single `three` per bundle, so this works in practice, but npm's own peer check cannot express it, which is why the Reality Collective workspaces set `legacy-peer-deps=true`.

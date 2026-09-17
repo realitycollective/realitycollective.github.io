@@ -8,7 +8,7 @@ description: How the core measures the speed of a hand or controller, and how ad
 
 ## Native versus derived velocity
 
-A throw, a flick or a swipe needs to know how fast a hand was moving when it let go. WebXR does not report that, and most engines do not either, so the core differentiates the grip poses it already samples. This runs by default; pass `velocity: false` to the runtime options to skip it, or `{ smoothing }` (a factor in `(0, 1]`, `1` is raw with no smoothing) to average out a noisy pose stream. Where a provider supplies its own `linearVelocity` or `angularVelocity`, on a snapshot already, the tracker leaves it alone: the provider's own numbers always win.
+A throw, a flick or a swipe needs to know how fast a hand was moving when it let go. WebXR does not report that, and most engines do not either, so the core differentiates the grip poses it already samples, in `VelocityTracker`. This runs by default; pass `velocity: false` to the runtime options to skip it, or `{ smoothing }` (a factor in `(0, 1]`, `1` is raw with no smoothing) to average out a noisy pose stream. Where a provider supplies its own `linearVelocity` or `angularVelocity`, on a snapshot already, the tracker leaves it alone: the provider's own numbers always win.
 
 ## First-frame and reappearance rules
 
