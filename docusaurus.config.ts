@@ -138,8 +138,8 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // 1200x630 (1.91:1), the ratio X, LinkedIn and Discord show uncropped. The wide 2000x800 art stays for the blog post.
-    image: 'img/webxr-social-card-og.png',
+    // Site-wide default social card, 1200x630 (1.91:1). The WebXR launch post sets its own card in front matter.
+    image: 'img/rc-social-card-og.png',
     navbar: {
       title: 'Reality Collective',
       logo: {
