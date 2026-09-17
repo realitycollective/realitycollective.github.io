@@ -1,0 +1,10 @@
+{
+  "label": "Basics",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "/interactions/basics",
+    "title": "Interactions: Basics",
+    "description": "Learn the foundational concepts of WebXR Interactions and how to use it. The pages follow the shape of the Service Framework basics."
+  }
+}

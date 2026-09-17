@@ -1,12 +1,11 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Global styles. Infima is bundled by the classic preset; the variables below override it.
+ * The colour ramps are the Reality Collective's (magenta light, red dark); the type pairing and the
+ * dark page tokens are shared with the Service Framework site so the two read as one system.
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #A81481;
+  --ifm-color-primary: #a81481;
   --ifm-color-primary-dark: #971274;
   --ifm-color-primary-darker: #8f116e;
   --ifm-color-primary-darkest: #760e5a;
@@ -15,11 +14,32 @@
   --ifm-color-primary-lightest: #da1aa8;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --ifm-font-family-base: 'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --ifm-heading-font-family: 'Space Grotesk', 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --ifm-heading-font-weight: 700;
+
+  /* Dark page tokens, shared with the Service Framework homepage and overview. */
+  --rc-bg: #12141a;
+  --rc-panel: #1c2030;
+  --rc-line: #262a35;
+  --rc-border: #3a3f4d;
+  --rc-text: #eef0f4;
+  --rc-muted: #b7bcc8;
+  --rc-faint: #8e94a3;
+  --rc-action: #fc3848;
+  --rc-link: #ff7ad0;
+
+  /* Brand colours from the logo ramp, used by the sunset hero. */
+  --rc-magenta: #a81481;
+  --rc-deep-magenta: #760e5a;
+  --rc-navy: #102445;
+  --rc-gold: #ffc93c;
+  --rc-ink: #2c0620;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #FC3848;
+  --ifm-color-primary: #fc3848;
   --ifm-color-primary-dark: #fc1a2c;
   --ifm-color-primary-darker: #fb0a1e;
   --ifm-color-primary-darkest: #d40314;
@@ -27,4 +47,42 @@
   --ifm-color-primary-lighter: #fd6672;
   --ifm-color-primary-lightest: #fd939c;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Pages that open on a dark band (homepage, /webxr, the family overviews) get a dark navbar whatever the theme. */
+body:has(main.rc-dark-nav) .navbar {
+  --ifm-navbar-background-color: var(--rc-bg);
+  --ifm-navbar-link-color: var(--rc-text);
+  --ifm-navbar-link-hover-color: #ffffff;
+  --ifm-color-emphasis-200: var(--rc-line);
+  --ifm-menu-color: var(--rc-text);
+  --ifm-navbar-search-input-background-color: var(--rc-panel);
+  color: var(--rc-text);
+  border-bottom: 1px solid var(--rc-line);
+  box-shadow: none;
+}
+
+body:has(main.rc-dark-nav) .navbar .navbar__title,
+body:has(main.rc-dark-nav) .navbar .navbar__link,
+body:has(main.rc-dark-nav) .navbar .navbar__toggle,
+body:has(main.rc-dark-nav) .navbar .clean-btn {
+  color: var(--rc-text);
+}
+
+body:has(main.rc-dark-nav) .navbar .navbar__link--active {
+  color: var(--rc-link);
+}
+
+body:has(main.rc-dark-nav) .navbar .dropdown__menu {
+  background: var(--rc-panel);
+}
+
+body:has(main.rc-dark-nav) .navbar .dropdown__link {
+  color: var(--rc-text);
+}
+
+body:has(main.rc-dark-nav) .navbar .dropdown__link:hover,
+body:has(main.rc-dark-nav) .navbar .dropdown__link--active {
+  background: var(--rc-line);
+  color: var(--rc-link);
 }

@@ -1,0 +1,35 @@
+{
+  "$comment": "Repositories the WebXR API reference is generated from. 'ref' is a branch, tag or commit. Override per run with <ENV>_REF (branch/tag/sha) or <ENV>_DIR (use a local checkout, no fetch). The same overrides are exposed as --<name>-ref and --<name>-dir on `npm run local` and as workflow_dispatch inputs on the Test deployment workflow. Generated output lands in webxr-api/<name>/.",
+  "input": {
+    "label": "Input",
+    "repo": "https://github.com/realitycollective/WebXR-Input.git",
+    "ref": "main",
+    "dir": ".sources/WebXR-Input",
+    "env": "WEBXR_INPUT",
+    "install": "npm"
+  },
+  "interactions": {
+    "label": "Interactions",
+    "repo": "https://github.com/realitycollective/WebXR-Interactions.git",
+    "ref": "main",
+    "dir": ".sources/WebXR-Interactions",
+    "env": "WEBXR_INTERACTIONS",
+    "install": "npm"
+  },
+  "uiextensions": {
+    "label": "UI Extensions",
+    "repo": "https://github.com/realitycollective/WebXR-UIExtensions.git",
+    "ref": "main",
+    "dir": ".sources/WebXR-UIExtensions",
+    "env": "WEBXR_UIEXTENSIONS",
+    "install": "npm"
+  },
+  "environment": {
+    "label": "Environment",
+    "repo": "https://github.com/realitycollective/WebXR-Environment.git",
+    "ref": "main",
+    "dir": ".sources/WebXR-Environment",
+    "env": "WEBXR_ENVIRONMENT",
+    "install": "npm"
+  }
+}

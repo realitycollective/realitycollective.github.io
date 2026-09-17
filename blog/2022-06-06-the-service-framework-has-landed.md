@@ -1,18 +1,18 @@
 ---
 slug: serviceframework
 title: The Service Framework has landed
-authors: [simon, rony, dino]
-tags: [welcome, service, framework]
+authors: [simon, dino]
+tags: [service-framework]
 ---
 
-[![Reality Collective Logo](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveBanner_600x300.png)](https://www.realitycollective.net/)
-
-# A brave new world
+[![Reality Collective Logo](https://github.com/realitycollective/realitycollective.logo/raw/main/RepoBanners/com.realitycollective.service-framework.png)](https://www.realitycollective.net/)
 
 Building projects in Unity is hard, if done right.  There are so many tools out there and lots of assets to choose from and not all of them play nicely together.
 This gets even more tricky if you then need to have "managers" in your project that run in your scene or if you need connections to external services and components.
 
-### **Enter the [Service Framework](https://service-framework.realitycollective.io/)**
+<!-- truncate -->
+
+## **Enter the [Service Framework](https://serviceframework.realitycollective.net/)**
 
 ---
 
@@ -35,9 +35,9 @@ However, due to its integral nature, it was not available outside of these toolk
 
 ---
 
-## Enter the **new and improved** [Service Framework](https://service-framework.realitycollective.io/)
+## Enter the **new and improved** [Service Framework](https://serviceframework.realitycollective.net/)
 
-[![](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollectiveLogo_256.png)](https://service-framework.realitycollective.io/)
+[![Reality Collective logo](https://github.com/realitycollective/realitycollective.logo/raw/main/Branding/RealityCollective_IconLogo.png)](https://serviceframework.realitycollective.net/)
 
 In essence, everything that was good and fantastic about the implementation in other frameworks has been extracted, improved and enhanced so that it is now available for **ANY Unity project**, not limited to XR.
 
@@ -49,7 +49,7 @@ On top of the previous capabilities, we have added and improved the framework wi
 * Configuration run or Code run registration of services.
 * Improved Service Generator for creating new services.
 * Easy migration from other frameworks, only requiring namespace and base implementation changes (migration docs to follow)
-* [Documentation!!](https://service-framework.realitycollective.io/docs/get-started) - still a Work in Progress but advancing quickly
+* [Documentation!!](https://serviceframework.realitycollective.net/docs/get-started) - still a Work in Progress but advancing quickly
 
 There is so much more than can really be noted in a simple blog post, so we encourage you to check it out from our [new Homepage](https://www.realitycollective.net/)
 
@@ -73,7 +73,7 @@ The options are almost endless and some of the above you may see published as pa
 
 ## The beginning of the journey
 
-[![](https://media.giphy.com/media/1jl0Xuj9wEptDaNTjT/giphy.gif)](https://service-framework.realitycollective.io/)
+[![Animated celebration](https://media.giphy.com/media/1jl0Xuj9wEptDaNTjT/giphy.gif)](https://serviceframework.realitycollective.net/)
 
 As of today, the first public preview of the Service Framework is now available for use, published on OpenUPM.  The Framework is fully supported and tested on all current LTS versions of Unity and is the most tested thing ever.
 
@@ -87,11 +87,11 @@ It can be installed quickly into your project from the command-line using the Op
 `openupm add com.realitycollective.service-framework`
 ```
 
-> For more details on installing the Service Framework, check out the "[**Getting Started**](https://service-framework.realitycollective.io/docs/basics/getting_started#installing-the-service-framework)" docs on the Service-Frameworks page.
+> For more details on installing the Service Framework, check out the "[**Getting Started**](https://serviceframework.realitycollective.net/docs/basics/getting_started#installing-the-service-framework)" docs on the Service-Frameworks page.
 
 Once installed, configuration and implementation is quick and easy.
 
-![Service Framework blank configuration](https://service-framework.realitycollective.io/assets/images/02_03_ServiceFrameworkEmptyConfiguraton-d138c705ad43f06c01f1881afe773fd7.png)
+![Service Framework blank configuration](/img/blog/service-framework-empty-configuration.png)
 
 ## And there is more
 
@@ -115,4 +115,4 @@ Our mission at the collective is not limited to any one platform, framework or i
 
 Join us on our [Discord Server](https://discord.gg/YjHAQD2XT8) if you have questions or just want to chat about where we are headed.
 
-[![](https://media.giphy.com/media/JUMagNHzWMeAkx9pyV/giphy.gif)](https://discord.gg/YjHAQD2XT8)
+[![Animated invitation to join the Discord](https://media.giphy.com/media/JUMagNHzWMeAkx9pyV/giphy.gif)](https://discord.gg/YjHAQD2XT8)

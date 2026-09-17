@@ -1,23 +1,288 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
+/* Homepage: the "brand sunset" design. Always dark, whatever the site theme. */
 
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.page {
+  background: var(--rc-bg);
+  color: var(--rc-text);
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.page a {
+  color: var(--rc-link);
 }
 
-.buttons {
+.page a:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.heroInner {
   display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 720px;
+  margin: 0 auto 0 8%;
+  padding: 120px 32px 150px;
+}
+
+.pill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--rc-gold);
+  color: var(--rc-ink);
+  font-family: var(--ifm-heading-font-family);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0;
+  font-size: 5.25rem;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  text-shadow: 0 4px 0 var(--rc-ink);
+}
+
+.lead {
+  margin: 0;
+  max-width: 600px;
+  font-size: 1.3125rem;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1.0625rem;
+}
+
+/* Written as ".page a.primary" so these beat the page-wide pink link colour above. */
+.page a.primary {
+  background: var(--rc-ink);
+  color: #ffffff;
+}
+
+.page a.primary:hover {
+  background: #000000;
+}
+
+.page a.secondary {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+}
+
+.page a.secondary:hover {
+  border-color: #ffffff;
+}
+
+.projects {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  max-width: 1248px;
+  margin: -72px auto 0;
+  padding: 0 32px;
+}
+
+.page a.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 36px;
+  background: var(--rc-panel);
+  border: 1px solid var(--rc-line);
+  border-radius: 12px;
+  color: var(--rc-text);
+}
+
+.page a.card:hover {
+  border-color: var(--rc-border);
+}
+
+.eyebrow,
+.eyebrowAccent {
+  font-family: var(--ifm-heading-font-family);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rc-faint);
+}
+
+.eyebrowAccent {
+  color: var(--rc-action);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.625rem;
+}
+
+.cardBody,
+.body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--rc-muted);
+}
+
+.cardLink {
+  margin-top: auto;
+  font-weight: 600;
+  color: var(--rc-link);
+}
+
+.about {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+  align-items: center;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 80px 32px 40px;
+}
+
+.aboutCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 2.5rem;
+  letter-spacing: -0.01em;
+}
+
+.headingSmall {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.body {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.inlineLinks {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 0.9375rem;
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: 1.5px solid var(--rc-muted);
+  border-radius: 999px;
+  color: var(--rc-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.blog {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 24px 32px 80px;
+}
+
+.blogHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.moreLink {
+  font-weight: 600;
+}
+
+.posts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.page a.post {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 0;
+  border-top: 1px solid var(--rc-line);
+  color: var(--rc-text);
+}
+
+.postTitle {
+  margin: 0;
+  font-size: 1.375rem;
+}
+
+@media (max-width: 996px) {
+  .heroInner {
+    margin: 0;
+    padding: 56px 16px 72px;
+    max-width: none;
+  }
+
+  .title {
+    font-size: 2.75rem;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+  }
+
+  .projects {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 32px;
+    padding: 0 16px;
+  }
+
+  .about,
+  .blog {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding-top: 48px;
+  }
+
+  .heading {
+    font-size: 1.75rem;
+  }
+
+  .posts {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

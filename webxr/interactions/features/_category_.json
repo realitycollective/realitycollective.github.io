@@ -1,0 +1,10 @@
+{
+  "label": "Features",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "slug": "/interactions/features",
+    "title": "Interactions: Features",
+    "description": "Discover the additional capabilities that ship with the family, and the design decisions behind it."
+  }
+}

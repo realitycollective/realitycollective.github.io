@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+description: How the Reality Collective's Unity packages are versioned and released through the shared GitHub Actions pipelines.
 ---
 
 # Release Pipelines

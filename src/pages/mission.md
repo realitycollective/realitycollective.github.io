@@ -1,15 +1,13 @@
 ---
 title: Our Mission
-description: This is our mission
+description: The Reality Collective's mission, to simplify and accelerate XR development in Unity and on the web through tools, components and services that work on every supported platform.
 hide_table_of_contents: true
 ---
 
-# Our Mission
+The mission of the Reality Collective is to simplify and accelerate XR development, in Unity and on the web, through a range of useful tools, components and services.
 
-The sole mission of the Reality Collective is to simplify and accelerate XR and Unity development through a range of useful tools, components and services.
+XR development is hard enough without having to worry about how each vendor or engine "does things differently". Through the Reality Toolkit, the Service Framework and the WebXR families, you build your project once, against the framework, and the framework does the heavy lifting to make it work on every supported platform. On the web that means one engine-free core per concern and one adapter per engine, so a behaviour, a window or an environment runs unchanged on three.js, Babylon.js, Meta IWSDK or Google XR Blocks.
 
-XR Development is hard enough without having to worry about how each provider or vendor "does things differently", through the Reality Toolkit and other projects, you build your project once (against the toolkit) and we handle the heavy lifting to "make it work" on all supported platforms.
+Have a suggestion or a feature you would like? Raise an issue on the relevant project and we will prioritise it, or open a pull request yourself to get it in faster. The [contribution guide](/contribution) explains how.
 
-Have a suggestion or feature you would like, they raise an issue on the respective project and we'll prioritise it for delivery, or you can even make a PR yourself to get it in faster.
-
- :heart: The Reality Collective
+:heart: The Reality Collective
