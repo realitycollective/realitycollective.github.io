@@ -1,7 +1,7 @@
 ---
 slug: serviceframework
 title: The Service Framework has landed
-authors: [simon, rony, dino]
+authors: [simon, dino]
 tags: [service-framework]
 ---
 
