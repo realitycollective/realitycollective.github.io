@@ -51,6 +51,8 @@ Occlusion, light estimation, planes, meshes, anchors and hit tests each report `
 
 **Why:** a sensor-backed feature fails to a scene that looks completely normal, so an app that could not tell the difference would ship the failure. See [Sensing](./01-sensing.md) for the full report model.
 
+A port never calls a method to say a feature is unsupported. `applyOcclusion` and `applyLightEstimation` on `EnvironmentPort`, and every setter on `WorldSensingPort`, are optional members; a port that cannot do the feature at all leaves the method off entirely, rather than implementing it just to report failure. `EnvironmentDirector` and `WorldSensingDirector` already check whether their port has the method before calling it, so they see it is missing and report `unsupported` on their own, one layer above the port. Wiring a method on a port that only re-reports what the director already knows would say the same sentence twice. Every adapter follows this, including `native-environment`, whose ports grow an optional method onto themselves only when the native host implements it and otherwise leave it off, exactly as the web adapters do.
+
 The sections below set out each of these decisions in full.
 
 ## What the family owns
@@ -90,5 +92,6 @@ If a source is there, the app binds it. If it is not, nothing happens, and neith
 
 - [Sensing](./01-sensing.md)
 - [Roadmap](../basics/06-roadmap.md)
+- [Native adapter](../integrations/05-native.md)
 - [Layering rule](/webxr/docs/concepts/layering-rule)
 - [API reference](pathname:///webxr/api/environment/)

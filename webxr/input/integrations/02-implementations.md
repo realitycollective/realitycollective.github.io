@@ -6,7 +6,7 @@ description: The engine adapters that implement InputProvider, and which capabil
 
 # Implementations
 
-Four engine adapters in the Interactions family implement `InputProvider` today. Each is described in depth on its own page; this page only says which one to reach for and links onward.
+Five adapters in the Interactions family implement `InputProvider` today. Each is described in depth on its own page; this page only says which one to reach for and links onward.
 
 ## three.js
 
@@ -24,6 +24,10 @@ Four engine adapters in the Interactions family implement `InputProvider` today.
 
 `@realitycollective/xrblocks-interactions` feeds XR Blocks input into the contracts and reuses the three.js adapter's hit-testing. Its own README marks it experimental, since the XR Blocks pipeline is still young. See the [XR Blocks adapter](/webxr/docs/interactions/integrations/xrblocks).
 
+## Native
+
+`@realitycollective/native-interactions` reads the `input` slice a native app (OpenXR on Quest, CompositorServices on visionOS) installs on `globalThis.__rcHost`, and copies every snapshot before it leaves the provider, so a host that reuses its own buffers cannot change a snapshot the app is still holding. From 0.1.1 (preview). Tested headless against an in-memory fake of the slice only; not yet run on real hardware. See the [Native adapter](/webxr/docs/interactions/integrations/native).
+
 ## Which capability each one reports
 
 This table records only what each adapter's own README states. A blank cell means the README does not describe that capability either way; check the adapter's page or its README for anything not shown here.
@@ -40,9 +44,12 @@ This table records only what each adapter's own README states. A blank cell mean
 
 `pinch`, `buttonsAxes`, `gaze`, `headPose` and `grabsNative` are not described explicitly in any of the four READMEs, so they are left off this table rather than guessed at.
 
+Native is left off this table too, for a different reason: it declares no fixed capability set of its own. `getCapabilities()` passes through whatever `__rcHost.input` reports, so what it can do depends on the host, not on the adapter.
+
 ## More information
 
 - [The contracts package](./01-core.md)
 - [Provider conformance](../basics/05-provider-conformance.md)
 - [Conformance in practice](../examples/01-conformance-in-practice.md)
 - [Pointer streams and velocity](../features/01-pointer-streams-and-velocity.md)
+- [Native as a platform](/webxr/docs/concepts/native-platform)

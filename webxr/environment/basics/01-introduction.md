@@ -18,12 +18,12 @@ Every slot in an environment is a **platform facility**: something the host engi
 
 ## Core and adapter
 
-The **core** package, `@realitycollective/webxr-environment`, holds the environment and audio logic as plain data, with no 3D engine code and no dependencies at all. An **adapter** translates that plain data onto one engine: three.js, IWSDK or Google XR Blocks. You install one adapter, and it re-exports the core, so you never install the core yourself.
+The **core** package, `@realitycollective/webxr-environment`, holds the environment and audio logic as plain data, with no 3D engine code and no dependencies at all. An **adapter** translates that plain data onto one host: three.js, IWSDK, Google XR Blocks, or, from 0.1.1 (preview), a native app on OpenXR or visionOS that embeds a JavaScript engine such as Hermes. You install one adapter, and it re-exports the core, so you never install the core yourself.
 
 ## The layering rule
 
 ```
-app → ONE adapter (threejs | iwsdk | xrblocks) → core (webxr-environment) → nothing
+app → ONE adapter (threejs | iwsdk | xrblocks | native) → core (webxr-environment) → nothing
 ```
 
 Arrows only point down, and the core's arrow points at nothing at all. Its architecture test fails the moment an engine import lands in it, or an import of the service framework, or of the input contracts, or a read of `navigator.xr`. The one exception inside this repository is the XR Blocks adapter, which builds on the three.js adapter because XR Blocks renders through three.js. Between families nothing references anything, which is the rule that matters.
@@ -36,5 +36,7 @@ A director is the object that holds the current description, eases between state
 
 - [Getting started](./02-getting-started.md)
 - [The environment document](./03-the-environment-document.md)
+- [Native adapter](../integrations/05-native.md)
+- [Native platform](/webxr/docs/concepts/native-platform)
 - [Environment overview](/webxr/environment)
 - [API reference](pathname:///webxr/api/environment/)

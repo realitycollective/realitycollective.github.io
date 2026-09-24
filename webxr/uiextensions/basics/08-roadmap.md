@@ -16,6 +16,14 @@ Windowing, docking, layout regions, hand menus, the control set and the develope
 
 `@realitycollective/xrblocks-uiextensions` is marked experimental in its own README. It matches most of the IWSDK adapter's windowing features, chrome, the window manager, hand menus, regions, follow mode, desktop mouse input and locomotion, but it has no title-bar drag of its own yet: `movable` is accepted on a window's options but not acted on, so ray drag, near grab and drop-to-dock are all still roadmap items there. It also has no guarded near-touch pointer yet, though the core's `TouchPress` state machine is ready for one, and system keyboard text input on Android XR is untested. Its desktop path is verified in a real browser; it has had no on-device pass on Android XR hardware, so treat that path as unverified.
 
+## Headless-tested only: the native adapter
+
+`@realitycollective/native-uiextensions`, from 0.1.1 (preview), binds the core to a native app on OpenXR or visionOS that renders panels itself and installs `globalThis.__rcHost`. It runs the same three conformance suites as the IWSDK and XR Blocks hosts, against an in-memory fake of the `ui` slice, and holds the family's usual coverage gate.
+
+:::warning
+This adapter is tested headless only, against an in-memory fake of the `ui` slice. It has not run against a real native host on Quest 3 or the visionOS Simulator; a device run is the native team's step.
+:::
+
 ## Known in-headset verification gap
 
 Everything headless is tested in continuous integration, including the IWSDK systems against a headless `World`. In-headset behaviours still need a manual pass on device: title-bar drag by ray, near grab by squeeze and by hand pinch, the hand menu's palm gate and anchors on real hands and controllers, the poke guard's press and release distances, and system keyboard on Quest.
@@ -28,5 +36,6 @@ Portable world-building is not a current promise: scene content such as meshes, 
 
 - [Introduction](./01-introduction.md)
 - [XR Blocks and three.js adapter](../integrations/03-xrblocks-threejs.md)
+- [Native adapter](../integrations/05-native.md)
 - Repository: [WebXR-UIExtensions](https://github.com/realitycollective/WebXR-UIExtensions)
 - [API reference](pathname:///webxr/api/uiextensions/)

@@ -77,6 +77,12 @@ The interaction core and its adapters share input contracts with UI Extensions t
 
 **Why:** keeps each family independently installable and versioned, with the input contracts as the only shared seam between them.
 
+### 11. The transform port splits the live pose from the rest pose
+
+`TransformPort.getWorldPose()` is the live pose, where the object is now, after every write including one made by something else. `getRestWorldPose()` is the pose captured at registration, and stays put while offsets and rotations are measured from it.
+
+**Why:** before 0.1.1 the core only said "current world pose", and the platforms disagreed: three.js, IWSDK and XR Blocks returned the rest pose while Babylon returned the live one, so the same behaviour acted differently by platform. Hinge, slide and dial measure the hand against the rest pose; grab and toss-score scoring read the live pose, because they need to know where the object really is.
+
 ## Package breakdown
 
 ### `@realitycollective/webxr-interactions`
@@ -99,6 +105,10 @@ Connects to Meta's Immersive Web SDK, passing through IWSDK's own `Pressed` and 
 
 Matches the XR Blocks API shape in TypeScript, reusing the three.js adapter's hit-testing since XR Blocks Scripts are ordinary three.js `Object3D`s. Marked experimental; the upstream API may still move.
 
+### `@realitycollective/native-interactions`
+
+Reads the `input` and `interactions` slices a native app (OpenXR on Quest, CompositorServices on visionOS) installs on `globalThis.__rcHost`, and maps them onto `InputProvider`, `HitTester` and `TransformPort` with no engine dependency at all. Tested headless against an in-memory fake of both slices; not yet run on real hardware.
+
 ## Code layout
 
 ```text
@@ -108,7 +118,8 @@ WebXR-Interactions/
 │   ├── threejs-interactions/     three.js adapter
 │   ├── babylon-interactions/     Babylon.js adapter
 │   ├── iwsdk-interactions/       Meta IWSDK adapter
-│   └── xrblocks-interactions/    Google XR Blocks adapter
+│   ├── xrblocks-interactions/    Google XR Blocks adapter
+│   └── native-interactions/      native platform adapter
 ├── demos/
 │   └── playground/               the standalone three.js/WebXR interaction playground
 ├── scripts/                      shared release tooling (set-version, verify-pack)
@@ -126,5 +137,6 @@ WebXR-Interactions/
 
 - [Introduction](../basics/01-introduction.md)
 - [Core: the engine-free package](../integrations/01-core.md)
+- [Native adapter](../integrations/06-native.md)
 - [Interaction playground example](../examples/01-interaction-playground.md)
 - [API reference](pathname:///webxr/api/interactions/)

@@ -39,9 +39,9 @@ The core, `@realitycollective/webxr-uiextensions`, carries exactly one runtime d
 
 ### 5. The conformance suite ships as data, not hidden tests
 
-`windowHostContractCases()` returns the `WindowHost` conformance suite as a list of named cases with a `run(setup)` function, rather than as a fixed test file.
+`windowHostContractCases()`, `sceneTargetContractCases()` and `uixElementContractCases()` return their conformance suites as lists of named cases with a `run(setup)` function, rather than as a fixed test file.
 
-**Why:** a new adapter runs the same cases in whatever test runner it already has, so a failing case is a real behavioural difference, not a difference in test style.
+**Why:** a new adapter runs the same cases in whatever test runner it already has, so a failing case is a real behavioural difference, not a difference in test style. This is what let a third adapter, `native-uiextensions`, join the estate and prove conformance with no access to this repository's own `test/` folder; the suite found a real defect in it (see [Native panels carry attributes too](../basics/06-controls-and-markup.md#native-panels-carry-attributes-too)).
 
 ### 6. Structural interfaces over one engine's element type
 
@@ -67,6 +67,12 @@ UI Extensions sits above the WebXR-Input contracts and beside the Interactions f
 
 **Why:** see [the layering rule](/webxr/docs/concepts/layering-rule) for how this applies across the whole stack.
 
+### 10. Every host tears down the same way
+
+`WindowHost.dispose()` is a required member, from 0.1.1 (preview): close every window the host opened, release every subscription, safe to call twice.
+
+**Why:** no host could be torn down before this, so an app that rebuilt its UI leaked listeners and scene objects on every platform; a required method, checked by the conformance suite, is what keeps a fourth or fifth adapter from repeating that gap.
+
 ## Package breakdown
 
 ### `@realitycollective/webxr-uiextensions`
@@ -80,6 +86,10 @@ The reference adapter for Meta's Immersive Web SDK. Window entities carry IWSDK'
 ### `@realitycollective/xrblocks-uiextensions`
 
 The experimental adapter for Google XR Blocks and any hand-rolled three.js WebXR scene, binding to plain three.js shapes rather than importing `xrblocks` itself. It matches most of the IWSDK adapter's windowing, chrome, hand menus and regions, but has no title-bar drag of its own yet, so drag, near grab and drop-to-dock are still roadmap items there.
+
+### `@realitycollective/native-uiextensions`
+
+From 0.1.1 (preview), the adapter for a native app on OpenXR or visionOS that renders panels itself and installs `globalThis.__rcHost`. It owns no scene graph at all: `NativeWindowHost` builds proxy `UixElement`s over the host's `NativeElementNode` tree, so the same control upgraders run unchanged, and it is tested headless only, against an in-memory fake of the `ui` slice.
 
 ### `@realitycollective/uix-devtools`
 
@@ -100,6 +110,9 @@ packages/
     src/systems/               ECS systems binding the core to @iwsdk/core
     Examples/                   basic-window, controls, dock-regions (shipped in the npm tarball)
   xrblocks-uiextensions/    Google XR Blocks / three.js adapter (experimental)
+  native-uiextensions/       native app adapter (OpenXR / visionOS, headless-tested only)
+    src/host.ts                 NativeWindowHost: WindowHost + SceneTarget
+    src/element.ts               NativeUixElement: proxy UixElement over NativeElementNode
   uix-devtools/                 dev tooling (dev-only, never shipped)
     src/gate.ts                 edit-session launch gate
     src/runtime-compile.ts     live UIKitML -> panel compilation
@@ -118,5 +131,6 @@ Scene content, meshes, prefabs and placement, is never built here; it stays with
 
 - [Introduction](../basics/01-introduction.md)
 - [The adapter contract](../basics/07-adapter-contract.md)
+- [Native adapter](../integrations/05-native.md)
 - [Developer cycle](./01-developer-cycle.md)
 - [API reference](pathname:///webxr/api/uiextensions/)

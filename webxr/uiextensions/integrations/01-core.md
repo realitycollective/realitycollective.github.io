@@ -8,7 +8,7 @@ description: The engine-free core - window manager, dock state, region maths, dr
 
 ## What it binds
 
-Nothing. The core imports no 3D engine; it is the contract that `iwsdk-uiextensions`, `xrblocks-uiextensions` and any future adapter implement against.
+Nothing. The core imports no 3D engine; it is the contract that `iwsdk-uiextensions`, `xrblocks-uiextensions`, `native-uiextensions` and any future adapter implement against.
 
 ## Install
 
@@ -16,7 +16,7 @@ Nothing. The core imports no 3D engine; it is the contract that `iwsdk-uiextensi
 npm install @realitycollective/webxr-uiextensions
 ```
 
-Install this package directly only when writing headless logic, tests, developer tooling, or a new engine adapter. An app targeting IWSDK or XR Blocks installs the matching adapter instead; both re-export this package in full.
+Install this package directly only when writing headless logic, tests, developer tooling, or a new engine adapter. An app targeting IWSDK, XR Blocks or a native host installs the matching adapter instead; all three re-export this package in full.
 
 ## Setup
 
@@ -32,7 +32,7 @@ There is no setup of its own to run: the core exposes classes and pure functions
 - Near touch: `TouchPress`, `resolveTouchPress`.
 - Controls: `StepperModel`, `ToggleModel`, `ExpandableModel`, `LogModel`, and the `upgradePanel` markup upgraders.
 - Portable scenes: `SceneDescriptor`, `applyScene`, `validateScene`.
-- The adapter contract itself: `PanelHost`, `WindowHost`, `HeadPoseSource`, `HandPoseSource`, `PointerInputSource`, and `windowHostContractCases()`.
+- The adapter contract itself: `PanelHost`, `WindowHost`, `SceneTarget`, `HeadPoseSource`, `HandPoseSource`, `PointerInputSource`, `windowHostContractCases()` (7 cases), `sceneTargetContractCases()` (5 cases) and `uixElementContractCases()` (6 cases), plus `MemoryWindowHost` and `createMemoryWindowHostSetup()`, the family's own in-memory mock and contract setup.
 
 ## What it cannot do on this host, and why
 
@@ -57,5 +57,6 @@ The core has no demo of its own; every live demo runs through an adapter. See [t
 - [Introduction](../basics/01-introduction.md)
 - [The adapter contract](../basics/07-adapter-contract.md)
 - [Meta IWSDK adapter](./02-iwsdk.md)
+- [Native adapter](./05-native.md)
 - npm: [@realitycollective/webxr-uiextensions](https://www.npmjs.com/package/@realitycollective/webxr-uiextensions)
 - [API reference](pathname:///webxr/api/uiextensions/)

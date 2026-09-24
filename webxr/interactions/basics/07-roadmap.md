@@ -8,11 +8,11 @@ description: What ships today, what is experimental, and what is deliberately ou
 
 ## In place
 
-The core behaviour set (`press`, including latching, `pulse`, `hinge`, `dial`, `slide`, `grab` in `poseOnly` and `native` modes, `tossScore`); gaze, both `required` gating and dwell-to-press; targeting, with provider hints beating the core's own hit-testing; capability negotiation with a visible `behaviourDisabled` outcome; events as the only outbound pathway; feedback intents with the two opt-in routing helpers; per-source velocity tracking; presence control on three.js, Babylon and IWSDK; the standalone three.js adapter, including a desktop mouse fallback and optional `three-mesh-bvh` acceleration; the Meta IWSDK adapter's one-call `registerInteractions` and native grab fulfilment; and the interaction playground demo.
+The core behaviour set (`press`, including latching, `pulse`, `hinge`, `dial`, `slide`, `grab` in `poseOnly` and `native` modes, `tossScore`); gaze, both `required` gating and dwell-to-press; targeting, with provider hints beating the core's own hit-testing; capability negotiation with a visible `behaviourDisabled` outcome; events as the only outbound pathway; feedback intents with the two opt-in routing helpers; per-source velocity tracking; presence control on three.js, Babylon and IWSDK; the standalone three.js adapter, including a desktop mouse fallback and optional `three-mesh-bvh` acceleration; the Meta IWSDK adapter's one-call `registerInteractions` and native grab fulfilment; the interaction playground demo; and, from 0.1.1, `hitTesterContractCases()` and `transformPortContractCases()`, the two conformance suites every one of the five platforms below now passes.
 
 ## Experimental or not yet run
 
-The Babylon adapter is written against the documented Babylon 7 API and covered by structural fakes only; it has not yet been exercised against a real Babylon runtime. The Google XR Blocks adapter is marked experimental: the upstream API may still move. It is structurally typed against xrblocks v0.20.0, and has no haptics and no presence control, because the upstream package offers neither.
+The Babylon adapter is written against the documented Babylon 7 API and covered by structural fakes only; it has not yet been exercised against a real Babylon runtime. The Google XR Blocks adapter is marked experimental: the upstream API may still move. It is structurally typed against xrblocks v0.20.0, and has no haptics and no presence control, because the upstream package offers neither. The [native adapter](../integrations/06-native.md), `native-interactions`, reads `globalThis.__rcHost` and is tested only against an in-memory fake of it; it has not yet run against a real native host.
 
 ## Deliberately not planned
 
@@ -27,4 +27,5 @@ Physics and ballistics stay with the app. A `grab` behaviour only ever reports a
 - [Introduction](./01-introduction.md)
 - [Babylon.js adapter](../integrations/03-babylon.md)
 - [Google XR Blocks adapter](../integrations/05-xrblocks.md)
+- [Native adapter](../integrations/06-native.md)
 - [Repository on GitHub](https://github.com/realitycollective/WebXR-Interactions)

@@ -26,7 +26,7 @@ An additive visual effect: a brief scale and emissive flash on actuation, decayi
 
 ## Hinge
 
-A position-driven lever, pivoted about a fixed axis. While an interactor grabs it, the lever swings to point at the interactor's hand, rather than tracking a wrist rotation; letting go leaves it where it was. Options: `axis` (the hinge axis, default `[1, 0, 0]`), `restDir` (the arm's local rest direction, default `[0, 1, 0]`) and `maxAngle` (maximum swing either side of rest, in radians, default `π/4`). It requires grab input. Its value is centred: `0.5` at rest, rising toward `1` on one side and falling toward `0` on the other.
+A position-driven lever, pivoted about a fixed axis. While an interactor grabs it, the lever swings to point at the interactor's hand, rather than tracking a wrist rotation; letting go leaves it where it was. Options: `axis` (the hinge axis, default `[1, 0, 0]`), `restDir` (the arm's local rest direction, default `[0, 1, 0]`) and `maxAngle` (maximum swing either side of rest, in radians, default `π/4`). It requires grab input. Its value is centred: `0.5` at rest, rising toward `1` on one side and falling toward `0` on the other. It measures the hand against the transform port's rest pose, `getRestWorldPose()`, captured when the object registered.
 
 ```ts
 { kind: "hinge", axis: [1, 0, 0], restDir: [0, 0, 1], maxAngle: (40 * Math.PI) / 180 }
@@ -34,7 +34,7 @@ A position-driven lever, pivoted about a fixed axis. While an interactor grabs i
 
 ## Dial
 
-A twistable knob. While grabbed, the bearing of the interactor's hand around the dial's axis accumulates a rotation clamped to `[0, maxAngle]`. Options: `axis` (the twist axis, default `[0, 1, 0]`) and `maxAngle` (radians, default `3π/2`, one and a half turns). It requires grab input. Its value is `0` at rest and `1` at the limit.
+A twistable knob. While grabbed, the bearing of the interactor's hand around the dial's axis accumulates a rotation clamped to `[0, maxAngle]`. Options: `axis` (the twist axis, default `[0, 1, 0]`) and `maxAngle` (radians, default `3π/2`, one and a half turns). It requires grab input. Its value is `0` at rest and `1` at the limit. Like hinge, it reads the transform port's rest pose rather than its live pose.
 
 ```ts
 { kind: "dial", axis: [0, 1, 0], maxAngle: (3 * Math.PI) / 2 }
@@ -42,7 +42,7 @@ A twistable knob. While grabbed, the bearing of the interactor's hand around the
 
 ## Slide
 
-A handle pulled along one axis, such as a pulley. While held, the handle follows the interactor's displacement along the axis; on release a spring returns it to rest while it keeps reporting its value. Options: `axis` (the rail axis, default `[0, 1, 0]`), `travel` (full pull travel in metres, default `0.3`), `stiffness` (default `180`) and `damping` (default `14`). It requires grab input. Its value is the pull distance divided by travel, `0` at rest and `1` at full pull.
+A handle pulled along one axis, such as a pulley. While held, the handle follows the interactor's displacement along the axis; on release a spring returns it to rest while it keeps reporting its value. Options: `axis` (the rail axis, default `[0, 1, 0]`), `travel` (full pull travel in metres, default `0.3`), `stiffness` (default `180`) and `damping` (default `14`). It requires grab input. Its value is the pull distance divided by travel, `0` at rest and `1` at full pull. It too measures displacement from the transform port's rest pose.
 
 ```ts
 { kind: "slide", axis: [0, 1, 0], travel: 0.3 }
@@ -50,7 +50,7 @@ A handle pulled along one axis, such as a pulley. While held, the handle follows
 
 ## Grab
 
-Pick up and carry an object. It has no options of its own: how it is fulfilled is negotiated automatically from the provider's capabilities, never set in your descriptor. When the negotiated capability is `poseOnly`, the behaviour owns the carry itself: on grab it captures the offset between the interactor's grip and the object, then follows the grip every frame. The object stays exactly where it is dropped, because ballistics is deliberately the app's concern, not the interaction layer's. When the capability is `native` (an engine that grabs and throws for you, such as IWSDK with physics enabled), the behaviour only mirrors the engine's own transitions into `grabStart` and `grabEnd` events; the engine moves the object. It requires grab input.
+Pick up and carry an object. It has no options of its own: how it is fulfilled is negotiated automatically from the provider's capabilities, never set in your descriptor. When the negotiated capability is `poseOnly`, the behaviour owns the carry itself: on grab it captures the offset between the interactor's grip and the object, then follows the grip every frame. The object stays exactly where it is dropped, because ballistics is deliberately the app's concern, not the interaction layer's. When the capability is `native` (an engine that grabs and throws for you, such as IWSDK with physics enabled), the behaviour only mirrors the engine's own transitions into `grabStart` and `grabEnd` events; the engine moves the object. It requires grab input. Unlike hinge, dial and slide, it reads the transform port's live pose, `getWorldPose()`, so the offset it captures is measured from where the object really is.
 
 ```ts
 { kind: "grab" }
@@ -58,7 +58,7 @@ Pick up and carry an object. It has no options of its own: how it is fulfilled i
 
 ## Toss score
 
-Attach to a hoop or a goal. Each frame it checks whether any of its named target interactables passed through its plane, inside its ring radius, since the last frame, and emits `scored` when one does. Options: `targetIds` (required, the interactable ids that can score), `radius` (ring radius in metres, default `0.2`) and `axis` (the hoop's local up, default `[0, 1, 0]`). Scoring is pure geometry. How the target got there, whether thrown by native physics or carried by a `grab` behaviour and released into an app's own ballistics, is not this behaviour's concern.
+Attach to a hoop or a goal. Each frame it checks whether any of its named target interactables passed through its plane, inside its ring radius, since the last frame, and emits `scored` when one does. Options: `targetIds` (required, the interactable ids that can score), `radius` (ring radius in metres, default `0.2`) and `axis` (the hoop's local up, default `[0, 1, 0]`). Scoring is pure geometry. How the target got there, whether thrown by native physics or carried by a `grab` behaviour and released into an app's own ballistics, is not this behaviour's concern. It reads each target's live pose, `getWorldPose()`, so a ball in flight is measured from where it actually is.
 
 ```ts
 { kind: "tossScore", targetIds: ["ball"], radius: 0.2 }

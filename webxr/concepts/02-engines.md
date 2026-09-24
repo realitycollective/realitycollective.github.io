@@ -47,9 +47,22 @@ Google's XR Blocks is an Android XR framework, and every adapter for it in this 
 
 None of the XR Blocks adapters declare a peer dependency on the `xrblocks` package itself; they are structurally typed against its shape, the way `babylon-interactions` is typed against Babylon's. `xrblocks-environment` keeps `xrblocks: ^0.21.1` as a devDependency for its own tests only. Where they peer on an engine at all, it is three.js, at the same `three: >=0.170.0` range as the plain three.js adapters. None of the three families offers a desktop fallback specific to XR Blocks; WebXR-UIExtensions' own platform detection instead falls back to plain three.js for anything that is neither Quest nor Android XR.
 
+## Native
+
+Native is not a 3D engine. It is a platform binding onto a native app, over OpenXR on Quest or CompositorServices on visionOS, that embeds a JavaScript engine such as Hermes. Rather than reading an engine's scene graph, each native package reads its own slice of one host object, `globalThis.__rcHost`, that the app installs.
+
+- **Interactions** - `native-interactions` reads the `input` and `interactions` slices: input sampling, hit testing and transform writes, keyed by the target id the app chose at registration. No engine dependency at all; only tuples and target ids cross the boundary.
+- **UI Extensions** - `native-uiextensions` reads the `ui` slice. The JavaScript side keeps the real `WindowManager` and controls, and sees each panel as a tree of proxy elements whose calls forward to the native app.
+- **Environment** - `native-environment` reads the `environment`, `audio` and `sensing` slices, all of which are already plain data, so the native app applies each spec with its own resolvers rather than decoding anything itself.
+
+Every native binding is tested headless against an in-memory fake of its slice, and holds 100% coverage doing it. Only the root slice, the service framework's `service-framework-native`, has run on real hardware, Quest 3 and the visionOS Simulator; every family slice above is untested on a device. From 0.1.1 (preview) for the three extension families, 1.0.2 (preview) for the service framework.
+
+Native has no desktop fallback and needs none: a native app already runs on its target device or simulator, so there is no browser session to fall back to. See [Native as a platform](./05-native-platform.md) for the one host object and the rules every slice follows.
+
 ## More information
 
 - [The layering rule](./01-layering-rule.md)
 - [What this stack is and is not](./03-what-this-stack-is-not.md)
+- [Native as a platform](./05-native-platform.md)
 - [Interactions adapters](/webxr/docs/interactions/integrations)
 - [Environment adapters](/webxr/docs/environment/integrations)

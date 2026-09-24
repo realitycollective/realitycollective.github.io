@@ -22,6 +22,12 @@ npm install @realitycollective/webxr-interactions
 
 Everyone else installs one adapter instead; each adapter re-exports the whole of this package, so an app depends on exactly one package.
 
+## The two ports every adapter implements
+
+`HitTester` and `TransformPort`, both in `ports.ts`, are the space queries and transform writes the core cannot perform itself. `HitTester` answers a ray or proximity query with the nearest interactable, its distance and the hit point, or `null`. `TransformPort` is the read/write surface of one interactable's object: `getWorldPose()` is the live pose, where the object is now, including a write made by anything else; `getRestWorldPose()` is the pose captured at registration, and offsets and rotations behaviours write are measured from it, not from the live pose. The hinge, slide and dial behaviours read `getRestWorldPose()`; grab and toss-score scoring read `getWorldPose()`. Every tuple a port returns is a fresh value the caller owns, and a tuple passed in is read during the call and not kept.
+
+From 0.1.1 (preview), `hitTesterContractCases()` and `transformPortContractCases()` ship as data next to `inputProviderContractCases()`, so a new port proves conformance the same way a new `InputProvider` does. See [Provider conformance](/webxr/docs/input/basics/provider-conformance) for the shape a case takes, and [Conformance suites](/webxr/docs/concepts/conformance-suites) for the full list across every family.
+
 ## The architecture test
 
 The design rule "no engine imports" is enforced, not just documented. The workspace runs an architecture test that fails the build the moment an engine import lands inside this package's source, so behaviours, the runtime, gaze and the interaction math stay engine-free because nothing else is possible.
@@ -35,4 +41,5 @@ Behaviours are plain classes implementing the `Behaviour` interface, and the run
 - [Introduction](../basics/01-introduction.md)
 - [Behaviours](../basics/03-behaviours.md)
 - [Patterns](../basics/06-patterns.md)
+- [Native adapter](./06-native.md)
 - [API reference](pathname:///webxr/api/interactions/)

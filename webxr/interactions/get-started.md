@@ -2,7 +2,7 @@
 sidebar_position: 1
 sidebar_label: Welcome to WebXR Interactions
 title: Welcome to WebXR Interactions
-description: Buttons, levers, dials and grabbable objects that behave the same way across three.js, Babylon.js, IWSDK and XR Blocks.
+description: Buttons, levers, dials and grabbable objects that behave the same way across three.js, Babylon.js, IWSDK, XR Blocks and native XR apps.
 ---
 
 # Welcome to WebXR Interactions
@@ -33,6 +33,7 @@ Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 | `@realitycollective/babylon-interactions` | Adapter for Babylon.js, matched structurally to the API | None |
 | `@realitycollective/iwsdk-interactions` | Adapter for Meta's Immersive Web SDK | `@iwsdk/core >=0.5.0 <0.6.0`, `@iwsdk/xr-input >=0.5.0 <0.6.0`, `three >=0.170.0` |
 | `@realitycollective/xrblocks-interactions` | Adapter for Google's XR Blocks, matched structurally to the API | `three >= 0.170.0` |
+| `@realitycollective/native-interactions` | Adapter for a native OpenXR or visionOS app embedding a JavaScript engine such as Hermes, from 0.1.1 (preview) | None |
 
 Every adapter declares its core, and `@realitycollective/webxr-input`, as an npm dependency, so installing the adapter installs both, and the adapter re-exports their symbols in full.
 
@@ -48,6 +49,9 @@ npm install @realitycollective/iwsdk-interactions @iwsdk/core
 
 # Google XR Blocks
 npm install @realitycollective/xrblocks-interactions three
+
+# Native apps on OpenXR or visionOS, from 0.1.1 (preview)
+npm install @realitycollective/native-interactions@preview
 ```
 
 Writing a new adapter, or headless tests against your own interaction logic? Install the core directly instead:
@@ -121,7 +125,7 @@ npm run dev:playground     # http://localhost:8082
 
 ## What this stack is and is not
 
-The Reality Collective WebXR packages aim at one outcome: an app's logic, input handling, interactions and UI should not care which engine hosts them. Each family ships an engine-free core and thin adapters, here for Meta IWSDK, plain three.js and WebXR, Babylon.js and Google XR Blocks. When an app still has to reach into the host, either a contract is missing, which is a bug to report, or the app is overreaching. Physics and ballistics stay with the app: a `grab` behaviour only ever reports a pickup and a release, never a thrown object's flight afterwards. Portable scene and content building beyond the shared `InteractionDescriptor` is not a current promise.
+The Reality Collective WebXR packages aim at one outcome: an app's logic, input handling, interactions and UI should not care which engine hosts them. Each family ships an engine-free core and thin adapters, here for Meta IWSDK, plain three.js and WebXR, Babylon.js, Google XR Blocks and native XR apps. When an app still has to reach into the host, either a contract is missing, which is a bug to report, or the app is overreaching. Physics and ballistics stay with the app: a `grab` behaviour only ever reports a pickup and a release, never a thrown object's flight afterwards. Portable scene and content building beyond the shared `InteractionDescriptor` is not a current promise.
 
 ## Feedback
 

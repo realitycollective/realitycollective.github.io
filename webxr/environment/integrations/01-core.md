@@ -10,7 +10,7 @@ The core is the engine-free package every adapter builds on: two directors, two 
 
 ## What it binds
 
-Nothing. The core never imports an engine, never imports a sibling package and never reads `navigator.xr`. Its architecture test fails the moment any of those happen. It holds `EnvironmentDirector` and `WorldSensingDirector` as plain data and logic, and defines the `EnvironmentPort`, `AudioPort` and `WorldSensingPort` interfaces an adapter implements.
+Nothing. The core never imports an engine, never imports a sibling package and never reads `navigator.xr`. Its architecture test fails the moment any of those happen. It holds `EnvironmentDirector` and `WorldSensingDirector` as plain data and logic, and defines the `EnvironmentPort`, `AudioPort` and `WorldSensingPort` interfaces an adapter implements, plus their conformance suites: `environmentPortContractCases()` (6 cases), `audioPortContractCases()` (6 cases) and `worldSensingPortContractCases()` (7 cases). Each case is a `name` and a `run(subject)` that throws a plain `Error` on failure, shipped as data rather than as tests, in the style of `webxr-uiextensions`'s suites. All four adapters, three.js, IWSDK, XR Blocks and native, run all three suites.
 
 ## Install
 
@@ -44,5 +44,7 @@ Not applicable; the core renders nothing on its own. See the [Environment playgr
 
 - [Introduction](../basics/01-introduction.md)
 - [three.js and raw WebXR adapter](./02-threejs.md)
+- [Native adapter](./05-native.md)
 - [The environment document](../basics/03-the-environment-document.md)
+- [Conformance suites](/webxr/docs/concepts/conformance-suites)
 - [API reference](pathname:///webxr/api/environment/)

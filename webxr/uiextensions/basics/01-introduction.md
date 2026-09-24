@@ -22,7 +22,7 @@ Panels are authored in UIKitML, an HTML and CSS-like markup language that Meta's
 
 ## What the core owns, what an adapter owns
 
-The core package, `@realitycollective/webxr-uiextensions`, owns every UX decision: window lifecycle, dock state, region layout, drag maths, hold-to-drag timing, hand-menu placement and the control models. It imports no 3D engine, so the same decisions apply unchanged wherever it runs. An adapter is the only place an engine name appears: it turns UIKitML into a live panel, delivers pointer and hand input into the core, and supplies the viewer pose. Two adapters ship today: `@realitycollective/iwsdk-uiextensions` for Meta IWSDK, the reference implementation, and `@realitycollective/xrblocks-uiextensions` for Google XR Blocks and plain three.js, which is experimental. Where a host cannot do something, the adapter reports it rather than staying silent: `WindowHost.supportsStandalonePanels` says whether a bare panel is even possible on that host, and `createPanel` throws where it is not.
+The core package, `@realitycollective/webxr-uiextensions`, owns every UX decision: window lifecycle, dock state, region layout, drag maths, hold-to-drag timing, hand-menu placement and the control models. It imports no 3D engine, so the same decisions apply unchanged wherever it runs. An adapter is the only place an engine name appears: it turns UIKitML into a live panel, delivers pointer and hand input into the core, and supplies the viewer pose. Three adapters ship today: `@realitycollective/iwsdk-uiextensions` for Meta IWSDK, the reference implementation; `@realitycollective/xrblocks-uiextensions` for Google XR Blocks and plain three.js, which is experimental; and `@realitycollective/native-uiextensions` for a native app on OpenXR or visionOS that embeds a JavaScript engine such as Hermes and renders panels itself, from 0.1.1 (preview). Where a host cannot do something, the adapter reports it rather than staying silent: `WindowHost.supportsStandalonePanels` says whether a bare panel is even possible on that host, and `createPanel` throws where it is not.
 
 ## The runtime dependency and the architecture test
 
@@ -37,4 +37,6 @@ UI Extensions sits above the WebXR-Input contracts and beside the Interactions f
 - [Getting started](./02-getting-started.md)
 - [The adapter contract](./07-adapter-contract.md)
 - [Core adapter](../integrations/01-core.md)
+- [Native adapter](../integrations/05-native.md)
+- [Native platform](/webxr/docs/concepts/native-platform)
 - [API reference](pathname:///webxr/api/uiextensions/)
