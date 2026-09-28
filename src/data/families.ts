@@ -44,7 +44,7 @@ export const families: Family[] = [
   {
     id: 'input',
     tagline: 'The cross-platform contracts required for unified input.',
-    stack: {adapter: 'threejs-, babylon-, iwsdk-, xrblocks-interactions and the UI adapters implement InputProvider', core: 'webxr-input · types, capabilities, provider, pointer streams, conformance cases'},
+    stack: {adapter: 'threejs-, babylon-, iwsdk-, xrblocks-, native-interactions and the UI adapters implement InputProvider', core: 'webxr-input · types, capabilities, provider, pointer streams, conformance cases'},
     ladder: [
       {stage: 'Describe input', core: 'InputSourceSnapshot, plain tuples, opaque ids, handedness', adapter: 'Fills one snapshot per source every frame from its engine'},
       {stage: 'Declare capabilities', core: 'The capability keys, satisfies and unmetRequirements', adapter: 'Derives the keys from the live session and raises change events'},
@@ -62,7 +62,7 @@ export const families: Family[] = [
       {pkg: 'webxr-interactions', sub: 'consumes it'},
       {pkg: 'webxr-uiextensions', sub: 'consumes it'},
     ],
-    mapFoot: {pkg: 'engine adapters', sub: 'implement InputProvider · three.js, Babylon.js, IWSDK, XR Blocks'},
+    mapFoot: {pkg: 'engine adapters', sub: 'implement InputProvider · three.js, Babylon.js, IWSDK, XR Blocks, Native'},
     reasons: [
       {title: 'One description of input', body: 'A ray, a grip pose, a fingertip, select and squeeze as numbers from 0 to 1. Plain tuples, no engine types anywhere, so a pose means the same thing to every family.'},
       {title: 'Capabilities from the live session', body: 'What a provider can deliver is derived from the session that is actually running, and consumers gate behaviour on it with satisfies and unmetRequirements.'},
@@ -71,8 +71,8 @@ export const families: Family[] = [
     adaptersHeading: 'Who implements it',
     adaptersLead: 'Apps never install this package. Every adapter in the Interactions and UI Extensions families implements the provider interface and re-exports the contracts, so an app reads these types through the adapter it already has.',
     adapters: [
-      {title: 'Interactions adapters', pkg: 'threejs-, babylon-, iwsdk-, xrblocks-interactions', body: 'Each implements InputProvider over its engine and hands the samples to the interaction core.', status: 'full', statusLabel: 'four adapters', href: '/webxr/docs/input/integrations/implementations'},
-      {title: 'UI Extensions adapters', pkg: 'iwsdk-, xrblocks-uiextensions', body: 'Drive windows and controls through the shared pointer contract, so one input stack serves both families.', status: 'full', statusLabel: 'two adapters', href: '/webxr/docs/input/integrations/implementations'},
+      {title: 'Interactions adapters', pkg: 'threejs-, babylon-, iwsdk-, xrblocks-, native-interactions', body: 'Each implements InputProvider over its engine and hands the samples to the interaction core.', status: 'full', statusLabel: 'five adapters', href: '/webxr/docs/input/integrations/implementations'},
+      {title: 'UI Extensions adapters', pkg: 'iwsdk-, xrblocks-, native-uiextensions', body: 'Drive windows and controls through the shared pointer contract, so one input stack serves both families.', status: 'full', statusLabel: 'three adapters', href: '/webxr/docs/input/integrations/implementations'},
       {title: 'Your own adapter', pkg: 'implement InputProvider', body: 'Pull-based sample(), capability-change events, optional haptics and presence. Run inputProviderContractCases() to prove it.', status: 'reference', statusLabel: 'guide', href: '/webxr/docs/input/basics/provider-conformance'},
     ],
     glossary: [
@@ -110,6 +110,7 @@ export const families: Family[] = [
       {pkg: 'babylon-interactions', sub: 'adapter'},
       {pkg: 'iwsdk-interactions', sub: 'adapter'},
       {pkg: 'xrblocks-interactions', sub: 'adapter, experimental'},
+      {pkg: 'native-interactions', sub: 'adapter, untested on hardware'},
     ],
     mapFoot: {pkg: 'webxr-input', sub: 'contracts · separate repository'},
     reasons: [
@@ -124,6 +125,7 @@ export const families: Family[] = [
       {title: 'Babylon.js', pkg: 'babylon-interactions', body: 'Reads a WebXRDefaultExperience: controllers, motion controller trigger and grip, hand joints. Structurally typed, so no @babylonjs/core import.', status: 'untested', statusLabel: 'not yet run on a real app', href: '/webxr/docs/interactions/integrations/babylon'},
       {title: 'Meta IWSDK', pkg: 'iwsdk-interactions', body: 'Passes IWSDK\'s own press and grab answers straight through, with native grab fulfilment and full presence control. Setup is one call: registerInteractions(world).', status: 'full', statusLabel: 'full', href: '/webxr/docs/interactions/integrations/iwsdk'},
       {title: 'Google XR Blocks', pkg: 'xrblocks-interactions', body: 'Maps the XR Blocks input pipeline onto the three.js machinery. XR Blocks has no haptics and no way to hide its own hand visuals, so neither is offered.', status: 'experimental', statusLabel: 'experimental', href: '/webxr/docs/interactions/integrations/xrblocks'},
+      {title: 'Native', pkg: 'native-interactions', body: 'Reads the input and interactions slices a native app (OpenXR on Quest, CompositorServices on visionOS) installs on globalThis.__rcHost. No engine dependency; only tuples and target ids cross the boundary.', status: 'untested', statusLabel: 'untested on hardware', href: '/webxr/docs/interactions/integrations/native'},
     ],
     glossary: [
       ['Interactable', 'an object in your scene that can be interacted with, such as a button'],
@@ -135,7 +137,7 @@ export const families: Family[] = [
     repo: links.repos.interactions,
     demo: {label: 'Interaction playground', ...links.demos.interactions},
     cardBody: 'Interactables, interactors and behaviours: press, hinge, dial, slide, grab, toss-scoring, gaze dwell. Capability checks that switch a behaviour off and say why.',
-    cardAdapters: 'three.js · Babylon.js · IWSDK · XR Blocks',
+    cardAdapters: 'three.js · Babylon.js · IWSDK · XR Blocks · Native',
     cardStatus: 'Released',
     released: true,
   },
@@ -159,6 +161,7 @@ export const families: Family[] = [
     mapItems: [
       {pkg: 'iwsdk-uiextensions', sub: 'reference adapter'},
       {pkg: 'xrblocks-uiextensions', sub: 'adapter, experimental'},
+      {pkg: 'native-uiextensions', sub: 'adapter, untested on hardware'},
       {pkg: 'uix-devtools', sub: 'dev-only tooling'},
     ],
     mapFoot: {pkg: 'webxr-input', sub: 'pointer and pose contracts · separate repository'},
@@ -172,6 +175,7 @@ export const families: Family[] = [
     adapters: [
       {title: 'Meta IWSDK', pkg: 'iwsdk-uiextensions', body: 'The reference implementation: ECS systems binding the core to @iwsdk/core, a window factory, regions, hand menus and the shipped examples.', status: 'reference', statusLabel: 'reference, full feature set', href: '/webxr/docs/uiextensions/integrations/iwsdk'},
       {title: 'Google XR Blocks and plain three.js', pkg: 'xrblocks-uiextensions', body: 'Hosts the windowing core in any three.js WebXR scene, including XR Blocks Scripts, with uikit panels, follow mode and desktop controls.', status: 'experimental', statusLabel: 'experimental, partial feature set', href: '/webxr/docs/uiextensions/integrations/xrblocks-threejs'},
+      {title: 'Native', pkg: 'native-uiextensions', body: 'Renders panels on the native app; the JavaScript side keeps the WindowManager and controls, and sees each panel as a tree of proxy UixElements.', status: 'untested', statusLabel: 'untested on hardware', href: '/webxr/docs/uiextensions/integrations/native'},
       {title: 'Developer tooling', pkg: 'uix-devtools', body: 'An edit-session launch gate, runtime UIKitML compilation and the uix-dev CLI with a Cloudflare quick tunnel and QR onboarding for headset testing. Never ship it.', status: 'dev-only', statusLabel: 'dev dependency only', href: '/webxr/docs/uiextensions/integrations/uix-devtools'},
     ],
     glossary: [
@@ -184,7 +188,7 @@ export const families: Family[] = [
     repo: links.repos.uiextensions,
     demo: {label: 'UI Extensions showcase', ...links.demos.uiShowcase},
     cardBody: 'Movable, dockable windows, layout regions, hand menus and controls for spatial UI, authored in UIKitML. Plus dev tooling for live editing on a headset.',
-    cardAdapters: 'IWSDK · XR Blocks and three.js',
+    cardAdapters: 'IWSDK · XR Blocks and three.js · Native',
     cardStatus: 'Released',
     released: true,
   },
@@ -209,6 +213,7 @@ export const families: Family[] = [
       {pkg: 'threejs-environment', sub: 'adapter'},
       {pkg: 'iwsdk-environment', sub: 'adapter'},
       {pkg: 'xrblocks-environment', sub: 'adapter, experimental, builds on three.js'},
+      {pkg: 'native-environment', sub: 'adapter, untested on hardware'},
     ],
     reasons: [
       {title: 'An environment as one document', body: 'Sky, fog, ambient light, key light and an environment map for image-based lighting, as plain data. Name a preset, then ease to it: every slot moves together on one curve.'},
@@ -221,6 +226,7 @@ export const families: Family[] = [
       {title: 'three.js and raw WebXR', pkg: 'threejs-environment', body: 'A gradient sky as an equirectangular texture regenerated in place, Fog and FogExp2, an AmbientLight and a DirectionalLight, Web Audio playback, light estimation straight from WebXR.', status: 'full', statusLabel: 'full', href: '/webxr/docs/environment/integrations/threejs'},
       {title: 'Meta IWSDK', pkg: 'iwsdk-environment', body: 'Drives IWSDK\'s own DomeGradient, IBL and light components, AudioSource entities and depth occlusion. IWSDK 0.5 has no light estimation, and the adapter says so. Setup is one call: registerEnvironment(world).', status: 'full', statusLabel: 'full', href: '/webxr/docs/environment/integrations/iwsdk'},
       {title: 'Google XR Blocks', pkg: 'xrblocks-environment', body: 'The three.js adapter plus two sensors: XR Blocks\' depth occlusion and its Lighting manager for light estimation.', status: 'experimental', statusLabel: 'experimental', href: '/webxr/docs/environment/integrations/xrblocks'},
+      {title: 'Native', pkg: 'native-environment', body: 'Applies sky, fog, light and IBL specs, plays audio cues and answers world-sensing requests through the slices a native app installs on globalThis.__rcHost.', status: 'untested', statusLabel: 'untested on hardware', href: '/webxr/docs/environment/integrations/native'},
       {title: 'Babylon.js', pkg: 'pending', body: 'Waits on a review across all five families rather than being started here.', status: 'pending', statusLabel: 'pending', href: '/webxr/docs/environment/basics/roadmap'},
     ],
     glossary: [
@@ -233,7 +239,7 @@ export const families: Family[] = [
     repo: links.repos.environment,
     demo: {label: 'Environment playground', ...links.demos.environment},
     cardBody: 'The world around the player as one document: sky, fog, light, image-based lighting, passthrough, occlusion, world sensing and the sound in it.',
-    cardAdapters: 'three.js · IWSDK · XR Blocks',
+    cardAdapters: 'three.js · IWSDK · XR Blocks · Native',
     cardStatus: 'Released',
     released: true,
   },

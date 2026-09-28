@@ -45,9 +45,9 @@ interactions.runtime.onFeedback((intent) => {
 });
 ```
 
-## Keeping physics in the app
+## Throws: physics host or your own code
 
-A `grab` behaviour only ever reports the pickup and the release; what happens to the object afterwards is the app's decision. A thrown ball's flight after `grabEnd` is client ballistics, not part of the interaction layer.
+On a host whose object has a physics body, from 0.1.1 (preview), a `poseOnly` grab hands the release velocity to the engine through `endHold`, and the engine's physics flies the object; there is nothing to write. On a host without physics, the object stays where it is dropped, and a throw's flight after `grabEnd` is your own code:
 
 ```ts
 interactions.runtime.onEvent((event) => {

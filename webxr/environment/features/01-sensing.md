@@ -55,17 +55,19 @@ A report never changes what the app asked for; it changes what the app can be to
 
 ## The sensor matrix per adapter
 
-| | three.js | Meta IWSDK | Google XR Blocks |
-| --- | --- | --- | --- |
-| Sky, fog, ambient, key | yes | yes | yes |
-| Image-based lighting | yes (`room` is a neutral ramp without a prefilter) | yes (`room` is native) | yes |
-| Depth occlusion | yes, three.js's own, gpu-optimised depth only | yes, per entity | yes, XR Blocks' occlusion pass |
-| Light estimation | yes, straight from WebXR | no, reported, and requested upstream | yes, via XR Blocks' `Lighting` |
-| Spatial attenuation per cue | yes | yes | yes (three.js audio) |
-| Planes and meshes | yes, from the `XRFrame` | yes, from scene understanding | yes, from its own detectors |
-| Anchors | yes | yes | no, XR Blocks exposes none to read |
-| Hit test | yes, cast from the viewer or from either hand's own ray, with a distance | yes, via `EnvironmentRaycastTarget`, no distance | no, it places objects rather than reporting |
-| Measured reflections | yes, given a `reflection` hook | no, reported | no, reported |
+On native, every optional member is present only when the native app provides it. Where it is missing, the director reports `unsupported`, as it does for any port.
+
+| | three.js | Meta IWSDK | Google XR Blocks | Native |
+| --- | --- | --- | --- | --- |
+| Sky, fog, ambient, key | yes | yes | yes | yes, drawn by the native app |
+| Image-based lighting | yes (`room` is a neutral ramp without a prefilter) | yes (`room` is native) | yes | yes, the spec passes through to the app |
+| Depth occlusion | yes, three.js's own, gpu-optimised depth only | yes, per entity | yes, XR Blocks' occlusion pass | if the host has `applyOcclusion` |
+| Light estimation | yes, straight from WebXR | no, reported, and requested upstream | yes, via XR Blocks' `Lighting` | if the host has `applyLightEstimation` |
+| Spatial attenuation per cue | yes | yes | yes (three.js audio) | yes, played by the native app |
+| Planes and meshes | yes, from the `XRFrame` | yes, from scene understanding | yes, from its own detectors | if the host's `sensing` slice has `onPlanes` or `onMeshes` |
+| Anchors | yes | yes | no, XR Blocks exposes none to read | if the host has `createAnchor` |
+| Hit test | yes, cast from the viewer or from either hand's own ray, with a distance | yes, via `EnvironmentRaycastTarget`, no distance | no, it places objects rather than reporting | if the host has `startHitTest` |
+| Measured reflections | yes, given a `reflection` hook | no, reported | no, reported | the native app's choice, given the estimate through `applyLightEstimation` |
 
 ## More information
 
@@ -73,4 +75,5 @@ A report never changes what the app asked for; it changes what the app can be to
 - [three.js and raw WebXR adapter](../integrations/02-threejs.md)
 - [Meta IWSDK adapter](../integrations/03-iwsdk.md)
 - [Google XR Blocks adapter](../integrations/04-xrblocks.md)
+- [Native adapter](../integrations/05-native.md)
 - [API reference](pathname:///webxr/api/environment/)

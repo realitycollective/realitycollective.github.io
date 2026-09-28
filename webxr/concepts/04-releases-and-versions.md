@@ -10,12 +10,12 @@ All four repositories share the same release automation, so the pattern on this 
 
 ## Released versions
 
-All four families have a stable release on npm. WebXR-Input is at `0.1.4`; WebXR-Interactions, WebXR-UIExtensions and WebXR-Environment shipped `0.1.0` on 17 September 2026. A bare `npm install` of any package resolves the stable release, because every package's `latest` dist-tag points at it. A dist-tag is npm's name for a release channel: `latest` is what a bare `npm install` resolves, and `preview` is what `@preview` resolves.
+All four families have a stable release on npm. WebXR-Input is at `0.1.6`, released on 28 September 2026 with the contract semantics a native host had to guess written down; WebXR-Interactions, WebXR-UIExtensions and WebXR-Environment shipped `0.1.0` on 17 September 2026. A bare `npm install` of any package resolves the stable release, because every package's `latest` dist-tag points at it. A dist-tag is npm's name for a release channel: `latest` is what a bare `npm install` resolves, and `preview` is what `@preview` resolves.
 
 The `0.x` range is deliberate: the APIs are stable enough to build on, but a minor version may still change a signature, and the changelog of each repository records every such change under a **Changed** heading. Pin the versions you build against and read the changelog before moving up.
 
 :::note
-Every package also carries a `preview` dist-tag, published from each repository's `development` branch ahead of the next release. Install `@preview` only when you want to try a change before it ships; the previews are not supported.
+Every package also carries a `preview` dist-tag, published from each repository's `development` branch ahead of the next release. Install `@preview` only when you want to try a change before it ships; the previews are not supported. The current previews are UI Extensions `0.1.1-preview.1`, Interactions and Environment `0.1.1-preview.2` and the service framework `1.0.2-preview.1`. Between them they carry the native platform, the held pose, scene management, the move of the IWSDK reference to 1.0, and the platform synchronisation of 28 September 2026, which brought every binding into line with the IWSDK reference. The `0.1.1` and `1.0.2` releases will carry all of it.
 :::
 
 ## What latest and preview mean on npm

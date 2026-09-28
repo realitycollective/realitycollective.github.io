@@ -21,7 +21,7 @@ Start with [the input model](./basics/03-the-input-model.md) for the concepts, o
 - A bundler or framework of your choice; each adapter that depends on this package picks its own.
 - TypeScript is recommended but not required; the package ships type declarations.
 
-Current release: `0.1.x` on npm, published under the `latest` dist-tag.
+Current release: `0.1.6` on npm, released on 28 September 2026 and published under the `latest` dist-tag.
 
 ### Packages
 

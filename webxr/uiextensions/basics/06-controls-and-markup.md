@@ -33,7 +33,13 @@ A panel with no controls, only windows and title-bar chrome, needs no component 
 
 ## The UixElement interface
 
-Every control upgrader works against a small structural interface, `UixElement`: `userData`, `children`, `addEventListener` and `setProperties`. Because the interface is structural rather than tied to one engine's element type, the same upgrader code runs against uikit's element tree on both adapters. `walk`, `tagOf`, `findRole` and `findRoles` traverse that tree and locate a control's parts by their tag.
+Every control upgrader works against a small structural interface, `UixElement`: `userData`, `children`, `addEventListener` and `setProperties`. Because the interface is structural rather than tied to one engine's element type, the same upgrader code runs against uikit's element tree on every adapter, including the native one. `walk`, `tagOf`, `findRole` and `findRoles` traverse that tree and locate a control's parts by their tag.
+
+`dataAttributeKey()` is the one rule for where a `data-*` attribute lands in `userData`: `data-uix-min` becomes `uixMin`, and an attribute a parser has already camelCased (`dataUixMin`) gives the same key. `tagOf()` reads the `uix-*` custom element name a parser recorded, and returns a name only when it holds a hyphen, so a built-in tag such as `span`, which the three.js and XR Blocks parser records the same way as a custom one, reads as `undefined` everywhere.
+
+## Native panels carry attributes too
+
+The [native adapter](../integrations/05-native.md), `@realitycollective/native-uiextensions`, has no markup parser of its own: the native app sends a tree of `NativeElementNode`s, and each node's `attributes` field carries every `data-*` attribute exactly as the markup wrote it, for example `{ "data-uix-id": "count", "data-uix-min": "0" }`. The proxy element the adapter builds over that tree lifts those attributes into `userData` with the same `dataAttributeKey()` rule every other adapter uses, so a control upgrader cannot tell the difference. A native app that omits `attributes` on an element gives every control on it its defaults, silently, which is a real defect this package shipped and fixed; sending `attributes` on every element is required, not optional.
 
 ## Stepper
 
@@ -72,5 +78,6 @@ controls.stepper('health').events.on('change', (value) => setHealth(value));
 
 - [The adapter contract](./07-adapter-contract.md)
 - [Core adapter](../integrations/01-core.md)
+- [Native adapter](../integrations/05-native.md)
 - [Package examples](../examples/04-package-examples.md)
 - [API reference](pathname:///webxr/api/uiextensions/)

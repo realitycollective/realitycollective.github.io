@@ -123,9 +123,9 @@ export default function WebXRHome(): ReactNode {
             <h2 className={styles.heading}>How it is built</h2>
             <p className={styles.sectionLead}>
               Every family has the same shape, and the shape is the whole idea. The logic lives in an engine-free core that
-              carries the tests. A thin adapter, one per engine, binds that core to three.js, Babylon.js, Meta IWSDK or Google
-              XR Blocks. Your app installs one adapter per family and never touches the engine&apos;s input, UI or
-              environment systems directly again.
+              carries the tests. A thin adapter, one per platform, binds that core to three.js, Babylon.js, Meta IWSDK,
+              Google XR Blocks or a native host. Your app installs one adapter per family and never touches the engine&apos;s
+              input, UI or environment systems directly again.
             </p>
           </div>
           <div className={styles.howGrid}>
@@ -140,7 +140,7 @@ export default function WebXRHome(): ReactNode {
             <div className={styles.howArt}>
               <StackDiagram
                 app={{title: 'Your app', sub: 'content, physics, the wiring between families'}}
-                adapter={{title: 'One adapter', sub: 'three.js · Babylon.js · IWSDK · XR Blocks'}}
+                adapter={{title: 'One adapter', sub: 'three.js · Babylon.js · IWSDK · XR Blocks · Native'}}
                 core={{title: 'Engine-free core', sub: 'interactions · ui extensions · environment'}}
                 contracts={{title: 'Contracts', sub: '@realitycollective/webxr-input · zero dependencies'}}
                 caption="Arrows only point down."

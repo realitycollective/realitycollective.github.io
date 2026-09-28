@@ -2,7 +2,7 @@
 sidebar_position: 1
 sidebar_label: Welcome to WebXR UI Extensions
 title: Welcome to WebXR UI Extensions
-description: Movable windows, dock regions, hand menus and controls for a WebXR scene, installed as one Meta IWSDK or XR Blocks adapter.
+description: Movable windows, dock regions, hand menus and controls for a WebXR scene, installed as one Meta IWSDK, three.js, XR Blocks or native adapter.
 ---
 
 # Welcome to WebXR UI Extensions
@@ -23,6 +23,10 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 
 Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 
+:::note Preview
+The three.js binding, the native adapter, the IWSDK 1.0 reference and the platform synchronisation of 28 September 2026 are working extensions in `0.1.1-preview.1`, installed with `@preview`. Previews show where the family is heading and are not supported.
+:::
+
 ### Packages
 
 | Package | What it is | Peers |
@@ -32,14 +36,24 @@ Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 | `@realitycollective/xrblocks-uiextensions` | Google XR Blocks and plain three.js adapter, experimental | `three >=0.170.0` |
 | `@realitycollective/uix-devtools` | Developer-only tooling: an edit-session gate, runtime UIKitML compilation and the `uix-dev` CLI | none; installed as a `devDependency` |
 
+:::note Preview
+In `0.1.1-preview.1` the IWSDK adapter peers on `@iwsdk/core >=1.0.0 <2.0.0`, and two packages join: `@realitycollective/threejs-uiextensions`, the plain three.js and WebXR adapter with the same window host, pointer rules and cursor as IWSDK over `@pmndrs/uikit`, and `@realitycollective/native-uiextensions`, for an OpenXR or visionOS app embedding a JavaScript engine such as Hermes. `xrblocks-uiextensions` becomes a thin subclass of the three.js adapter that reads XR Blocks' own input callbacks.
+:::
+
 Each adapter re-exports the whole core, so an app installs one package:
 
 ```sh
 # Meta IWSDK apps (core re-exported)
 npm install @realitycollective/iwsdk-uiextensions
 
-# Google XR Blocks / plain three.js apps (core re-exported, experimental)
+# Plain three.js and WebXR apps (core re-exported), from 0.1.1 (preview)
+npm install @realitycollective/threejs-uiextensions@preview three
+
+# Google XR Blocks apps (core re-exported, experimental)
 npm install @realitycollective/xrblocks-uiextensions three
+
+# Native apps on OpenXR or visionOS (core re-exported), from 0.1.1 (preview)
+npm install @realitycollective/native-uiextensions@preview
 
 # Writing headless logic, tests, or a new engine adapter
 npm install @realitycollective/webxr-uiextensions
@@ -97,7 +111,7 @@ windows.togglePin('status');
 windows.setChrome('status', { close: true });
 ```
 
-Panels load asynchronously, so wait for `onReady` before reaching into a panel's elements. [Getting started](./basics/02-getting-started.md) walks through this in detail, including what changes on the XR Blocks and three.js adapter.
+Panels load asynchronously, so wait for `onReady` before reaching into a panel's elements. [Getting started](./basics/02-getting-started.md) walks through this in detail, including what changes on the three.js and XR Blocks adapters.
 
 ## Examples and runnable apps
 
@@ -115,7 +129,7 @@ npm run dev:playground        # the devtools playground, edit gate open in dev
 
 ## What this stack is and is not
 
-The Reality Collective WebXR packages aim at one outcome: an app's windows, docking and controls should not care which engine hosts them. The core, `@realitycollective/webxr-uiextensions`, ships engine-free, and the IWSDK and XR Blocks adapters are thin translations of the same decisions. When an app still has to reach into the host directly, either a contract is missing, which is a bug to report, or the app is overreaching.
+The Reality Collective WebXR packages aim at one outcome: an app's windows, docking and controls should not care which engine hosts them. The core, `@realitycollective/webxr-uiextensions`, ships engine-free, and the IWSDK, three.js, XR Blocks and native adapters are provable translations of the same decisions: every rule lives in the core, the IWSDK adapter is the reference, and each other adapter is held to it by the shared conformance suites. When an app still has to reach into the host directly, either a contract is missing, which is a bug to report, or the app is overreaching.
 
 Portable world-building is not a current promise. A `SceneDescriptor` lets this family's own windows and regions be authored as portable data, but scene content, meshes, prefabs and placement, is still built by the app. A shared content descriptor across families is only worth considering once a second host is actually targeted for that kind of portability.
 
@@ -127,6 +141,6 @@ Questions and problems go to the [issue tracker](https://github.com/realitycolle
 
 - [Basics: Introduction](./basics/01-introduction.md), [Hand menus](./basics/05-hand-menus.md) and the rest of the [Basics](/webxr/docs/uiextensions/basics) section, one page per topic
 - [Features: Developer cycle](./features/01-developer-cycle.md), [Near touch](./features/02-near-touch.md) and [Design and decisions](./features/03-design-and-decisions.md), in [Features](/webxr/docs/uiextensions/features)
-- [Host integrations: Core](./integrations/01-core.md), one page per npm package, in [Host integrations](/webxr/docs/uiextensions/integrations)
+- [Host integrations: Core](./integrations/01-core.md), one page per npm package, including [Native](./integrations/05-native.md), in [Host integrations](/webxr/docs/uiextensions/integrations)
 - [Examples: Showcase](./examples/01-showcase.md), and the rest of the [Examples](/webxr/docs/uiextensions/examples) section
 - [WebXR UI Extensions overview](/webxr/uiextensions)

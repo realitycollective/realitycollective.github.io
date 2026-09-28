@@ -68,7 +68,7 @@ When no immersive session is live, the three.js adapter falls back to a mouse ra
 
 ## What changes for the other adapters
 
-Every adapter follows the same shape: a one-call setup function, a `register(descriptor, object)` method, and events through `interactions.runtime.onEvent`. Babylon takes a `scene` and an `xr` experience instead of a renderer. IWSDK drives its own render loop, so there is no `update(dt)` call to make. XR Blocks is set up inside a Script's `init()` rather than at module scope.
+Every adapter follows the same shape: a one-call setup function, a `register(descriptor, object)` method, and events through `interactions.runtime.onEvent`. Babylon takes a `scene` and an `xr` experience instead of a renderer. IWSDK drives its own render loop, so there is no `update(dt)` call to make. XR Blocks is set up inside a Script's `init()` rather than at module scope. The native adapter reads the host object a native app installs, so it takes no engine objects at all.
 
 ## More information
 
@@ -77,3 +77,4 @@ Every adapter follows the same shape: a one-call setup function, a `register(des
 - [Babylon.js adapter](../integrations/03-babylon.md)
 - [Meta IWSDK adapter](../integrations/04-iwsdk.md)
 - [Google XR Blocks adapter](../integrations/05-xrblocks.md)
+- [Native adapter](../integrations/06-native.md)

@@ -8,6 +8,8 @@ description: A walkthrough of a real test file that runs the shared contract cas
 
 The Interactions repository's `iwsdk-interactions` package carries a test file, `provider-parity.test.ts`, that builds an instance of every engine adapter's provider, including the three.js one, and runs the full shared conformance suite against each. Its own comment explains why it lives in one place: four providers built against four different engines is exactly the shape of defect that hides, where one of them quietly drops a method and nothing notices until an app swaps adapters.
 
+A fifth provider, `native-interactions`' `NativeInputProvider`, runs the same suite against an in-memory fake of the native host's `input` slice. `MemoryInputProvider` from `@realitycollective/webxr-input` is a simpler reference for the same purpose: build one, hand it to every case, and you have a working example with no engine, no host and no adapter repository to check out. See [Provider conformance](../basics/05-provider-conformance.md) for it.
+
 ## Building a provider and a driver
 
 Each adapter gets a small builder function that returns a `provider` and, where the test harness can manage one, a `driver`. The three.js builder constructs a `WebXRInputProvider` with a stub `xr` context whose session, reference space and frame are all `null`, and a real three.js `PerspectiveCamera`, and it supplies no driver:

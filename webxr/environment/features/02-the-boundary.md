@@ -51,15 +51,23 @@ Occlusion, light estimation, planes, meshes, anchors and hit tests each report `
 
 **Why:** a sensor-backed feature fails to a scene that looks completely normal, so an app that could not tell the difference would ship the failure. See [Sensing](./01-sensing.md) for the full report model.
 
+A port never calls a method to say a feature is unsupported. `applyOcclusion` and `applyLightEstimation` on `EnvironmentPort`, and every setter on `WorldSensingPort`, are optional members; a port that cannot do the feature at all leaves the method off entirely, rather than implementing it just to report failure. `EnvironmentDirector` and `WorldSensingDirector` already check whether their port has the method before calling it, so they see it is missing and report `unsupported` on their own, one layer above the port. Wiring a method on a port that only re-reports what the director already knows would say the same sentence twice. Every adapter follows this, including `native-environment`, whose ports grow an optional method onto themselves only when the native host implements it and otherwise leave it off, exactly as the web adapters do.
+
+### 7. Scene management is owned; what is in a scene is not
+
+From 0.1.1 (preview) the family manages scenes: the list, single and additive loads, the stack, preloading, the active scene, persistent nodes and lifecycle events.
+
+**Why:** it passes the platform facility test. Every host changes scenes, and each does it differently: IWSDK has levels and persistent entities, three.js builds and disposes object graphs, and a native app has no engine in JavaScript at all. The meaning is the same everywhere. The owner placed it here on 25 September 2026. See [Scenes](../basics/06-scenes.md).
+
 The sections below set out each of these decisions in full.
 
 ## What the family owns
 
-Sky, fog, ambient and key lighting are in scope, the same platform facilities named on the [Introduction](../basics/01-introduction.md) page, plus transitions between named presets and passthrough suppression of the sky and fog. Audio is in scope too: a cue registry, bus and master mix, retrigger policy, throttling and voice lifetime. The test behind every decision is whether something is a facility the host exposes, which differs per host, not whether an environment usually has it.
+Sky, fog, ambient and key lighting are in scope, the same platform facilities named on the [Introduction](../basics/01-introduction.md) page, plus transitions between named presets and passthrough suppression of the sky and fog. Audio is in scope too: a cue registry, bus and master mix, retrigger policy, throttling and voice lifetime. So is scene management, from 0.1.1 (preview): the rules live in `SceneManager`, and each adapter's `ScenePort` builds and destroys content with the host's own loaders. The test behind every decision is whether something is a facility the host exposes, which differs per host, not whether an environment usually has it.
 
 ## What is deliberately unowned
 
-Several things were proposed and turned down on that test. A parametric ground plane was removed from an earlier draft: no host exposes one, so a floor is a mesh and a material, which is content, and content is the app's. Scene composition, content descriptors and asset loading are not owned either; a shared content descriptor is only worth considering once a second host is actually targeted. Physics is not owned. A body solved from the head and hands was turned down, because no host exposes a body: the tracked poses are WebXR-Input's contract and the solver is pure trigonometry that belongs to the app. Reflection cube maps from a live GL context are not built here either, because prefiltering one is a renderer's job; the environment map instead carries `{ kind: "estimated" }` as a marker the app's renderer applies.
+Several things were proposed and turned down on that test. A parametric ground plane was removed from an earlier draft: no host exposes one, so a floor is a mesh and a material, which is content, and content is the app's. What a scene contains is not owned: the scene manager loads a scene's `src` through the host's own loader and never reads it. Content descriptors, converting a scene format between hosts, asset decoding and how a scene looks, its materials, opacity and effects, stay with the app; a shared content descriptor is only worth considering once a second host is actually targeted. Physics is not owned. A body solved from the head and hands was turned down, because no host exposes a body: the tracked poses are WebXR-Input's contract and the solver is pure trigonometry that belongs to the app. Reflection cube maps from a live GL context are not built here either, because prefiltering one is a renderer's job; the environment map instead carries `{ kind: "estimated" }` as a marker the app's renderer applies.
 
 ## No seam to sibling families
 
@@ -89,6 +97,8 @@ If a source is there, the app binds it. If it is not, nothing happens, and neith
 ## More information
 
 - [Sensing](./01-sensing.md)
-- [Roadmap](../basics/06-roadmap.md)
+- [Scenes](../basics/06-scenes.md)
+- [Roadmap](../basics/07-roadmap.md)
+- [Native adapter](../integrations/05-native.md)
 - [Layering rule](/webxr/docs/concepts/layering-rule)
 - [API reference](pathname:///webxr/api/environment/)

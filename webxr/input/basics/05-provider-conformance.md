@@ -32,6 +32,20 @@ for (const contractCase of inputProviderContractCases()) {
 
 `InputProviderContractDriver` is an optional pair of hooks, `enterSession()` and `exitSession()`, that an adapter's test harness supplies when it can fake a session. The session-cycle case needs both hooks to run at all; without a driver, or with only one hook, that case passes without exercising anything. This is deliberate: a partial driver is always safe, and a case that cannot be faked never blocks conformance, it simply cannot check what it was written to check.
 
+## The reference mock
+
+`MemoryInputProvider`, from `@realitycollective/webxr-input` since 0.1.5 (preview), is an in-memory `InputProvider` that needs no engine, no WebXR and no headset, and passes every case in `inputProviderContractCases()`. It reports two tracked hands with fixed poses and declares every capability it can serve, so it is a working reference to check a new adapter's behaviour against, and a fake to build headless tests on. `enterSession()` and `exitSession()` are its driver hooks: each re-publishes the current capabilities, the way a live provider does when a session starts or ends.
+
+```ts
+for (const contractCase of inputProviderContractCases()) {
+  const provider = new MemoryInputProvider();
+  contractCase.run(provider, {
+    enterSession: () => provider.enterSession(),
+    exitSession: () => provider.exitSession(),
+  });
+}
+```
+
 ## The worked example
 
 [Conformance in practice](../examples/01-conformance-in-practice.md) walks through a real test file that builds a provider and a driver, then runs every case against it.
@@ -42,3 +56,4 @@ for (const contractCase of inputProviderContractCases()) {
 - [The input model](./03-the-input-model.md)
 - [Conformance in practice](../examples/01-conformance-in-practice.md)
 - [Evolving the contract](../features/02-evolving-the-contract.md)
+- [Conformance suites](/webxr/docs/concepts/conformance-suites)

@@ -6,11 +6,11 @@ description: The engine-free core that every Environment adapter re-exports, and
 
 # Core: @realitycollective/webxr-environment
 
-The core is the engine-free package every adapter builds on: two directors, two ports, and no 3D engine code at all.
+The core is the engine-free package every adapter builds on: its directors, the scene manager, the ports an adapter implements, and no 3D engine code at all.
 
 ## What it binds
 
-Nothing. The core never imports an engine, never imports a sibling package and never reads `navigator.xr`. Its architecture test fails the moment any of those happen. It holds `EnvironmentDirector` and `WorldSensingDirector` as plain data and logic, and defines the `EnvironmentPort`, `AudioPort` and `WorldSensingPort` interfaces an adapter implements.
+Nothing. The core never imports an engine, never imports a sibling package and never reads `navigator.xr`. Its architecture test fails the moment any of those happen. It holds `EnvironmentDirector` and `WorldSensingDirector` as plain data and logic, and defines the `EnvironmentPort`, `AudioPort` and `WorldSensingPort` interfaces an adapter implements, plus their conformance suites: `environmentPortContractCases()` (6 cases), `audioPortContractCases()` (7 cases) and `worldSensingPortContractCases()` (7 cases). From 0.1.1-preview.2 the core also holds `AudioStartReaper` and `DEFAULT_AUDIO_START_TIMEOUT_MS` (10 000 ms), the engine-free rule every `AudioPort` composes to release a voice it started but never confirmed as playing, and the audio suite's seventh case proves it on every platform that polls with `update`; a looping voice, or one whose cue declares its own `durationMs`, is never reaped this way. From 0.1.1 (preview) it also holds `SceneManager`, defines `ScenePort`, and ships `sceneManagerContractCases()` (18 cases), which runs the real manager over an adapter's real port; see [Scenes](../basics/06-scenes.md). Each case is a `name` and a `run(subject)` that throws a plain `Error` on failure, shipped as data rather than as tests, in the style of `webxr-uiextensions`'s suites. All four adapters, three.js, IWSDK, XR Blocks and native, run all four suites.
 
 ## Install
 
@@ -44,5 +44,7 @@ Not applicable; the core renders nothing on its own. See the [Environment playgr
 
 - [Introduction](../basics/01-introduction.md)
 - [three.js and raw WebXR adapter](./02-threejs.md)
+- [Native adapter](./05-native.md)
 - [The environment document](../basics/03-the-environment-document.md)
+- [Conformance suites](/webxr/docs/concepts/conformance-suites)
 - [API reference](pathname:///webxr/api/environment/)
