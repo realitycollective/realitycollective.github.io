@@ -44,6 +44,10 @@ director.update(deltaMs);
 
 Sky, fog, lights and image-based lighting come from the three.js adapter it extends, because XR Blocks renders through three.js and reimplementing four slots would only let them drift. Occlusion registers as a client of XR Blocks' `Depth` manager, turns its occlusion pass on, and chooses the depth-texture blur from the requested mode and softness. Light estimation reads the `Lighting` manager and turns its directional light and ambient probe into the same specs an app writes by hand, which the director then lays over the ambient, key and IBL slots. For the room, `createXRBlocksWorldSensing(xb.core.world)` reads XR Blocks' `PlaneDetector` and `MeshDetector`.
 
+## Scenes
+
+From 0.1.1 (preview). `createXRBlocksScenes(root, options)` is the three.js scene port outright, under XR Blocks' three.js scene (`xb.core.scene`), the same way `createXRBlocksAudio` is the three.js audio port. XR Blocks adds nothing a scene needs. See the [three.js adapter](./02-threejs.md#scenes) and [Scenes](../basics/06-scenes.md).
+
 ## What it cannot do on this host, and why
 
 Anchors and hit testing report `unsupported`, because XR Blocks has `placeOnSurface` and `anchorObjectAtReticle`, which move an object for you and hand nothing back, so neither can answer where a ray would land. XR Blocks configures its depth and lighting managers during its own `xb.init`, before this adapter can act, so anything it arrives too late to change is named in the sensing report rather than silently dropped. If XR Blocks' own estimated lights (`useAmbientSH`, `useDirectionalLight`) are on at the same time as this adapter applies the same estimate, the room gets lit twice; turn the XR Blocks lights off and let the director own them, and the adapter says so in the report if it sees both.
@@ -60,5 +64,5 @@ Not applicable; the shipped [Environment playground](../examples/01-environment-
 
 - [Sensing](../features/01-sensing.md)
 - [three.js and raw WebXR adapter](./02-threejs.md)
-- [Roadmap](../basics/06-roadmap.md)
+- [Roadmap](../basics/07-roadmap.md)
 - [API reference](pathname:///webxr/api/environment/)

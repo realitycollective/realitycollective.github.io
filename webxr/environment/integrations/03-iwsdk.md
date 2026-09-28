@@ -18,7 +18,11 @@ The IWSDK adapter drives Meta's Immersive Web SDK's own environment, lighting an
 npm install @realitycollective/iwsdk-environment
 ```
 
-Peer dependencies are `@iwsdk/core >= 0.5.0 < 0.6.0`, developed and tested against 0.5.3, and `three >= 0.170.0`, which every IWSDK application already carries. The adapter imports three.js classes from `three` directly rather than through `@iwsdk/core`'s star re-export, so it prebundles even when an app excludes `three` from Vite's dependency optimiser to transform its own source.
+Peer dependencies are `@iwsdk/core >=0.5.0 <0.6.0`, developed and tested against 0.5.3, and `three >= 0.170.0`, which every IWSDK application already carries. This adapter is the reference implementation of the family: every rule it applies is stated in the core and held on the three.js, XR Blocks and native adapters by the shared conformance suites. The adapter imports three.js classes from `three` directly rather than through `@iwsdk/core`'s star re-export, so it prebundles even when an app excludes `three` from Vite's dependency optimiser to transform its own source.
+
+:::note Preview
+From `0.1.1-preview.2` the peer range is `@iwsdk/core >=1.0.0 <2.0.0`, built and tested against IWSDK 1.0.0.
+:::
 
 ## Setup
 
@@ -46,9 +50,13 @@ adapter.onCapabilitiesChange((c) => env.environment.setPassthrough(c.passthrough
 
 A gradient sky's equator is derived from the same ramp the three.js adapter uses, so the two engines agree at the horizon. IWSDK's `EnvironmentSystem` already hides authored backgrounds in an AR session, which the adapter inherits rather than fights. `kind: "room"` image-based lighting is native here, using IWSDK's own built-in probe string, the one kind three.js has to approximate. Occlusion opts entities in one at a time by patching their materials, so `scope: "all"` needs an `occludables` option naming which entities the real world may hide; whatever the port adds it remembers, so turning occlusion off never strips a component the app added itself. Audio uses one entity per voice with `playbackMode` pinned to `Overlap`, because the core has already applied the cue's own retrigger policy and letting IWSDK apply its own on top would make `restart` mean two different things on two engines. For the room, `IWSDKWorldSensingPort` queries the entities `SceneUnderstandingSystem` already made, so planes, meshes and anchors come with IWSDK's own measurements; a hit test becomes an entity carrying `EnvironmentRaycastTarget`.
 
+## Scenes
+
+From 0.1.1 (preview). `createIWSDKScenes(world, options)` builds each scene with IWSDK's own `SceneJSONImporter`, the loader `world.loadLevel` uses, under a persistent root entity of its own. Scenes therefore stack, preload and unload beside IWSDK's level rather than replacing it. The importer tags what it creates with `LevelTag`; the port removes the tag, so an unrelated `loadLevel` cannot destroy a managed scene. Every entity a scene owns is tracked, because destroying an IWSDK entity does not destroy the entities under it. `instantiate` clones a preloaded glTF from IWSDK's `AssetManager` by default; pass `assets` to resolve names yourself. A hidden scene or node is hidden through IWSDK's `Visibility`, an empty layer mask and `pointerEvents = "none"`, because IWSDK's pointer system reads only that last one. The importer's player attachments and hero camera are not applied; `loadLevel` does that part. See [Scenes](../basics/06-scenes.md).
+
 ## What it cannot do on this host, and why
 
-IWSDK 0.5.3 has no WebXR light estimation at all, so the port reports `unsupported` with that sentence rather than going quiet; this is filed upstream, see the [Roadmap](../basics/06-roadmap.md). Hit tests carry no distance on IWSDK, because IWSDK moves a target entity to the hit and keeps the ray to itself, and reporting a guess from the head would be a different number wearing the same name. Without an `occludables` option, `scope: "all"` occlusion reports `unavailable` rather than walking the scene graph for content it does not own.
+IWSDK has no WebXR light estimation at all, in 0.5.3 and still in 1.0.0, and measures no reflections either, so the port reports light estimation and the estimated environment map as `unsupported` with that sentence rather than going quiet; this is filed upstream, see the [Roadmap](../basics/07-roadmap.md). Hit tests carry no distance on IWSDK, because IWSDK moves a target entity to the hit and keeps the ray to itself, and reporting a guess from the head would be a different number wearing the same name. Without an `occludables` option, `scope: "all"` occlusion reports `unavailable` rather than walking the scene graph for content it does not own.
 
 ## Testing it
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: "Google XR Blocks: @realitycollective/xrblocks-interactions"
-description: The experimental XR Blocks adapter, matched structurally to xrblocks v0.20.0 with no upstream dependency.
+description: The experimental XR Blocks adapter, matched structurally to xrblocks 0.21.1 with no upstream dependency, with haptics, an engine-owned grab and a RAPIER held pose.
 ---
 
 # Google XR Blocks: @realitycollective/xrblocks-interactions
@@ -14,8 +14,10 @@ Experimental. The XR Blocks pipeline is young and its API still moves. Treat thi
 
 | Layer | Detail |
 | --- | --- |
-| Input | `Input.getFrame()` ray sources and direct touches, plus XR Blocks' own select events |
-| Hit-testing and movement | Shared with the three.js adapter, since XR Blocks Scripts are ordinary three.js `Object3D`s |
+| Input | `Input.getFrame()` ray sources and direct touches, XR Blocks' own select events, the real grip pose from `inputSource.gripSpace` through an optional `xr` context, and haptics through the controller's WebXR Gamepad `hapticActuators` |
+| Hit-testing | Shared with the three.js adapter, since XR Blocks Scripts are ordinary three.js `Object3D`s |
+| Movement | `XRBlocksTransformPort`, the three.js port plus the held pose over a RAPIER rigid body, from 0.1.1-preview.2 |
+| Grab | XR Blocks' `ManipulationManager` grab, forwarded as an engine-owned grab through `onObjectGrabStart` and `onObjectGrabEnd` with the `nativeGrab` option |
 
 ## Install
 
@@ -23,39 +25,58 @@ Experimental. The XR Blocks pipeline is young and its API still moves. Treat thi
 npm install @realitycollective/xrblocks-interactions three
 ```
 
-Peer dependency: `three >= 0.170.0`. xrblocks itself declares a peer of `three@^0.184`, while Meta's IWSDK mandates the `super-three@0.181` fork. A bundler resolves a single `three` per bundle, so this works in practice, but npm's own peer check cannot express it, which is why the Reality Collective workspaces set `legacy-peer-deps=true`.
+Peer dependency: `three >= 0.170.0`. xrblocks itself declares a peer of `three@^0.184`, while Meta's IWSDK mandates the `super-three@0.181` fork. A bundler resolves a single `three` per bundle, so this works in practice, but npm's own peer check cannot express it, which is why the Reality Collective workspaces set `legacy-peer-deps=true`. The adapter is structurally typed against xrblocks 0.21.1 and imports nothing from it.
 
 ## Setup
 
 ```ts
 import { connectXRBlocksInteractions } from "@realitycollective/xrblocks-interactions";
+import { RigidBodyType } from "@dimforge/rapier3d";
+
+const rigidBodyTypes = { kinematicPositionBased: RigidBodyType.KinematicPositionBased, dynamic: RigidBodyType.Dynamic };
 
 class MyScript extends xb.Script {
   init() {
-    this.ix = connectXRBlocksInteractions({ input: xb.input, camera: xb.camera });
+    this.ix = connectXRBlocksInteractions({
+      input: xb.input,
+      camera: xb.camera,
+      xr: xb.core.renderer.xr,   // grip poses, angular velocity and the visibility gate
+      nativeGrab: true,          // only if the app uses XR Blocks' ManipulationManager grab
+      rigidBodyTypes,            // RAPIER's own values for the two body types, for the held pose
+    });
     this.ix.register({ id: "button", behaviours: [{ kind: "press" }] }, buttonMesh);
+    this.ix.register({ id: "ball", behaviours: [{ kind: "grab" }] }, ballMesh, { rigidBody: ballBody });
   }
   update() {
     this.ix.update(xb.getDeltaTime());
   }
+  onObjectGrabStart(event) { this.ix.onObjectGrabStart(event); }
+  onObjectGrabEnd(event) { this.ix.onObjectGrabEnd(event); }
 }
 ```
 
+Pass `xr` so the provider reads each controller's real grip pose from `inputSource.gripSpace`, falling back to `targetRaySpace`, and gates sampling on the session's visibility. Without it the grip pose is the ray origin with an identity orientation, so every rotation read is zero, angular velocity is meaningless, and sampling is never gated; that is the pre-0.21 behaviour, kept only as a fallback. `register` takes an optional `targetRadius`, 0.1 m by default for an object with no geometry of its own, and an optional `rigidBody`.
+
 ## What it adds over the core
 
-Nothing beyond the three.js hit-testing and transform machinery it reuses; its own code is limited to translating XR Blocks' pooled per-frame structs into the shared input snapshot, copying every value out immediately since XR Blocks reuses those objects.
+Beyond the three.js hit-testing it reuses, its own code translates XR Blocks' pooled per-frame structs into the shared input snapshot, copying every value out immediately since XR Blocks reuses those objects. From 0.1.1-preview.2 it follows the IWSDK reference where xrblocks 0.20.0 could not and 0.21.1 can:
+
+- **Haptics.** `pulse()` plays through the controller's WebXR Gamepad `hapticActuators` (`Controller.gamepad`), clamping intensity to 0..1 exactly as the other providers do, and reports `capabilities.haptics` and `hapticsAvailable` accordingly.
+- **An engine-owned grab.** With `nativeGrab`, `capabilities.grabs` is `"native"` and the Script's `onObjectGrabStart` and `onObjectGrabEnd` hooks, driven by XR Blocks' `ManipulationManager`, raise the same `nativeGrabbing` hint the IWSDK provider raises for its own grab.
+- **The held pose.** `XRBlocksTransformPort` implements `beginHold` and `endHold` when the target's object was registered with a RAPIER rigid body, which xrblocks 0.21.1 bundles (`PhysicsOptions.RAPIER`): held switches the body kinematic and keeps it at the object's written pose, released switches it back to dynamic with the release velocity. `rigidBodyTypes` at connect time supplies RAPIER's own values for the two body types, the same idea as `physicsMotionTypes` on the Babylon adapter, because this package holds no RAPIER values, only shapes. With no body, or no `rigidBodyTypes`, the port behaves exactly like `ThreeTransformPort`.
+- **The shared rules.** A controller's `indexTip` is its ray origin, so a controller pokes as a fingertip does; `sample()` reports no sources while a live session is not visible; a bare `Group` is a 0.1 m proximity sphere; and a hit on a hidden object is dropped.
 
 ## What it cannot do on this host, and why
 
-It cannot fire haptics: xrblocks v0.20.0 has no haptics API, so `capabilities.haptics` is always false and a haptic request is reported but never played. It cannot offer presence either: XR Blocks owns its controller and hand visuals and exposes no way to hide them.
+It cannot offer presence: XR Blocks 0.21.1 owns its hand and controller visuals and exposes no public hook to hide them (`disableControllers` stops input and the reticle, not the models, and the grips are private), so `capabilities.presence` is always false, and there is no modality to switch either.
 
 ## Presence and haptics
 
-Both are unavailable on this host, for the reasons above. `capabilities.presence` and `capabilities.haptics` are always false.
+Presence is unavailable, for the reason above. Haptics are available from 0.1.1-preview.2 on a controller whose Gamepad carries an actuator; in the 0.1.0 release `capabilities.haptics` was always false, because xrblocks 0.20.0 had no such surface.
 
 ## Testing it
 
-Covered against a structural fake of the `Input.getFrame()` shape, so the provider's parsing is exercised without the `xrblocks` package installed.
+Covered against structural fakes of the `Input.getFrame()` shape, the `xr` context, the Gamepad actuators and a RAPIER body, so the provider's parsing, the pulse and the held pose are exercised without the `xrblocks` package installed. `XRBlocksTransformPort` runs the shared `transformPortContractCases()`, including the three held, released and reset cases, in the port parity suite beside the other four platforms.
 
 ## Live demo
 

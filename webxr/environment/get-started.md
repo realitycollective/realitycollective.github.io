@@ -11,7 +11,7 @@ WebXR Environment describes the world around the player, sky, fog, light and sou
 
 ## Overview
 
-Every slot in an environment is a platform facility: something the host engine exposes, and exposes differently. Three.js has `scene.background` and `Fog`; Meta's Immersive Web SDK has `DomeGradient` and `AmbientLightComponent`. The engine-free core, `@realitycollective/webxr-environment`, holds the environment and audio logic as plain data with no dependencies at all; an adapter is the only place an engine name appears, translating that data onto three.js, IWSDK, Google XR Blocks or, from 0.1.1 (preview), a native app. Content is never here: meshes, prefabs and placement stay with the app. Sensor-backed features, occlusion, light estimation, planes, meshes, anchors and hit tests, report `unsupported`, `unavailable`, `pending` or `active` rather than failing silently.
+Every slot in an environment is a platform facility: something the host engine exposes, and exposes differently. Three.js has `scene.background` and `Fog`; Meta's Immersive Web SDK has `DomeGradient` and `AmbientLightComponent`. The engine-free core, `@realitycollective/webxr-environment`, holds the environment and audio logic as plain data with no dependencies at all; an adapter is the only place an engine name appears, translating that data onto three.js, IWSDK, Google XR Blocks or, from 0.1.1 (preview), a native app. From 0.1.1 (preview) it also manages scenes inside one session: a scene list, single and additive loads, preloading and persistent nodes, with the active scene driving the environment. Content is never here: meshes, prefabs and placement stay with the app, and the scene manager loads a scene without reading it. Sensor-backed features, occlusion, light estimation, planes, meshes, anchors and hit tests, report `unsupported`, `unavailable`, `pending` or `active` rather than failing silently.
 
 Start with the [introduction](./basics/01-introduction.md) for the concepts, or jump to the [quickstart](#quickstart) below.
 
@@ -23,15 +23,22 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 
 Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 
+:::note Preview
+Scene management, the native adapter, the IWSDK 1.0 reference and the platform synchronisation of 28 September 2026 are working extensions in `0.1.1-preview.2`, installed with `@preview`. Previews show where the family is heading and are not supported.
+:::
+
 ### Packages
 
 | Package | What it is | Peers |
 | --- | --- | --- |
-| `@realitycollective/webxr-environment` | Engine-free core: the `EnvironmentDirector` and `WorldSensingDirector`, and the ports an adapter implements, with no dependencies at all | none |
+| `@realitycollective/webxr-environment` | Engine-free core: the `EnvironmentDirector`, `WorldSensingDirector` and, from 0.1.1 (preview), `SceneManager`, and the ports an adapter implements, with no dependencies at all | none |
 | `@realitycollective/threejs-environment` | Adapter for plain three.js and raw WebXR | `three >=0.170.0` |
-| `@realitycollective/iwsdk-environment` | Adapter for Meta IWSDK, driving IWSDK's own environment, lighting and audio machinery | `@iwsdk/core >=0.5.0 <0.6.0`, `three >=0.170.0` |
+| `@realitycollective/iwsdk-environment` | Adapter for Meta IWSDK, the reference implementation, driving IWSDK's own environment, lighting and audio machinery | `@iwsdk/core >=0.5.0 <0.6.0`, `three >=0.170.0` |
 | `@realitycollective/xrblocks-environment` | Experimental adapter for Google XR Blocks, builds on the three.js adapter | `three >=0.170.0`, an XR Blocks build to hand in |
-| `@realitycollective/native-environment` | Adapter for a native app on OpenXR or visionOS embedding a JavaScript engine such as Hermes, from 0.1.1 (preview) | none |
+
+:::note Preview
+In `0.1.1-preview.2` the IWSDK adapter peers on `@iwsdk/core >=1.0.0 <2.0.0`, the core gains `SceneManager`, and `@realitycollective/native-environment` joins, for a native app on OpenXR or visionOS embedding a JavaScript engine such as Hermes, with no peers.
+:::
 
 Install exactly one adapter; each one re-exports the core, so you never install the core yourself:
 
@@ -56,6 +63,7 @@ npm install @realitycollective/native-environment
 - letting the host's own light estimation take over ambient, key and reflections while it is measuring
 - a music, ambience and UI sound mix with per-bus and master gain, muted independently of level
 - spawning content onto a real surface once world sensing reports a new plane
+- moving between levels or stages inside one session, with a HUD that survives the change and the next level preloaded behind a fade
 
 ## Quickstart
 
@@ -109,7 +117,7 @@ No audio file ships with the repository; the demo points at `public/audio/hum.mp
 
 ## What this stack is and is not
 
-The Reality Collective WebXR packages aim at one outcome: an app's environment and sound should not care which engine hosts them. The core ships with no dependencies at all, and the three.js, IWSDK, XR Blocks and native adapters are thin translations of the same directors. When an app still has to reach into the host directly, either a contract is missing, which is a bug to report, or the app is overreaching.
+The Reality Collective WebXR packages aim at one outcome: an app's environment and sound should not care which engine hosts them. The core ships with no dependencies at all, and the three.js, IWSDK, XR Blocks and native adapters are thin translations of the same directors, with the IWSDK adapter as the reference every other one is held to by the shared conformance suites. When an app still has to reach into the host directly, either a contract is missing, which is a bug to report, or the app is overreaching.
 
 Content is never built here. Meshes, prefabs, placement and floors belong to the app, and the stock presets are examples to copy in a project's first five minutes, not a view on how any world should look. Portable world-building beyond this family's own slots is not a current promise, and a shared content descriptor is only worth considering once a second host is actually targeted for that kind of portability.
 

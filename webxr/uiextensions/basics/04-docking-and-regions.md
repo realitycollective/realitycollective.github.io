@@ -14,7 +14,7 @@ Four values, from `DockMode`:
 
 - `world-locked` - placed in space; the window keeps its world transform.
 - `body-follow` - lazily follows the player, with a deadzone so it does not jitter.
-- `head-locked` - rigidly attached to the view; use sparingly.
+- `head-locked` - pinned to the screen outside an immersive session; inside a session it follows exactly as `body-follow` does, on every platform, because IWSDK hands a screen-space panel back to world space while presenting. Use sparingly.
 - `hand-locked` - rides a hand and shows while the palm is raised toward the viewer, a hand menu.
 
 `manager.togglePin(id)` moves a window between `world-locked` and `body-follow`, using the core rule `togglePinned(mode)`. A head-locked or hand-locked window pins to `world-locked` too, because pinning either of those in place makes it an ordinary window.

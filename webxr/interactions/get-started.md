@@ -23,6 +23,10 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 
 Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 
+:::note Preview
+The native adapter, the held pose, the IWSDK 1.0 reference and the platform synchronisation of 28 September 2026 are working extensions in `0.1.1-preview.2`, installed with `@preview`. Previews show where the family is heading and are not supported.
+:::
+
 ### Packages
 
 | Package | What it is | Peers |
@@ -31,9 +35,12 @@ Current release: `0.1.0` on npm, resolved by a bare `npm install`.
 | `@realitycollective/webxr-interactions` | The core: behaviours, targeting, gaze, capability checks, events and feedback, with no engine code | Depends on `@realitycollective/webxr-input` |
 | `@realitycollective/threejs-interactions` | Adapter for plain three.js and raw WebXR; the default, standalone choice | `three >= 0.170.0`; optional `three-mesh-bvh >= 0.9.14` |
 | `@realitycollective/babylon-interactions` | Adapter for Babylon.js, matched structurally to the API | None |
-| `@realitycollective/iwsdk-interactions` | Adapter for Meta's Immersive Web SDK | `@iwsdk/core >=0.5.0 <0.6.0`, `@iwsdk/xr-input >=0.5.0 <0.6.0`, `three >=0.170.0` |
+| `@realitycollective/iwsdk-interactions` | Adapter for Meta's Immersive Web SDK, the reference implementation | `@iwsdk/core >=0.5.0 <0.6.0`, `@iwsdk/xr-input >=0.5.0 <0.6.0`, `three >=0.170.0` |
 | `@realitycollective/xrblocks-interactions` | Adapter for Google's XR Blocks, matched structurally to the API | `three >= 0.170.0` |
-| `@realitycollective/native-interactions` | Adapter for a native OpenXR or visionOS app embedding a JavaScript engine such as Hermes, from 0.1.1 (preview) | None |
+
+:::note Preview
+In `0.1.1-preview.2` the IWSDK adapter peers on `@iwsdk/core` and `@iwsdk/xr-input` `>=1.0.0 <2.0.0`, the XR Blocks adapter is matched to xrblocks 0.21.1 and gains haptics, an engine-owned grab and a RAPIER held pose, and `@realitycollective/native-interactions` joins, for a native OpenXR or visionOS app embedding a JavaScript engine such as Hermes, with no peers.
+:::
 
 Every adapter declares its core, and `@realitycollective/webxr-input`, as an npm dependency, so installing the adapter installs both, and the adapter re-exports their symbols in full.
 
@@ -125,7 +132,7 @@ npm run dev:playground     # http://localhost:8082
 
 ## What this stack is and is not
 
-The Reality Collective WebXR packages aim at one outcome: an app's logic, input handling, interactions and UI should not care which engine hosts them. Each family ships an engine-free core and thin adapters, here for Meta IWSDK, plain three.js and WebXR, Babylon.js, Google XR Blocks and native XR apps. When an app still has to reach into the host, either a contract is missing, which is a bug to report, or the app is overreaching. Physics and ballistics stay with the app: a `grab` behaviour only ever reports a pickup and a release, never a thrown object's flight afterwards. Portable scene and content building beyond the shared `InteractionDescriptor` is not a current promise.
+The Reality Collective WebXR packages aim at one outcome: an app's logic, input handling, interactions and UI should not care which engine hosts them. Each family ships an engine-free core and one adapter per platform, here for Meta IWSDK, plain three.js and WebXR, Babylon.js, Google XR Blocks and native XR apps. The IWSDK adapter is the reference: every rule it applies is stated in the core and every other adapter is held to it by the shared conformance suites, so the same descriptor behaves the same way on every platform. When an app still has to reach into the host, either a contract is missing, which is a bug to report, or the app is overreaching. The physics simulation stays with the host engine: a `grab` behaviour suspends a physics body while it is held and hands the engine the release velocity, and on a host with no physics a thrown object's flight is the app's own code. Scene content stays with the app, and loading and switching scenes is the Environment family's scene manager.
 
 ## Feedback
 

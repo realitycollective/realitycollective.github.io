@@ -8,7 +8,7 @@ description: The reference adapter binding the core onto Meta's Immersive Web SD
 
 ## What it binds
 
-This is the reference adapter for [Meta's Immersive Web SDK](https://iwsdk.dev) (`@iwsdk/core`), and the most complete of the two shipped adapters. It binds the engine-free core to IWSDK's own ECS (entity-component-system): window entities carry IWSDK's `PanelUI` component alongside this package's `UIWindow`, and its systems add or remove IWSDK's `Follower`, `ScreenSpace`, `RayInteractable` and `PokeInteractable` components to realise what the core decides.
+This is the reference adapter for [Meta's Immersive Web SDK](https://iwsdk.dev) (`@iwsdk/core`), the one every other adapter in the family behaves as. It binds the engine-free core to IWSDK's own ECS (entity-component-system): window entities carry IWSDK's `PanelUI` component alongside this package's `UIWindow`, and its systems add or remove IWSDK's `Follower`, `ScreenSpace`, `RayInteractable` and `PokeInteractable` components to realise what the core decides.
 
 ## Install
 
@@ -18,6 +18,14 @@ npm install @realitycollective/iwsdk-uiextensions
 ```
 
 This package re-exports the whole core, so an IWSDK app depends on this one package only.
+
+:::note Preview
+From `0.1.1-preview.1` the peer range is `@iwsdk/core >=1.0.0 <2.0.0`, built and tested against IWSDK 1.0.0.
+:::
+
+## The reference
+
+Every rule this adapter applies through IWSDK's systems is stated in the core and run by every other adapter: the `UIWindow` and `UIDockRegion` component defaults and the `createUIWindow` and `createDockRegion` factory defaults read the core constants, so there is one set of defaults, in the core, for every platform, and `follow-reference.test.ts` drives IWSDK 1.0's own `FollowSystem` beside the core's `stepFollow` over the same head motion and requires the same position and facing every frame. Moving the reference to IWSDK 1.0 changed one rule: 1.0's `FollowSystem` honours the height of the follow offset, where 0.5 set a following window at head height, so a body-follow or head-locked window now sits 0.15 m below eye level by default and a following region 0.2 m below, on every platform.
 
 ## Setup
 

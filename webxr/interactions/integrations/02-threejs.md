@@ -42,11 +42,11 @@ interactions.register({ id: "button", behaviours: [{ kind: "press" }] }, buttonM
 
 ## What it adds over the core
 
-It is the only adapter with no framework requirement beyond three.js itself, and the only one with a `registerVisual` presence API, because a standalone three.js app builds its own hand and controller models.
+It is the only adapter with no framework requirement beyond three.js itself, and the only one with a `registerVisual` presence API, because a standalone three.js app builds its own hand and controller models. From 0.1.1-preview.2 it follows the IWSDK reference where three.js itself has no opinion: a controller's `indexTip` is its ray origin, so a controller pokes buttons as a fingertip does; `sample()` reports no sources while a live session is not visible; `ThreeHitTester.register(id, object, targetRadius?)` gives a bare `Group` a 0.1 m proximity radius by default, the radius IWSDK gives a bare target, while a mesh keeps its own bounding sphere; and a hit on an object hidden with `visible = false`, or under a hidden ancestor, is dropped, because three.js's own `Raycaster` ignores `visible` by design.
 
 ## What it cannot do on this host, and why
 
-It cannot show or hide a hand or controller visual until the app hands one over with `registerVisual`; there is nothing built in to hide. It also cannot resolve a detailed mesh's raycast quickly without `three-mesh-bvh` installed; without it, register a low-poly collider proxy instead of the visible mesh.
+It cannot show or hide a hand or controller visual until the app hands one over with `registerVisual`; there is nothing built in to hide, and `setPresenceModality` always returns false, because the app owns one visual root per side and there is no hands-or-controllers family to switch. It cannot hold a physics body during a grab: three.js has no physics engine, so its transform port has no body to suspend and omits `beginHold` and `endHold`, as the core contract allows; a grabbed object rests where it is released. It has no engine-owned grab to report as a hint either, so every grab is pose-only. It also cannot resolve a detailed mesh's raycast quickly without `three-mesh-bvh` installed; without it, register a low-poly collider proxy instead of the visible mesh.
 
 ## Presence and haptics
 

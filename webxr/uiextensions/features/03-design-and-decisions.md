@@ -27,7 +27,7 @@ The core, `@realitycollective/webxr-uiextensions`, carries exactly one runtime d
 
 ### 3. Adapters re-export the whole core
 
-`@realitycollective/iwsdk-uiextensions` and `@realitycollective/xrblocks-uiextensions` each re-export the entire core surface, so an app installs one package.
+`@realitycollective/iwsdk-uiextensions`, `@realitycollective/threejs-uiextensions`, `@realitycollective/xrblocks-uiextensions` and `@realitycollective/native-uiextensions` each re-export the entire core surface, so an app installs one package.
 
 **Why:** an app targeting one engine should not also have to track a second package's version for the logic it depends on.
 
@@ -83,13 +83,17 @@ The engine-free core. Windows (`WindowManager`, `WindowRecord`, `WindowChrome`),
 
 The reference adapter for Meta's Immersive Web SDK. Window entities carry IWSDK's `PanelUI` component alongside this package's `UIWindow`, and its systems add or remove IWSDK's `Follower`, `ScreenSpace`, `RayInteractable` and `PokeInteractable` components to realise what the core decides. It has the full feature set: title-bar drag by ray and by near grab, drop-to-dock, a guarded poke pointer, and system keyboard text input.
 
+### `@realitycollective/threejs-uiextensions`
+
+From 0.1.1 (preview), the adapter for plain three.js and WebXR: `UixWindowHost` over `@pmndrs/uikit`, a pointer bridge that resolves a hit-tested ray, a proximity-tested grab or a fingertip touch into the same events every platform raises, WebXR input over `renderer.xr` with no SDK beyond three.js, and a cursor disc at every ray hit. It runs the core's follow, placement, pointer and drag rules, so it matches the IWSDK adapter's windowing, chrome, hand menus, regions, title-bar drag, touch press and focus bias.
+
 ### `@realitycollective/xrblocks-uiextensions`
 
-The experimental adapter for Google XR Blocks and any hand-rolled three.js WebXR scene, binding to plain three.js shapes rather than importing `xrblocks` itself. It matches most of the IWSDK adapter's windowing, chrome, hand menus and regions, but has no title-bar drag of its own yet, so drag, near grab and drop-to-dock are still roadmap items there.
+The experimental adapter for Google XR Blocks, from 0.1.1 (preview) a thin subclass of the three.js adapter that supplies XR Blocks' own select, touch and hover callbacks in place of the WebXR pointer bridge, binding to plain three.js shapes rather than importing `xrblocks` itself. It follows the same core rules as IWSDK and three.js; XR Blocks draws its own cursor with no seam to observe it, which is the one rule this adapter cannot prove.
 
 ### `@realitycollective/native-uiextensions`
 
-From 0.1.1 (preview), the adapter for a native app on OpenXR or visionOS that renders panels itself and installs `globalThis.__rcHost`. It owns no scene graph at all: `NativeWindowHost` builds proxy `UixElement`s over the host's `NativeElementNode` tree, so the same control upgraders run unchanged, and it is tested headless only, against an in-memory fake of the `ui` slice.
+From 0.1.1 (preview), the adapter for a native app on OpenXR or visionOS that renders panels itself and installs `globalThis.__rcHost`. It owns no scene graph at all: `NativeWindowHost` builds proxy `UixElement`s over the host's `NativeElementNode` tree, so the same control upgraders run unchanged. From 0.1.1-preview.1 it runs every rule IWSDK's UI systems run and hands the host a pose per window and a property write per element; the host draws them and reports what each pointer measures. It is tested headless only, against an in-memory fake of the `ui` slice, and ships the host conformance kit a native app runs on its device.
 
 ### `@realitycollective/uix-devtools`
 
@@ -109,7 +113,8 @@ packages/
   iwsdk-uiextensions/        Meta IWSDK adapter (reference implementation)
     src/systems/               ECS systems binding the core to @iwsdk/core
     Examples/                   basic-window, controls, dock-regions (shipped in the npm tarball)
-  xrblocks-uiextensions/    Google XR Blocks / three.js adapter (experimental)
+  threejs-uiextensions/      plain three.js / WebXR adapter: UixWindowHost, ScenePointerBridge, CursorVisual
+  xrblocks-uiextensions/    Google XR Blocks adapter (experimental), a subclass of the three.js host
   native-uiextensions/       native app adapter (OpenXR / visionOS, headless-tested only)
     src/host.ts                 NativeWindowHost: WindowHost + SceneTarget
     src/element.ts               NativeUixElement: proxy UixElement over NativeElementNode

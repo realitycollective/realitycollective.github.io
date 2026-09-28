@@ -13,7 +13,7 @@ description: Why the core stays engine-free, its key decisions, the package brea
 - behaviours are plain state machines with no engine reference
 - the runtime is the one place targeting, gaze, capability negotiation and event dispatch happen, shared by every adapter
 - events are the only outbound pathway; the core never calls into app code
-- physics and ballistics stay with the app, always
+- the host engine owns physics; the core only suspends it for a held object and hands over the release velocity
 
 ## Key decisions
 
@@ -65,11 +65,11 @@ The core asks for a haptic pulse or a sound through a `FeedbackIntent`; it never
 
 **Why:** playing feedback is host- and app-specific, so two opt-in helpers, `routeHapticsToProvider` and `routeAudioToSink`, wire it up rather than the core assuming an implementation.
 
-### 9. Physics and ballistics stay with the app, permanently
+### 9. The held pose: physics stays with the host engine
 
-`grab` only ever reports a pickup and a release; what happens to an object afterwards, such as a thrown ball's flight, is the app's own code.
+From 0.1.1 (preview), a held object has its physics suspended and follows the hand; released, its physics resumes and it leaves the hand with the hand's velocity; given a pose while not held, it is teleported and comes to rest. `TransformPort` carries this as two optional members, `beginHold()` and `endHold(release)`, and `setWorldPose` means follow while held and teleport while not. The `poseOnly` grab calls them; a platform that grabs natively, such as IWSDK with `nativeGrab`, must show the same three behaviours through its own engine. A platform without physics implements neither and nothing changes for it.
 
-**Why:** ballistics is a property of the object, not the interaction layer, and keeping the boundary there is deliberate, not a gap to close later.
+**Why:** before this, the per-frame follow fought the solver, physics never resumed on release and a throw dropped, because the two uses of `setWorldPose` needed opposite behaviour and a port could not tell them apart. The simulation itself is still the engine's: the core never integrates a body. Force-driven and articulated grabs are left for later.
 
 ### 10. Families never reference each other directly
 
@@ -129,7 +129,7 @@ WebXR-Interactions/
 ## What is deliberately not built
 
 - No engine code inside the core, ever, enforced by the architecture test rather than left as a guideline.
-- No physics or ballistics. A `grab` behaviour reports a pickup and a release; what happens next is the app's own code.
+- No physics engine and no physics port. The held pose suspends and resumes the host's own physics; on a host without physics, what happens after a release is the app's own code.
 - No portable scene or content descriptor beyond `InteractionDescriptor`. Meshes, prefabs and placement remain the app's job.
 - No callback surface into app code. Events are the only outbound pathway, by design.
 
