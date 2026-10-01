@@ -13,7 +13,8 @@ description: Why the core stays engine-free, its key decisions, the package brea
 - behaviours are plain state machines with no engine reference
 - the runtime is the one place targeting, gaze, capability negotiation and event dispatch happen, shared by every adapter
 - events are the only outbound pathway; the core never calls into app code
-- the host engine owns physics; the core only suspends it for a held object and hands over the release velocity
+- the platform's engine owns physics behind one `PhysicsFacility` contract; the core only suspends it for a held object and hands over the release velocity
+- one pointer decision per source covers interactables and UI panels, and every binding draws the same ray and cursor from it
 
 ## Key decisions
 
@@ -43,7 +44,7 @@ When live capabilities cannot satisfy a behaviour's declared requirements, the b
 
 ### 5. Provider hints win over the core's own targeting
 
-Target resolution tries a provider hint first, then a proximity touch, then a pointing ray; a provider hint for `"press"` or `"grab"` overrides resolution entirely.
+Target resolution tries a provider hint first, then the active pointer: touch, then grab, then ray. A provider hint for `"press"` or `"grab"` overrides resolution entirely.
 
 **Why:** an engine that already knows what is being touched, such as Meta IWSDK's own tag system, is trusted over the core re-deriving the same answer.
 
@@ -65,11 +66,11 @@ The core asks for a haptic pulse or a sound through a `FeedbackIntent`; it never
 
 **Why:** playing feedback is host- and app-specific, so two opt-in helpers, `routeHapticsToProvider` and `routeAudioToSink`, wire it up rather than the core assuming an implementation.
 
-### 9. The held pose: physics stays with the host engine
+### 9. The held pose: physics stays with the platform's engine
 
-From 0.1.1 (preview), a held object has its physics suspended and follows the hand; released, its physics resumes and it leaves the hand with the hand's velocity; given a pose while not held, it is teleported and comes to rest. `TransformPort` carries this as two optional members, `beginHold()` and `endHold(release)`, and `setWorldPose` means follow while held and teleport while not. The `poseOnly` grab calls them; a platform that grabs natively, such as IWSDK with `nativeGrab`, must show the same three behaviours through its own engine. A platform without physics implements neither and nothing changes for it.
+From 0.1.1, a held object has its physics suspended and follows the hand; released, its physics resumes and it leaves the hand with the hand's velocity; given a pose while not held, it is teleported and comes to rest. `TransformPort` carries this as two optional members, `beginHold()` and `endHold(release)`, and `setWorldPose` means follow while held and teleport while not. The `poseOnly` grab calls them; a platform that grabs natively, such as IWSDK with `nativeGrab`, must show the same three behaviours through its own engine. An object registered with no body implements neither and nothing changes for it.
 
-**Why:** before this, the per-frame follow fought the solver, physics never resumed on release and a throw dropped, because the two uses of `setWorldPose` needed opposite behaviour and a port could not tell them apart. The simulation itself is still the engine's: the core never integrates a body. Force-driven and articulated grabs are left for later.
+**Why:** before this, the per-frame follow fought the solver, physics never resumed on release and a throw dropped, because the two uses of `setWorldPose` needed opposite behaviour and a port could not tell them apart. The simulation itself is still the engine's: the core never integrates a body. Force-driven and articulated grabs are left for later. The core states the throw too: the release velocity is the held object's velocity over the last 1/60 of a second, the physics step IWSDK measures it over, so every platform throws at the same speed from the same input.
 
 ### 10. Families never reference each other directly
 
@@ -83,6 +84,24 @@ The interaction core and its adapters share input contracts with UI Extensions t
 
 **Why:** before 0.1.1 the core only said "current world pose", and the platforms disagreed: three.js, IWSDK and XR Blocks returned the rest pose while Babylon returned the live one, so the same behaviour acted differently by platform. Hinge, slide and dial measure the hand against the rest pose; grab and toss-score scoring read the live pose, because they need to know where the object really is.
 
+### 12. One pointer decision per source, across objects and panels
+
+Per source, the first of touch, grab and ray with a candidate is the active pointer, locked while it presses or grabs. The runtime offers its candidates to a `PointerArbiter` shared with the UI Extensions hosts, so a panel nearer than an object takes the ray and a fingertip on a panel retires the ray over an object.
+
+**Why:** IWSDK runs one pointer stack over every pointer-event object, objects and panels alike. Two decisions made separately would draw two rays for one hand, and the platforms would disagree about which one wins.
+
+### 13. The physics facility: every platform has an engine, named once
+
+`PhysicsFacility` is the contract for a platform's physics, with IWSDK 1.0.0's defaults in `PHYSICS_DEFAULTS`: gravity `[0, -9.81, 0]`, 60 steps per second with interpolation, a dynamic body with no damping and gravity factor 1, and an auto shape with density 1, restitution 0 and friction 0.5. Each binding names a default engine and takes an app's own facility in its place. `physicsFacilityContractCases()` proves each one falls and rests, bounces, holds, throws, teleports and disposes.
+
+**Why:** a held object has to behave the same under Havok, Rapier, Jolt and RealityKit. The core states the semantics once and never integrates a body itself.
+
+### 14. Rules are restated in the core and proved against the reference
+
+A rule IWSDK applies inside its engine, such as the near-pointer distances, the gaze cone or the touch press, is restated as pure logic in the core. Tests drive IWSDK's own classes beside the core function and compare them. A recorded trace of a real session replays through each binding's own ports and is compared with the reference within stated tolerances.
+
+**Why:** a binding that merely resembles the reference drifts. A number that both implementations must produce cannot.
+
 ## Package breakdown
 
 ### `@realitycollective/webxr-interactions`
@@ -91,11 +110,11 @@ Behaviours (`press`, `pulse`, `hinge`, `dial`, `slide`, `grab`, `tossScore`) as 
 
 ### `@realitycollective/threejs-interactions`
 
-The default, standalone adapter. Reads raw WebXR directly: controllers, hand joints, trigger and grip pressure, haptic pulses. Hit-testing through a three.js `Raycaster`, optionally accelerated with `three-mesh-bvh`. The only adapter with a `registerVisual` presence API, and a desktop mouse fallback.
+The default, standalone adapter. Reads raw WebXR directly: controllers, hand joints, eye gaze, trigger and grip pressure, haptic pulses. Hit-testing through a three.js `Raycaster`, optionally accelerated with `three-mesh-bvh`. Physics through Rapier, when the app hands it the module. The only adapter with a `registerVisual` presence API, and a desktop mouse fallback.
 
 ### `@realitycollective/babylon-interactions`
 
-Matches the Babylon API shape in TypeScript without depending on `@babylonjs/core`, so an upstream Babylon release cannot break the install. Reads a `WebXRDefaultExperience`. Not yet exercised against a real Babylon runtime; covered by structural fakes only.
+Matches the Babylon API shape in TypeScript without depending on `@babylonjs/core`, so an upstream Babylon release cannot break the install. Reads a `WebXRDefaultExperience`. Covered by structural fakes, and run by the playground in a real Babylon scene on desktop, with no headset pass. Physics is Havok through a kit of the app's own Babylon constructors, and that facility does not yet pass the shared physics cases against a real Havok plugin.
 
 ### `@realitycollective/iwsdk-interactions`
 
@@ -103,11 +122,11 @@ Connects to Meta's Immersive Web SDK, passing through IWSDK's own `Pressed` and 
 
 ### `@realitycollective/xrblocks-interactions`
 
-Matches the XR Blocks API shape in TypeScript, reusing the three.js adapter's hit-testing since XR Blocks Scripts are ordinary three.js `Object3D`s. Marked experimental; the upstream API may still move.
+Matches the XR Blocks API shape in TypeScript, reusing the three.js adapter's hit-testing since XR Blocks Scripts are ordinary three.js `Object3D`s. Adds haptics, XR Blocks' own grab and a RAPIER held pose. Marked experimental; the upstream API may still move.
 
 ### `@realitycollective/native-interactions`
 
-Reads the `input` and `interactions` slices a native app (OpenXR on Quest, CompositorServices on visionOS) installs on `globalThis.__rcHost`, and maps them onto `InputProvider`, `HitTester` and `TransformPort` with no engine dependency at all. Tested headless against an in-memory fake of both slices; not yet run on real hardware.
+Reads the `input` and `interactions` slices a native app (OpenXR on Quest, CompositorServices on visionOS) installs on `globalThis.__rcHost`, and maps them onto `InputProvider`, `HitTester` and `TransformPort` with no engine dependency at all, plus a `physics` slice for the host's engine. Tested headless against an in-memory fake of the slices, and on a Meta Quest 3 through the host conformance kit and a person's play-through.
 
 ## Code layout
 
@@ -129,7 +148,7 @@ WebXR-Interactions/
 ## What is deliberately not built
 
 - No engine code inside the core, ever, enforced by the architecture test rather than left as a guideline.
-- No physics engine and no physics port. The held pose suspends and resumes the host's own physics; on a host without physics, what happens after a release is the app's own code.
+- No physics engine of the family's own. The physics facility suspends, resumes and teleports the platform's engine and hands it the release velocity; for an object with no body, what happens after a release is the app's own code.
 - No portable scene or content descriptor beyond `InteractionDescriptor`. Meshes, prefabs and placement remain the app's job.
 - No callback surface into app code. Events are the only outbound pathway, by design.
 

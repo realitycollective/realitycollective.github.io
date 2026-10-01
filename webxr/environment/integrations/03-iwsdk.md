@@ -18,11 +18,7 @@ The IWSDK adapter drives Meta's Immersive Web SDK's own environment, lighting an
 npm install @realitycollective/iwsdk-environment
 ```
 
-Peer dependencies are `@iwsdk/core >=0.5.0 <0.6.0`, developed and tested against 0.5.3, and `three >= 0.170.0`, which every IWSDK application already carries. This adapter is the reference implementation of the family: every rule it applies is stated in the core and held on the three.js, XR Blocks and native adapters by the shared conformance suites. The adapter imports three.js classes from `three` directly rather than through `@iwsdk/core`'s star re-export, so it prebundles even when an app excludes `three` from Vite's dependency optimiser to transform its own source.
-
-:::note Preview
-From `0.1.1-preview.2` the peer range is `@iwsdk/core >=1.0.0 <2.0.0`, built and tested against IWSDK 1.0.0.
-:::
+Peer dependencies are `@iwsdk/core >=1.0.0 <2.0.0`, built and tested against IWSDK 1.0.0, and `three >= 0.170.0`, which every IWSDK application already carries. Release `0.1.0` peered on `@iwsdk/core >=0.5.0 <0.6.0`, so an app upgrading from it moves to IWSDK 1.0 as well. This adapter is the reference implementation of the family: every rule it applies is stated in the core and held on the three.js, XR Blocks and native adapters by the shared conformance suites. The adapter imports three.js classes from `three` directly rather than through `@iwsdk/core`'s star re-export, so it prebundles even when an app excludes `three` from Vite's dependency optimiser to transform its own source.
 
 ## Setup
 
@@ -52,7 +48,7 @@ A gradient sky's equator is derived from the same ramp the three.js adapter uses
 
 ## Scenes
 
-From 0.1.1 (preview). `createIWSDKScenes(world, options)` builds each scene with IWSDK's own `SceneJSONImporter`, the loader `world.loadLevel` uses, under a persistent root entity of its own. Scenes therefore stack, preload and unload beside IWSDK's level rather than replacing it. The importer tags what it creates with `LevelTag`; the port removes the tag, so an unrelated `loadLevel` cannot destroy a managed scene. Every entity a scene owns is tracked, because destroying an IWSDK entity does not destroy the entities under it. `instantiate` clones a preloaded glTF from IWSDK's `AssetManager` by default; pass `assets` to resolve names yourself. A hidden scene or node is hidden through IWSDK's `Visibility`, an empty layer mask and `pointerEvents = "none"`, because IWSDK's pointer system reads only that last one. The importer's player attachments and hero camera are not applied; `loadLevel` does that part. See [Scenes](../basics/06-scenes.md).
+From 0.1.1. `createIWSDKScenes(world, options)` builds each scene with IWSDK's own `SceneJSONImporter`, the loader `world.loadLevel` uses, under a persistent root entity of its own. Scenes therefore stack, preload and unload beside IWSDK's level rather than replacing it. The importer tags what it creates with `LevelTag`; the port removes the tag, so an unrelated `loadLevel` cannot destroy a managed scene. Every entity a scene owns is tracked, because destroying an IWSDK entity does not destroy the entities under it. `instantiate` clones a preloaded glTF from IWSDK's `AssetManager` by default; pass `assets` to resolve names yourself. A hidden scene or node is hidden through IWSDK's `Visibility`, an empty layer mask and `pointerEvents = "none"`, because IWSDK's pointer system reads only that last one. The importer's player attachments and hero camera are not applied; `loadLevel` does that part. See [Scenes](../basics/06-scenes.md).
 
 ## What it cannot do on this host, and why
 

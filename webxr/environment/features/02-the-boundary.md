@@ -55,7 +55,7 @@ A port never calls a method to say a feature is unsupported. `applyOcclusion` an
 
 ### 7. Scene management is owned; what is in a scene is not
 
-From 0.1.1 (preview) the family manages scenes: the list, single and additive loads, the stack, preloading, the active scene, persistent nodes and lifecycle events.
+From 0.1.1 the family manages scenes: the list, single and additive loads, the stack, preloading, the active scene, persistent nodes and lifecycle events.
 
 **Why:** it passes the platform facility test. Every host changes scenes, and each does it differently: IWSDK has levels and persistent entities, three.js builds and disposes object graphs, and a native app has no engine in JavaScript at all. The meaning is the same everywhere. The owner placed it here on 25 September 2026. See [Scenes](../basics/06-scenes.md).
 
@@ -63,7 +63,7 @@ The sections below set out each of these decisions in full.
 
 ## What the family owns
 
-Sky, fog, ambient and key lighting are in scope, the same platform facilities named on the [Introduction](../basics/01-introduction.md) page, plus transitions between named presets and passthrough suppression of the sky and fog. Audio is in scope too: a cue registry, bus and master mix, retrigger policy, throttling and voice lifetime. So is scene management, from 0.1.1 (preview): the rules live in `SceneManager`, and each adapter's `ScenePort` builds and destroys content with the host's own loaders. The test behind every decision is whether something is a facility the host exposes, which differs per host, not whether an environment usually has it.
+Sky, fog, ambient and key lighting are in scope, the same platform facilities named on the [Introduction](../basics/01-introduction.md) page, plus transitions between named presets and passthrough suppression of the sky and fog. Audio is in scope too: a cue registry, bus and master mix, retrigger policy, throttling and voice lifetime. So is scene management, from 0.1.1: the rules live in `SceneManager`, and each adapter's `ScenePort` builds and destroys content with the host's own loaders. The test behind every decision is whether something is a facility the host exposes, which differs per host, not whether an environment usually has it.
 
 ## What is deliberately unowned
 

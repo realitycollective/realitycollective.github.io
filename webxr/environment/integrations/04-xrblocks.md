@@ -46,7 +46,7 @@ Sky, fog, lights and image-based lighting come from the three.js adapter it exte
 
 ## Scenes
 
-From 0.1.1 (preview). `createXRBlocksScenes(root, options)` is the three.js scene port outright, under XR Blocks' three.js scene (`xb.core.scene`), the same way `createXRBlocksAudio` is the three.js audio port. XR Blocks adds nothing a scene needs. See the [three.js adapter](./02-threejs.md#scenes) and [Scenes](../basics/06-scenes.md).
+From 0.1.1. `createXRBlocksScenes(root, options)` is the three.js scene port outright, under XR Blocks' three.js scene (`xb.core.scene`), the same way `createXRBlocksAudio` is the three.js audio port. XR Blocks adds nothing a scene needs. See the [three.js adapter](./02-threejs.md#scenes) and [Scenes](../basics/06-scenes.md).
 
 ## What it cannot do on this host, and why
 

@@ -28,11 +28,13 @@ You need:
 
 ## Step 1: Create the IWSDK project
 
-Scaffold a new app with the Meta IWSDK project generator:
+Scaffold a new app with the Meta IWSDK project generator, at IWSDK 1.0.0:
 
 ```bash
-npm create @iwsdk@latest
+npm create @iwsdk@1.0.0
 ```
+
+The version matters. The Reality Collective IWSDK adapters need IWSDK 1.0.0 or later, and IWSDK's own `latest` tag on npm still points at a release candidate, `1.0.0-rc.2`, which the adapters' peer range does not accept. Naming the version scaffolds a 1.0.0 project.
 
 Give the project a name when asked, for example `my-first-scene`, and accept the defaults for the rest of the prompts. Then install and start it:
 
@@ -50,19 +52,19 @@ The generator puts the app entry point in `src/index.ts` (its README says so, an
 
 ## Step 2: Install the UI Extensions adapter
 
-`@realitycollective/iwsdk-uiextensions` is the Meta IWSDK adapter for WebXR UI Extensions, released as `0.1.0` on npm:
+`@realitycollective/iwsdk-uiextensions` is the Meta IWSDK adapter for WebXR UI Extensions, released as `0.1.1` on npm:
 
 ```bash
 npm install @realitycollective/iwsdk-uiextensions
 ```
 
-This one package is everything you need. It re-exports the engine-free core, `@realitycollective/webxr-uiextensions`, in full, along with the input contracts it depends on, so no separate core install is required. It peers on `@iwsdk/core >=0.5.0 <0.6.0` and `three >=0.170.0`, both of which the generated project already has. See [Getting started](/webxr/docs/uiextensions/basics/getting-started) for the full walkthrough of this adapter on its own.
+This one package is everything you need. It re-exports the engine-free core, `@realitycollective/webxr-uiextensions`, in full, so no separate core install is required. It peers on `@iwsdk/core >=1.0.0 <2.0.0` and `three >=0.170.0`, both of which the generated project already has. See [Getting started](/webxr/docs/uiextensions/basics/getting-started) for the full walkthrough of this adapter on its own.
 
 The core never imports an engine: window lifecycle, dock state and drag maths are plain TypeScript. `@realitycollective/iwsdk-uiextensions` is the only place `@iwsdk/core` and `three` appear, translating those decisions onto IWSDK's entity component system.
 
 ## Step 3: Add the panel markup
 
-WebXR UI Extensions panels are written in UIKitML, an HTML and CSS-like markup language for spatial panels. On IWSDK 0.5 a panel's `config` is fetched and parsed at runtime, with no build step, so the file goes straight into `public/ui/`.
+WebXR UI Extensions panels are written in UIKitML, an HTML and CSS-like markup language for spatial panels. IWSDK fetches and parses a panel's `config` at runtime, with no build step, so the file goes straight into `public/ui/`.
 
 Create `public/ui/window.uikitml`:
 

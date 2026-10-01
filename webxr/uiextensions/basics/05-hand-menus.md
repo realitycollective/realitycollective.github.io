@@ -55,7 +55,7 @@ The core reads every hand pose in the WebXR grip frame, the one a controller's g
 
 ## Where there are no hands
 
-A hand-locked window with no tracked hand is hidden, on every platform, as the core's `evaluateHandMenu` decides. Until 0.1.1-preview.1 the XR Blocks host kept such a window shown by body-follow through an optional `HandPoseSource.hasHands()`, a behaviour the IWSDK and native adapters never had; that method is gone, because a platform never decides a behaviour the reference has not. A page that serves a desktop and a headset from one scene opens the menu as an ordinary body-follow window when there is no session to track a hand in, which is how a menu comes to float beside a window on a desktop build, as in the picture above.
+A hand-locked window with no tracked hand is hidden, on every platform, as the core's `evaluateHandMenu` decides. In `0.1.0` the XR Blocks host kept such a window shown by body-follow through an optional `HandPoseSource.hasHands()`, a behaviour the IWSDK and native adapters never had. If you wrote a hand pose source with that method, remove it. It is gone from 0.1.1, because a platform never decides a behaviour the reference has not. A page that serves a desktop and a headset from one scene opens the menu as an ordinary body-follow window when there is no session to track a hand in, which is how a menu comes to float beside a window on a desktop build, as in the picture above.
 
 ## Reference markup
 

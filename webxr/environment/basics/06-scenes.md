@@ -6,7 +6,7 @@ description: Loading, stacking, preloading and unloading scenes inside one XR se
 
 # Scenes
 
-From 0.1.1 (preview).
+From 0.1.1.
 
 A WebXR app cannot change scene by changing page, because navigating away ends the immersive session. So every app with more than one scene manages them inside one session. `SceneManager` does that the same way on every host: your scenes are a list, like Unity's build settings, and your services say "load the court additively" or "go to level 3". Each host builds the content its own best way. On the web that means fetch, build and fade; on a native host it means loading from the app package, and it can be instant if the scene was preloaded.
 

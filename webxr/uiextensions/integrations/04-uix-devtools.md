@@ -34,7 +34,7 @@ Guard the whole call behind a build-time flag such as `import.meta.env.VITE_UIX_
 
 ## Runtime panel sources
 
-IWSDK 0.5 fetches a panel's `config` as text and parses the UIKitML itself, so `compilePanelSource(source)` validates a source against the same parser IWSDK loads and wraps it in a `blob:` URL that `PanelUI.config` can fetch like any file.
+IWSDK fetches a panel's `config` as text and parses the UIKitML itself, so `compilePanelSource(source)` validates a source against the same parser IWSDK loads and wraps it in a `blob:` URL that `PanelUI.config` can fetch like any file.
 
 ```ts
 import { compilePanelSource } from '@realitycollective/uix-devtools';

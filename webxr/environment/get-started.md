@@ -11,7 +11,7 @@ WebXR Environment describes the world around the player, sky, fog, light and sou
 
 ## Overview
 
-Every slot in an environment is a platform facility: something the host engine exposes, and exposes differently. Three.js has `scene.background` and `Fog`; Meta's Immersive Web SDK has `DomeGradient` and `AmbientLightComponent`. The engine-free core, `@realitycollective/webxr-environment`, holds the environment and audio logic as plain data with no dependencies at all; an adapter is the only place an engine name appears, translating that data onto three.js, IWSDK, Google XR Blocks or, from 0.1.1 (preview), a native app. From 0.1.1 (preview) it also manages scenes inside one session: a scene list, single and additive loads, preloading and persistent nodes, with the active scene driving the environment. Content is never here: meshes, prefabs and placement stay with the app, and the scene manager loads a scene without reading it. Sensor-backed features, occlusion, light estimation, planes, meshes, anchors and hit tests, report `unsupported`, `unavailable`, `pending` or `active` rather than failing silently.
+Every slot in an environment is a platform facility: something the host engine exposes, and exposes differently. Three.js has `scene.background` and `Fog`; Meta's Immersive Web SDK has `DomeGradient` and `AmbientLightComponent`. The engine-free core, `@realitycollective/webxr-environment`, holds the environment and audio logic as plain data with no dependencies at all; an adapter is the only place an engine name appears, translating that data onto three.js, IWSDK, Google XR Blocks or, from 0.1.1, a native app. From 0.1.1 it also manages scenes inside one session: a scene list, single and additive loads, preloading and persistent nodes, with the active scene driving the environment. Content is never here: meshes, prefabs and placement stay with the app, and the scene manager loads a scene without reading it. Sensor-backed features, occlusion, light estimation, planes, meshes, anchors and hit tests, report `unsupported`, `unavailable`, `pending` or `active` rather than failing silently.
 
 Start with the [introduction](./basics/01-introduction.md) for the concepts, or jump to the [quickstart](#quickstart) below.
 
@@ -21,24 +21,21 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 - Any modern browser with WebXR for headsets; a passthrough or hit-test feature also needs a session that requests it.
 - TypeScript is recommended but not required; the packages ship type declarations.
 
-Current release: `0.1.0` on npm, resolved by a bare `npm install`.
-
-:::note Preview
-Scene management, the native adapter, the IWSDK 1.0 reference and the platform synchronisation of 28 September 2026 are working extensions in `0.1.1-preview.2`, installed with `@preview`. Previews show where the family is heading and are not supported.
-:::
+Current release: `0.1.1` on npm, resolved by a bare `npm install`.
 
 ### Packages
 
+Every package ships at `0.1.1`.
+
 | Package | What it is | Peers |
 | --- | --- | --- |
-| `@realitycollective/webxr-environment` | Engine-free core: the `EnvironmentDirector`, `WorldSensingDirector` and, from 0.1.1 (preview), `SceneManager`, and the ports an adapter implements, with no dependencies at all | none |
+| `@realitycollective/webxr-environment` | Engine-free core: the `EnvironmentDirector`, `WorldSensingDirector`, `AudioDirector` and `SceneManager`, and the ports an adapter implements, with no dependencies at all | none |
 | `@realitycollective/threejs-environment` | Adapter for plain three.js and raw WebXR | `three >=0.170.0` |
-| `@realitycollective/iwsdk-environment` | Adapter for Meta IWSDK, the reference implementation, driving IWSDK's own environment, lighting and audio machinery | `@iwsdk/core >=0.5.0 <0.6.0`, `three >=0.170.0` |
+| `@realitycollective/iwsdk-environment` | Adapter for Meta IWSDK, the reference implementation, driving IWSDK's own environment, lighting and audio machinery | `@iwsdk/core >=1.0.0 <2.0.0`, `three >=0.170.0` |
 | `@realitycollective/xrblocks-environment` | Experimental adapter for Google XR Blocks, builds on the three.js adapter | `three >=0.170.0`, an XR Blocks build to hand in |
+| `@realitycollective/native-environment` | Adapter for a native app on OpenXR or visionOS that embeds a JavaScript engine such as Hermes | none |
 
-:::note Preview
-In `0.1.1-preview.2` the IWSDK adapter peers on `@iwsdk/core >=1.0.0 <2.0.0`, the core gains `SceneManager`, and `@realitycollective/native-environment` joins, for a native app on OpenXR or visionOS embedding a JavaScript engine such as Hermes, with no peers.
-:::
+If you are upgrading from `0.1.0`, the IWSDK adapter now peers on IWSDK 1.0 instead of `>=0.5.0 <0.6.0`. Scene management and the native adapter are new.
 
 Install exactly one adapter; each one re-exports the core, so you never install the core yourself:
 

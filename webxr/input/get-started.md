@@ -21,15 +21,15 @@ Start with [the input model](./basics/03-the-input-model.md) for the concepts, o
 - A bundler or framework of your choice; each adapter that depends on this package picks its own.
 - TypeScript is recommended but not required; the package ships type declarations.
 
-Current release: `0.1.6` on npm, released on 28 September 2026 and published under the `latest` dist-tag.
+Current release: `0.1.8` on npm, released on 1 October 2026 and published under the `latest` dist-tag. 0.1.7 added [eye gaze and pinch](./features/05-eye-gaze-and-pinch.md); 0.1.8 added [the pointer arbiter and pointer display](./features/04-pointer-arbiter-and-display.md) and states what a hand's select and squeeze report.
 
 ### Packages
 
 | Package | What it is | Peers |
 | --- | --- | --- |
-| `@realitycollective/webxr-input` | The contracts: capabilities, input source snapshots, the `InputProvider` interface, pointer streams and the conformance suite | None. Zero runtime dependencies, enforced by an architecture test. |
+| `@realitycollective/webxr-input` | The contracts: capabilities, input source snapshots, the `InputProvider` interface, pointer streams, eye gaze, the pointer arbiter and pointer display, and the conformance suite | None. Zero runtime dependencies, enforced by an architecture test. |
 
-Every engine adapter in the Interactions family depends on this package and re-exports it in full, so an app never installs it directly.
+Every engine adapter in the Interactions family depends on this package and re-exports it in full, so an app never installs it directly. The UI Extensions family depends on it too, from 0.1.1, so its window hosts can share the pointer arbiter with the Interactions family.
 
 ```sh
 npm install @realitycollective/webxr-input
@@ -40,7 +40,8 @@ Install it directly only to write a new engine adapter, or to write headless too
 ## Use cases
 
 - writing a new engine adapter, so its `InputProvider` implementation and the shared conformance suite agree from the start
-- checking a live session's capabilities before an app or behaviour relies on one, such as haptics or a native grab
+- checking a live session's capabilities before an app or behaviour relies on one, such as haptics, eye gaze or a native grab
+- configuring how the pointer ray and cursor look, once, for every platform
 - tooling or a test suite that needs the input shapes but not an engine, such as a schema generator
 - proving two adapters behave the same way at the input boundary, by running the same conformance suite against both
 
@@ -103,7 +104,7 @@ Questions and problems go to the [Reality Collective Discord](https://discord.gg
 ## Documentation
 
 - [Basics](./basics/01-introduction.md): the concepts, one page per topic
-- [Features](./features/01-pointer-streams-and-velocity.md): pointer streams, evolving the contract, and design and decisions
+- [Features](./features/01-pointer-streams-and-velocity.md): pointer streams, evolving the contract, design and decisions, the pointer arbiter and display, and eye gaze
 - [Host integrations](./integrations/01-core.md): the contracts package as an npm dependency, and which adapters implement it
 - [Examples](./examples/01-conformance-in-practice.md): a worked conformance test
 - [Input overview](/webxr/input)

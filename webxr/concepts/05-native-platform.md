@@ -8,7 +8,7 @@ description: The one __rcHost object a native app installs, the slice each famil
 
 Native is a fifth platform in every family, beside three.js, Babylon.js, Meta IWSDK and Google XR Blocks. A native XR app, over OpenXR on Quest or CompositorServices on visionOS, embeds a JavaScript engine such as Hermes and runs the same client code that runs in a browser. The engine is the app's choice, made when it is built: JavaScriptCore or V8 serve as well, provided the engine supplies the host globals the [service framework's native page](https://serviceframework.realitycollective.net/docs/web/integrations/native) lists. No adapter reads a scene graph here, as the engine adapters do. Instead the app installs one host object, and each family's native package reads its own slice of it.
 
-It is in the current preview of each family that has a native package: service framework `1.0.2-preview.1`, UI Extensions `0.1.1-preview.1`, and Interactions and Environment `0.1.1-preview.2`. Those previews also carry the platform synchronisation of 28 September 2026, which made every native binding as thick as its IWSDK reference; a host written against an earlier preview has changes to absorb, listed on each family's native page.
+It ships in every family that has a native package: service framework `1.0.2`, and UI Extensions, Interactions and Environment `0.1.1`. Each native binding is as thick as its IWSDK reference. A host written against one of the early previews has changes to absorb, listed on each family's native page.
 
 ## The one host object
 
@@ -18,15 +18,16 @@ A native app installs `globalThis.__rcHost` before it evaluates the app bundle. 
 
 | Slice | Family | Package | What it carries |
 | --- | --- | --- | --- |
-| (root) | Service Framework | `service-framework-native` | `onFrame`, session info with the enabled WebXR features, the session lifecycle and a session refusal. Every other family's package plugs into this same object |
+| (root) | Service Framework | `service-framework-native` | `onFrame`, session info with the enabled WebXR features and the supported session modes, the session lifecycle, a session refusal and `recentre`. Every other family's package plugs into this same object |
 | `io` | Service Framework | `service-framework-native` | Byte transport: `fetchBytes` and `gunzip`, read through the core's `HostIO` |
-| `input` | Interactions and Service Framework | `native-interactions`, `service-framework-native` | The input provider slice. The host reports facts, `immersive`, `focused` and `handTracking`, per-frame sources, an optional head pose, hints and haptics, and applies the presence the binding decides per side. The service framework reads only its source-change signal |
+| `input` | Interactions, UI Extensions and Service Framework | `native-interactions`, `native-uiextensions`, `service-framework-native` | The input provider slice. The host reports facts, `immersive`, `focused`, `handTracking` and `eyeTracking`, per-frame sources, an optional head pose and eye-gaze pose, hints and haptics. It applies the presence the binding decides per side, and draws the ray and cursor it is handed per source through `applyPointerVisuals`. The service framework reads only its source-change signal |
 | `interactions` | Interactions | `native-interactions` | Hit testing, the target radius the binding assigns, live and rest pose reads and transform writes, keyed by the target id the app chose when it registered the object, and the held pose: `beginHold` and `endHold` are required |
+| `physics` | Interactions | `native-interactions` | The platform's physics engine behind the core physics facility: gravity, one body per target id, pose and velocity reads and writes, and suspend and resume for a held body. Optional: without it the binding has no physics |
 | `ui` | UI Extensions | `native-uiextensions` | Panels: element trees, property writes and element events. Windows: the pose and depth order the binding computes for each window, its hidden state and dock mode. Pointers: what each ray, touch and grab measures, reported to the binding, which decides every press, click and drag |
 | `environment` | Environment | `native-environment` | Sky, fog, ambient light, key light and image-based lighting |
 | `audio` | Environment | `native-environment` | Cue playback: start, stop, gain and voice-ended reporting |
 | `sensing` | Environment | `native-environment` | World sensing: planes, meshes, anchors and hit tests. Every member on this slice is optional |
-| `scenes` | Environment | `native-environment` | Scene management, from 0.1.1-preview.1: build, show, hide and destroy scenes and nodes, spawn instances and detach persistent nodes, keyed by the app's own strings. A node's key is its target id in `interactions` |
+| `scenes` | Environment | `native-environment` | Scene management, from 0.1.1: build, show, hide and destroy scenes and nodes, spawn instances and detach persistent nodes, keyed by the app's own strings. A node's key is its target id in `interactions` |
 
 Every slice except the root is optional. A native package given a host with its slice missing throws one clear error at construction that names the missing slice, rather than failing on the first call that needed it. `sensing` is the one exception: a host with no `sensing` slice is a supported shape, and the Environment family reports each sensing feature as `unsupported` instead of throwing.
 
@@ -48,7 +49,7 @@ A `src` string, such as a sky texture, an environment map, an audio cue or a pan
 
 ## What runs where
 
-The native app owns rendering, physics and assets. It builds scenes from their `src`, renders them, resolves hit tests and physics against its own scene graph, and answers pose reads and writes for whatever the app registered. The JavaScript side decides which scenes are loaded, which one is active and what survives a change of scene, tells the app when to hold a grabbed body and with what velocity to release it, computes where every window sits, decides every press, click and drag from what the pointers measure, derives every input capability from the facts the host reports, and decides which hand and controller models each side shows. The JavaScript side owns the same engine-free logic it runs everywhere else: behaviours, the window manager and its placement rules, the environment document and the audio director. The native packages copy every tuple they read from a slice or hand to one. A host may therefore reuse its own buffers without reaching an object the app is still holding.
+The native app owns rendering, physics and assets. It builds scenes from their `src`, renders them, resolves hit tests and physics against its own scene graph, and answers pose reads and writes for whatever the app registered. The JavaScript side decides which scenes are loaded, which one is active and what survives a change of scene, tells the app when to hold a grabbed body and with what velocity to release it, computes where every window sits, decides which pointer owns each hand and how its ray and cursor are drawn, decides every press, click and drag from what the pointers measure, derives every input capability from the facts the host reports, and decides which hand and controller models each side shows. The JavaScript side owns the same engine-free logic it runs everywhere else: behaviours, the window manager and its placement rules, the environment document and the audio director. The native packages copy every tuple they read from a slice or hand to one. A host may therefore reuse its own buffers without reaching an object the app is still holding.
 
 ## Host conformance kits
 
@@ -56,17 +57,22 @@ The shared conformance suites prove what a binding hands its platform. A native 
 
 | Package | Kit | Readbacks | Checks |
 | --- | --- | --- | --- |
-| `native-uiextensions` | `nativeUiHostConformanceCases()`, 10 cases | `NativeUiTestHost`: `windowPose`, `windowHidden`, `elementProperties`, `measureTouch` | The host draws a window at the pose it is handed, follows the core rule in `body-follow` and `head-locked`, hides a hand menu with no tracked hand, applies the title, chrome and labels, hides and restores, applies focus bias, and measures a fingertip's signed distance positive in front |
-| `native-interactions` | `nativeInteractionsHostConformanceCases()`, 6 host cases plus the 11 `hitTesterContractCases()` run against the host itself | `NativeInteractionsTestHost`: `placeTarget`, `clearTargets`, `presenceShown`, `lastRelease`, `cursors` | Proximity distance is to the surface, a target with no radius is a 0.1 m sphere, `endHold` receives the release velocity, capabilities follow the live session, presence hides the models only and per side, `"auto"` follows the live modality, and presence never hides the cursors |
-| `native-environment` | `nativeEnvironmentHostConformanceCases()`, 14 cases | `NativeEnvironmentTestHost` and `NativeAudioTestHost`: what was drawn per slot, the sky and fog kinds, shadows, IBL, light estimation, and the voices started and stopped | Every slot is drawn, every sky and fog kind as the kind it was given, passthrough suppresses sky and fog and restores them unchanged, a transition's in-between values arrive, the remembered occlusion spec is applied when passthrough starts, light estimation overlays the lit slots, and the `overlap`, `restart`, `ignore`, `minIntervalMs` and stop policies sound as they should |
+| `native-uiextensions` | `nativeUiHostConformanceCases()`, 13 cases | `NativeUiTestHost`: `windowPose`, `windowHidden`, `elementProperties`, `elementHovered`, `elementHandle`, `scrollPosition`, `keyboardShown`, `measureTouch` | The host draws a window at the pose it is handed, follows the core rule in `body-follow` and `head-locked`, hides a hand menu with no tracked hand, applies the title, chrome and labels, hides and restores, applies focus bias, styles hover and scrolls exactly as told, shows and hides its keyboard when told, and measures a fingertip's signed distance positive in front |
+| `native-interactions` | `nativeInteractionsHostConformanceCases()`, 49 cases: the 17 `hitTesterContractCases()`, the 9 `nearPointerContractCases()` and the 10 `physicsFacilityContractCases()` run against the host itself, plus 13 host cases | `NativeInteractionsTestHost`: `placeTarget`, `placeScenery`, `clearTargets`, `setTargetVisible`, `presenceShown`, `lastRelease`, `cursors`, `pointerVisuals`, `pointerDisplay` | Queries answer registered targets only, never scenery, and proximity is to the surface; a target with no radius is a 0.1 m sphere; `endHold` receives the release velocity, and a registered target with a body is held and released through `physics`; the ray and cursor are drawn exactly as handed, under the app's pointer display; a hand's select is binary and its squeeze 0; capabilities follow the live session; eye gaze takes far targeting and never answers a hidden target; presence hides the models only, per side, follows the live modality on `"auto"`, and never hides the cursors |
+| `native-environment` | `nativeEnvironmentHostConformanceCases()`, 16 cases: 9 environment and 7 audio | `NativeEnvironmentTestHost` and `NativeAudioTestHost`: what was drawn per slot, the sky and fog kinds, shadows, IBL, light estimation, the listener pose, each voice's distance gain, and the voices started and stopped | Every slot is drawn, every sky and fog kind as the kind it was given, passthrough suppresses sky and fog and restores them unchanged, a transition's in-between values arrive, the remembered occlusion spec is applied when passthrough starts, light estimation overlays the lit slots, a positional voice attenuates by the core defaults with the listener at the viewer's head, and the `overlap`, `restart`, `ignore`, `minIntervalMs` and stop policies sound as they should |
 
-Every kit is shown to fail a host with the defect it exists for: one that misplaces a window, drops the sign of a distance, measures proximity to a target's centre, loses a release velocity, draws the wrong presence, flattens every sky to one kind or has no occlusion. A case a host fails on the device is host work, recorded with its reason; a case a host passes is the proof its row in the platform matrix cites.
+Every kit is shown to fail a host with the defect it exists for: one that misplaces a window, drops the sign of a distance, measures proximity to a target's centre, loses a release velocity, draws the wrong presence, flattens every sky to one kind or has no occlusion. A case a host fails on the device is host work, recorded with its reason; a case a host passes is the proof that the platform behaves as the reference does.
 
-## Status
+## Tested on a headset
 
-:::warning
-Every native binding is tested headless against in-memory fakes of `__rcHost`. Only the root slice, the service framework, has run on real hardware: Quest 3 and the visionOS Simulator. Treat every other slice as a preview until its host conformance kit has passed on a device.
-:::
+Every native binding has run on a Quest 3 through the Reality Collective's own native host. Each one passed its conformance cases on the device and a person's play-through. The service framework's slice has also run in the visionOS Simulator.
+
+Two known issues remain on native:
+
+- **Interactions:** grab does not yet work as it should. Pinch works as expected.
+- **UI Extensions:** the system keyboard for a text field opens outside the wearer's view, so text cannot be typed yet. Pressing a field focuses it and asks for the keyboard as it should.
+
+Environment and the service framework have no known issues on native.
 
 ## More information
 

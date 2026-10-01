@@ -30,7 +30,7 @@ All three build the identical playground, the same five windows and two dock reg
 
 ## The ?uix-engine= override
 
-`?uix-engine=desktop`, `?uix-engine=iwsdk` or `?uix-engine=xrblocks` pre-selects a mode on the launch screen, or forces one outright in the showcase. UA (user-agent) sniffing is best-effort by nature; the override is authoritative.
+`?uix-engine=desktop`, `?uix-engine=iwsdk` or `?uix-engine=xrblocks` pre-selects a mode on the launch screen, or forces one outright in the showcase. UA (user-agent) sniffing is best-effort by nature; the override is authoritative. Add `&uix-autostart=1` to skip the launch screen and boot that mode at once.
 
 ## Desktop controls
 

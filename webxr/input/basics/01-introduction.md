@@ -18,7 +18,7 @@ Excellent prior art exists for parts of this problem, and this package reuses so
 
 ## Who consumes it
 
-An engine adapter, such as the three.js adapter, implements the `InputProvider` interface this package defines. The interaction family's core and the UI Extensions family's core (adoption planned) both consume `InputProvider` to drive their behaviour, so one adapter written for an engine feeds both families at once. An application never installs this package directly: every engine adapter re-exports it in full, so depending on the adapter is enough.
+An engine adapter, such as the three.js adapter, implements the `InputProvider` interface this package defines. The Interactions family's core consumes `InputProvider` to drive its behaviour. From 0.1.1 the UI Extensions family's core uses this package's geometry types and shares its [pointer arbiter](../features/04-pointer-arbiter-and-display.md), so a hand points at a panel and at an object the same way. An application never installs this package directly: every Interactions adapter re-exports it in full, so depending on the adapter is enough.
 
 ## Rules of the road
 

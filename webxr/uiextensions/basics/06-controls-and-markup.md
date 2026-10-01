@@ -12,13 +12,9 @@ Beyond windows, the library adds a small set of controls, written as markup and 
 
 A control is declared as a custom element, for example `<uix-stepper>`, and its parts are their own elements too: `<uix-value>`, `<uix-decrement>`, `<uix-increment>`. Parameters stay `data-uix-*` attributes on the control element, for example `data-uix-min="0"`, which land in `userData` camel-cased with `data-` stripped, so `data-uix-min` becomes `uixMin`. This is what makes one markup file portable: the IWSDK parser rejects unknown attributes on a built-in tag but accepts a custom tag declared in a component set, while the three.js and XR Blocks parser accepts a custom tag with no registration at all.
 
-:::warning
-The `@realitycollective/iwsdk-uiextensions` package README and its shipped `Examples/controls` markup still show the older `data-uix="stepper"` attribute form. The current core upgrades custom elements only, as recorded in the CHANGELOG, so use the element form on this page.
-:::
-
 ## Registering the elements on IWSDK
 
-IWSDK 0.5 parses panels with a component schema and rejects any tag it does not know, so a panel that uses a control must tell the parser about the `<uix-*>` elements when the world is created. `uixComponentSet` from `@realitycollective/iwsdk-uiextensions` is that declaration; pass it in `spatialUI.componentSets`. Without it, a panel containing any control fails to parse and never attaches, with no error in the scene.
+IWSDK parses panels with a component schema and rejects any tag it does not know, so a panel that uses a control must tell the parser about the `<uix-*>` elements when the world is created. `uixComponentSet` from `@realitycollective/iwsdk-uiextensions` is that declaration; pass it in `spatialUI.componentSets`. Without it, a panel containing any control fails to parse and never attaches, with no error in the scene.
 
 ```ts
 import { World } from '@iwsdk/core';
@@ -34,6 +30,8 @@ A panel with no controls, only windows and title-bar chrome, needs no component 
 ## The UixElement interface
 
 Every control upgrader works against a small structural interface, `UixElement`: `userData`, `children`, `addEventListener` and `setProperties`. Because the interface is structural rather than tied to one engine's element type, the same upgrader code runs against uikit's element tree on every adapter, including the native one. `walk`, `tagOf`, `findRole` and `findRoles` traverse that tree and locate a control's parts by their tag.
+
+The core publishes the element vocabulary as data. `UIX_CONTROL_TAGS` lists the four control elements, `UIX_ROLE_TAGS` lists the parts they own and `UIX_ELEMENT_TAGS` is both together. A panel loader that validates tags must accept every name on that list as a plain container that keeps its tag and every `data-*` attribute. A loader that rejects or renames one leaves the panel without that control. The IWSDK `uixComponentSet` reads the same list, and so does a native host's build-time or run-time panel loader. The three.js parser accepts any tag and needs no declaration.
 
 `dataAttributeKey()` is the one rule for where a `data-*` attribute lands in `userData`: `data-uix-min` becomes `uixMin`, and an attribute a parser has already camelCased (`dataUixMin`) gives the same key. `tagOf()` reads the `uix-*` custom element name a parser recorded, and returns a name only when it holds a hyphen, so a built-in tag such as `span`, which the three.js and XR Blocks parser records the same way as a custom one, reads as `undefined` everywhere.
 
