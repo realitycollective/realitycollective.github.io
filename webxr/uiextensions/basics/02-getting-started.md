@@ -14,11 +14,7 @@ This page installs one adapter and gets a single window on screen, using the ref
 npm install @realitycollective/iwsdk-uiextensions
 ```
 
-Peer dependencies, the packages your app installs alongside the adapter: `@iwsdk/core >=0.5.0 <0.6.0` and `three >=0.170.0`, which every IWSDK app already has.
-
-:::note Preview
-From `0.1.1-preview.1` the adapter peers on `@iwsdk/core >=1.0.0 <2.0.0`, built and tested against IWSDK 1.0.0.
-:::
+Peer dependencies, the packages your app installs alongside the adapter: `@iwsdk/core >=1.0.0 <2.0.0` and `three >=0.170.0`, which every IWSDK app already has. The adapter is built and tested against IWSDK 1.0.0. Release `0.1.0` peered on `@iwsdk/core >=0.5.0 <0.6.0`, so an app upgrading from it moves to IWSDK 1.0 as well.
 
 ## Describe a window
 
@@ -69,7 +65,7 @@ windows.close('status');
 
 ## What changes on the three.js and XR Blocks adapters
 
-The same options and the same `WindowManager` calls work on `@realitycollective/threejs-uiextensions`, the plain three.js and WebXR adapter from 0.1.1 (preview), and on `@realitycollective/xrblocks-uiextensions`, the experimental Google XR Blocks adapter built on it. Two differences: `createWindow` there returns a handle whose panel is ready immediately, because uikitml interprets the markup synchronously, and the host reports `supportsStandalonePanels: true`, so `createPanel` also works for an unmanaged panel with no window chrome. Everything a window does, following, hand menus, drag, touch press and focus bias, follows the same core rules as on IWSDK. See [the three.js and XR Blocks adapters](../integrations/03-xrblocks-threejs.md).
+The same options and the same `WindowManager` calls work on `@realitycollective/threejs-uiextensions`, the plain three.js and WebXR adapter from 0.1.1, and on `@realitycollective/xrblocks-uiextensions`, the experimental Google XR Blocks adapter built on it. Two differences: `createWindow` there returns a handle whose panel is ready immediately, because uikitml interprets the markup synchronously, and the host reports `supportsStandalonePanels: true`, so `createPanel` also works for an unmanaged panel with no window chrome. Everything a window does, following, hand menus, drag, touch press and focus bias, follows the same core rules as on IWSDK. See [the three.js and XR Blocks adapters](../integrations/03-xrblocks-threejs.md).
 
 ## More information
 

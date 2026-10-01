@@ -45,6 +45,26 @@ audio.play("click", { gain: 1 });
 
 `AudioCue.spatial` says how a positional voice gets quieter with distance: `refDistance` (full volume out to this many metres), `rolloffFactor`, `maxDistance` and `model` (`"linear"`, `"inverse"` or `"exponential"`). Every field is something all three hosts already expose per source, so a footstep and a waterfall need not fall off at the same rate.
 
+### What an omitted field means
+
+A cue may say nothing, or only some of it. The core fills every omitted field from `AUDIO_ATTENUATION_DEFAULTS` before a request reaches a port. The defaults are the Web Audio panner's own: inverse distance, full volume within 1 m, a rolloff factor of 1, a maximum distance of 10 000 m, and a cone of 360 degrees inside and out, so the sound is the same in every direction. Angles are radians. The web hosts inherited these values from their engines without saying so. A native host had no way to know them, so the core now states them and every adapter writes every field rather than leaving it to its engine.
+
+The result is that `AudioVoiceRequest.spatial` is always complete for a positional voice. It is `null` only for a voice heard from the listener, which has no attenuation at all. `resolveAudioSpatial(spatial)` returns a cue's attenuation with the defaults filled in, if you want to read it.
+
+### The distance rule
+
+`distanceGain(distance, spatial)` returns the gain factor, from 0 to 1, that distance alone leaves a positional voice with. The distance is in metres from the listener and is never counted as less than `refDistance`. The curves are Web Audio's.
+
+- `"inverse"` gives `ref / (ref + rolloff * (d - ref))`.
+- `"linear"` gives `1 - rolloff * (d - ref) / (max - ref)`, with `d` capped at `maxDistance` and the result never below 0.
+- `"exponential"` gives `(d / ref)` raised to the power of minus `rolloff`, with `d` capped at `maxDistance`.
+
+A native host applies exactly this rule, and its conformance kit checks the number it produces.
+
+## The listener
+
+The listener is the viewer's head. Its position and orientation are the head pose every frame, so a positional voice is heard from where the viewer is and facing the way the viewer faces. The core states this as `AUDIO_LISTENER_RULE`. On the web it is the `AudioListener` on the camera. On three.js and XR Blocks the adapter does it for you when you pass `head`, the render camera, in the audio options, and parents the listener under it unless it already sits there. IWSDK's audio system parents its own listener to the camera. A native host places its engine's listener at the head pose its `input` slice reports, every frame.
+
 ## Directional cones
 
 A cue's `spatial.cone` says how narrowly it points: `inner` and `outer` are the full width of the cone in radians, and `outsideGain` is how loud it still is outside the outer cone. A play's `facing` says which way this particular sound is turned, as the direction it travels, the same convention `KeyLightSpec.direction` uses. Both are the package's own terms; each adapter converts to the degrees and the forward axis its host wants.
@@ -55,7 +75,7 @@ audio.play("horn", { at: [2, 1, -3], facing: [0, 0, -1] });
 
 ## Knowing when a sound finished (adapter differences)
 
-The three.js adapter holds a play that arrives before its buffer has decoded and starts it once the decode lands, unless it was stopped in the meantime, so the first press of a session is not silent. IWSDK reports only whether a source is playing, never that it has just stopped, so its adapter polls in the tick it is already given and infers the end; a voice that never starts is reaped after a timeout with a warning rather than tracked forever. Neither difference reaches the app: the core has already applied the retrigger policy before either adapter sees a request, so `restart` means the same thing on both engines.
+The three.js adapter holds a play that arrives before its buffer has decoded and starts it once the decode lands, unless it was stopped in the meantime, so the first press of a session is not silent. IWSDK reports only whether a source is playing, never that it has just stopped, so its adapter polls in the tick it is already given and infers the end; a voice that never starts is reaped after a timeout with a warning rather than tracked forever. The core states that rule once, as `AudioStartReaper` with `DEFAULT_AUDIO_START_TIMEOUT_MS`, 10 000 ms, and every adapter's audio port composes it: three.js and native take a `startTimeoutMs` option, and IWSDK uses the shared reaper with its default. A looping voice, and a voice whose cue declares its own `durationMs`, are never reaped this way. A cue that legitimately plays longer than the timeout should declare its `durationMs`. Neither difference reaches the app: the core has already applied the retrigger policy before either adapter sees a request, so `restart` means the same thing on both engines.
 
 ## More information
 

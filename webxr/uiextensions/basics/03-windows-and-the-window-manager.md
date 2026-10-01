@@ -10,7 +10,7 @@ Every window's state lives on the `WindowManager`, and it is the one API app cod
 
 ## The window record
 
-Each open window has a `WindowRecord`: an id, a title, a dock mode, minimised, hidden and dragging flags, a region, chrome and hand-menu placement. `windows.get(id)` always reflects what the scene shows: a title-bar drag that docks a window, or a click on its own pin button, is written back into the record, not just the code path that started the change.
+Each open window has a `WindowRecord`: an id, a title, a dock mode, minimised, hidden and dragging flags, a region, chrome, hand-menu placement and follow settings. `windows.get(id)` always reflects what the scene shows: a title-bar drag that docks a window, or a click on its own pin button, is written back into the record, not just the code path that started the change.
 
 ## The manager as the one window API
 
@@ -33,6 +33,18 @@ The title bar is discovered by well-known element ids: `uix-pin`, `uix-dock`, `u
 
 `togglePin(id)` switches a window between `body-follow`, where it lazily follows the player, and `world-locked`, where it stays placed in space. `pinLabelFor(record)` returns the label the pin button should show next: `UNPIN` while world-locked, `PIN` while following or while the window is being dragged.
 
+## Follow settings
+
+A following window sits at an offset from the viewer, measured in the viewer's yaw frame in metres. The record's `follow` holds that offset, the follow speed, the dead zone in metres and the angle limit in degrees. Unless you say otherwise it holds `DEFAULT_WINDOW_FOLLOW`: an offset of `[0, -0.15, -1.2]`, speed 3, a 0.35 m dead zone and a 30 degree limit. The height of the offset is honoured, so a following window sits 0.15 m below eye level by default.
+
+Pass `follow` when you open the window, or call `windows.setFollow('status', { offset: [0, -0.3, -1] })` later. Any field you leave out keeps its current value. The call takes effect at once while the window is `body-follow`, and is remembered otherwise. It emits `followChanged` with the previous values, and every adapter re-aims the window at the new offset.
+
+A `head-locked` window follows exactly as a `body-follow` window does while an immersive session runs. Only outside a session, on a desktop page, is it pinned to the screen.
+
+## Regions and dock modes
+
+A window in a region is always world-locked, because the region places it. [Docking, regions and hand menus](./04-docking-and-regions.md) states the rule.
+
 ## Minimise
 
 `minimize`, `restore` and `toggleMinimized` collapse and expand the window body while leaving the title bar drawn. `minimizeLabelFor(record)` returns `MIN` when open and `MAX` when minimised, always naming what the next click does.
@@ -43,7 +55,7 @@ The title bar is discovered by well-known element ids: `uix-pin`, `uix-dock`, `u
 
 ## Events the manager emits
 
-Every state change emits a typed event on `windows.events`: `opened`, `closed`, `focused`, `minimized`, `restored`, `hidden`, `shown`, `dockChanged`, `regionChanged`, `returnHome`, `chromeChanged`, `handMenuChanged`, `dragStarted` and `dragEnded`. `close(id)` is the one teardown call: every adapter listens for `closed` and disposes whatever it created for the window.
+Every state change emits a typed event on `windows.events`: `opened`, `closed`, `focused`, `minimized`, `restored`, `hidden`, `shown`, `dockChanged`, `regionChanged`, `returnHome`, `chromeChanged`, `handMenuChanged`, `followChanged`, `dragStarted` and `dragEnded`. `close(id)` is the one teardown call: every adapter listens for `closed` and disposes whatever it created for the window.
 
 ## More information
 

@@ -77,7 +77,7 @@ This family is a single package.
 
 ### `@realitycollective/webxr-input`
 
-`src/index.ts` re-exports six files, each covering a distinct part of the contract.
+`src/index.ts` re-exports eleven files, each covering a distinct part of the contract.
 
 | File | Exports |
 | --- | --- |
@@ -86,8 +86,12 @@ This family is a single package.
 | `source.ts` | `InputSourceSnapshot`, `Handedness`, `InputSourceKind`, `PresenceModality`, `SELECT_PRESS_THRESHOLD`, `SELECT_RELEASE_THRESHOLD` |
 | `provider.ts` | `InputProvider`, `InputHitHint` |
 | `pointer.ts` | `PointerSample`, `PointerInputSource` |
+| `pointer-arbiter.ts` | `PointerArbiter`, `PointerTargetSet`, `PointerTargetKind`, `PointerCandidate`, `PointerOffer`, `PointerDecision`, `PointerVisuals`, `ActivePointerKind`, `NearPointerKind`, `POINTER_PRIORITY`, `pickActivePointer`, `pointerVisualsFor`, `copyPoint` |
+| `pointer-display.ts` | `PointerDisplay`, `PointerDisplayConfig`, `POINTER_DISPLAY_DEFAULTS`, `resolvePointerDisplay`, `PointerDrawing`, `pointerDrawing`, `RayDisplayMode`, `RGBTuple` |
 | `velocity.ts` | `velocityBetween` |
+| `eye-gaze.ts` | `EyeGazeInput`, `EyeGazeFrame`, `EyeGazeOptions`, `EYE_GAZE_DEFAULTS`, `resolveEyeGazeOptions`, `EYE_GAZE_SOURCE_ID`, `EYE_GAZE_MIN_FILTER_DT`, `EyeGazeFilter`, `OneEuroScalar`, `rayFromPose`, `rayPoseFromRay`, `EyeGazeSide` |
 | `contract-cases.ts` | `inputProviderContractCases`, `InputProviderContractCase`, `InputProviderContractDriver` |
+| `memory-input-provider.ts` | `MemoryInputProvider`, `MemoryInputProviderOptions` |
 
 ## Code layout
 

@@ -6,18 +6,18 @@ description: The native host adapter for WebXR Environment, reading the environm
 
 # Native: @realitycollective/native-environment
 
-From 0.1.1 (preview).
+From 0.1.1.
 
 The native adapter drives a native app's own environment, lighting, audio and sensing, for an app that embeds a JavaScript engine such as Hermes over OpenXR or CompositorServices and installs one object, `globalThis.__rcHost`, before the bundle runs. See the [native platform concept](/webxr/docs/concepts/native-platform) for the host contract this adapter reads.
 
 ## What it binds
 
-Four independent slices of `__rcHost`: `environment`, `audio`, `sensing` and, from 0.1.1-preview.1, `scenes`. Nothing here is engine-specific in the way three.js's `Fog` or IWSDK's `DomeGradient` is: every port forwards a spec, a request or a callback across the boundary as plain data, because the director has already resolved the interpolation, the mix and the retrigger policy by the time a port method runs. This package imports no engine at all.
+Four independent slices of `__rcHost`: `environment`, `audio`, `sensing` and `scenes`. Nothing here is engine-specific in the way three.js's `Fog` or IWSDK's `DomeGradient` is: every port forwards a spec, a request or a callback across the boundary as plain data, because the director has already resolved the interpolation, the mix and the retrigger policy by the time a port method runs. This package imports no engine at all.
 
 ## Install
 
 ```bash
-npm install @realitycollective/native-environment@preview
+npm install @realitycollective/native-environment
 ```
 
 This package re-exports the whole core, so a native app installs it and nothing else.
@@ -51,7 +51,7 @@ Every `create*` helper takes the host slice first, matching `createThreeEnvironm
 
 `NativeEnvironmentPort` forwards `applySky`, `applyFog`, `applyAmbient`, `applyKeyLight` and `applyIbl` straight to `__rcHost.environment`'s five required methods; there is nothing to convert, because the director has already resolved which slot changed. `NativeAudioPort` forwards `start` and `stop` to `__rcHost.audio`, and `NativeWorldSensingPort` forwards `setDetection`, `startHitTest`, `stopHitTest`, `createAnchor` and `removeAnchor` to `__rcHost.sensing` one member at a time.
 
-`applyOcclusion` and `applyLightEstimation` on the `environment` slice are optional, as are every member of `load` and `setGain` on `audio` and all five setters on `sensing`. The port grows the matching method on itself only when the host implements it, and leaves the rest off. From 0.1.1-preview.2 every member of the four slices carries a comment stating its units, sign, defaults and the IWSDK member it stands in for: what `null` means for each slot, that the director has already applied suppression, the easings and the policies, the key light's direction convention (the way the light travels), linear colours in 0..1, and that a scenes host reports every node id, repeats included, because the manager fails a load whose ids repeat. A host is built from those comments, not from a guess. `EnvironmentDirector` and `WorldSensingDirector` already check whether their port has the method before calling it and report `unsupported` themselves the moment an app asks for something the port cannot do, so wiring a method here that only re-reports what the director already knows would say the same thing twice. See [The boundary](../features/02-the-boundary.md) for the director side of this rule.
+`applyOcclusion` and `applyLightEstimation` on the `environment` slice are optional, as are every member of `load` and `setGain` on `audio` and all five setters on `sensing`. The port grows the matching method on itself only when the host implements it, and leaves the rest off. Every member of the four slices carries a comment stating its units, sign, defaults and the IWSDK member it stands in for: what `null` means for each slot, that the director has already applied suppression, the easings and the policies, the key light's direction convention (the way the light travels), linear colours in 0..1, and that a scenes host reports every node id, repeats included, because the manager fails a load whose ids repeat. A host is built from those comments, not from a guess. `EnvironmentDirector` and `WorldSensingDirector` already check whether their port has the method before calling it and report `unsupported` themselves the moment an app asks for something the port cannot do, so wiring a method here that only re-reports what the director already knows would say the same thing twice. See [The boundary](../features/02-the-boundary.md) for the director side of this rule.
 
 ## Specs pass through unchanged
 
@@ -59,7 +59,17 @@ A `SkySpec`, an `AudioCue`, an `OcclusionSpec`: every value crossing this bounda
 
 ## Voice endings stay in JavaScript
 
-`AudioVoiceRequest.ended` is a callback the core hands to a port so the port can report a voice finishing, which is backwards from the rule that only listener callbacks passed to an `on*` method cross this boundary. `NativeAudioPort` keeps every voice's `ended` callback in a `Map` keyed by `voiceId`, sends the host a request with `ended` removed (`NativeAudioVoiceRequest`), and runs the kept callback itself once `NativeAudioHost.onVoiceEnded` names that id. `stop` removes a voice's entry from the map before telling the host, so a voice that ends and is stopped in the same tick is only ever reported once. The host is expected to report a voice that fails to start promptly through `onVoiceEnded`; from 0.1.1-preview.2 `NativeAudioPortOptions.startTimeoutMs` (default 10 000 ms) is the backstop that releases such a voice on a host that forgets, through the core's shared `AudioStartReaper`. A cue that legitimately plays longer than the timeout should declare its own `durationMs`.
+`AudioVoiceRequest.ended` is a callback the core hands to a port so the port can report a voice finishing, which is backwards from the rule that only listener callbacks passed to an `on*` method cross this boundary. `NativeAudioPort` keeps every voice's `ended` callback in a `Map` keyed by `voiceId`, sends the host a request with `ended` removed (`NativeAudioVoiceRequest`), and runs the kept callback itself once `NativeAudioHost.onVoiceEnded` names that id. `stop` removes a voice's entry from the map before telling the host, so a voice that ends and is stopped in the same tick is only ever reported once. The host is expected to report a voice that fails to start promptly through `onVoiceEnded`. `NativeAudioPortOptions.startTimeoutMs` (default 10 000 ms) is the backstop that releases such a voice on a host that forgets, through the core's shared `AudioStartReaper`. A cue that legitimately plays longer than the timeout should declare its own `durationMs`.
+
+## Attenuation and the listener
+
+The director hands the host a positional voice with every attenuation field resolved. `NativeAudioHost.start` receives `spatial` complete for a voice with an `at` position, and `null` for a voice heard from the listener, which has no attenuation. The host applies exactly those fields and never its engine's own defaults.
+
+- `model` is the distance curve. For `"inverse"` the voice is at full volume within `refDistance` metres, then falls as `ref / (ref + rolloff * (d - ref))`. `"linear"` and `"exponential"` are Web Audio's.
+- `maxDistance` is the distance in metres past which the voice gets no quieter.
+- `cone.inner` and `cone.outer` are the full cone widths in radians about the voice's `facing`. Inside the inner cone the voice is at full volume, and beyond the outer cone it is at `cone.outsideGain`.
+
+The defaults when a cue says nothing are the core's `AUDIO_ATTENUATION_DEFAULTS`, which are Web Audio's panner defaults. The core's `distanceGain` states the number a correct host produces, and the conformance kit checks it. The listener is the viewer's head. The host places its engine's listener at the head pose the `input` slice reports, position and orientation, every frame. See [Audio](../basics/05-audio.md).
 
 ## Optional members and the world-sensing slice
 
@@ -102,11 +112,11 @@ Each port runs the shared conformance suites: `environmentPortContractCases()` (
 
 ## The host conformance kit
 
-From 0.1.1-preview.2, `nativeEnvironmentHostConformanceCases()` is the kit a native app runs on its device against its real `environment` and `audio` slices, 14 runner-free cases named `environment/<rule>` and `audio/<rule>`. It drives the real core directors over the host and reads back what the host drew and sounded through the `NativeEnvironmentTestHost` and `NativeAudioTestHost` readbacks the app provides in a test build: what was applied per slot, the sky and fog kinds actually drawn, whether the key light's shadow is on, whether materials reflect the IBL, whether light estimation reached the host, and the voices started and stopped. The cases check that every slot is drawn; that every sky kind (solid, gradient, texture) and every fog kind (linear, exponential) is drawn as the kind it was given rather than flattened to one; that passthrough suppresses sky and fog and restores them unchanged; that a transition's in-between values reach the host; that the remembered occlusion spec is applied when passthrough starts; that a key light's `castShadow` turns the host's shadow on and off; that an ibl spec makes materials reflect it and `null` turns that back off; that light estimation, once the host measures something, overlays ambient, key and ibl; and that the `overlap`, `restart`, `ignore`, `minIntervalMs` and stop policies sound as they should. A host that reports light estimation unavailable, or implements neither optional method, is accepted as legitimate; a host with no `applyOcclusion` or no `audio` slice fails the cases that need them, so those gaps show on the device rather than in a review. Against the package's reference fake every case passes, and the kit is shown to fail a host that flattens every sky to one kind or has no occlusion.
+`nativeEnvironmentHostConformanceCases()` is the kit a native app runs on its device against its real `environment` and `audio` slices, 16 runner-free cases named `environment/<rule>` and `audio/<rule>`. Nine are `environment/` cases and seven are `audio/` cases. It drives the real core directors over the host and reads back what the host drew and sounded through the `NativeEnvironmentTestHost` and `NativeAudioTestHost` readbacks the app provides in a test build: what was applied per slot, the sky and fog kinds actually drawn, whether the key light's shadow is on, whether materials reflect the IBL, whether light estimation reached the host, and the voices started and stopped. The cases check that every slot is drawn; that every sky kind (solid, gradient, texture) and every fog kind (linear, exponential) is drawn as the kind it was given rather than flattened to one; that passthrough suppresses sky and fog and restores them unchanged; that a transition's in-between values reach the host; that the remembered occlusion spec is applied when passthrough starts; that a key light's `castShadow` turns the host's shadow on and off; that an ibl spec makes materials reflect it and `null` turns that back off; that light estimation, once the host measures something, overlays ambient, key and ibl; that a positional voice attenuates by the core defaults, inverse from 1 m; that the listener is at the viewer's head; and that the `overlap`, `restart`, `ignore`, `minIntervalMs` and stop policies sound as they should. The attenuation case needs the `voiceDistanceGain` readback and the listener case needs `listenerPose` and a `headPose` in the kit setup. The sky case loads a texture sky from the kit setup's `skySrc`, which defaults to the name `kit://sky.hdr` that the app resolves. The occlusion case clears occlusion and passthrough afterwards, so a second run on the same host starts clean. A host that reports light estimation unavailable, or implements neither optional method, is accepted as legitimate; a host with no `applyOcclusion` or no `audio` slice fails the cases that need them, so those gaps show on the device rather than in a review. Against the package's reference fake every case passes, and the kit is shown to fail a host that flattens every sky to one kind or has no occlusion.
 
-:::warning
-This adapter is tested headless only, against in-memory fakes of the `environment`, `audio`, `sensing` and `scenes` slices. It has not run against a real native host on Quest 3 or the visionOS Simulator; a device run is the native team's step.
-:::
+## Tested on a headset
+
+A native app built with this package passed on a Meta Quest 3 on 1 October 2026, played by a person and checked by its conformance kit. There are no known issues.
 
 ## More information
 

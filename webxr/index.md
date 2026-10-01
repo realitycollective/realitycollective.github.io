@@ -11,10 +11,10 @@ Reality Toolkit WebXR is a set of four TypeScript families for building WebXR ap
 
 | Family | What it owns | Core package | Adapters | Status |
 | --- | --- | --- | --- | --- |
-| WebXR-Input | Input contracts: normalised input sources, capability negotiation, the provider interface | `@realitycollective/webxr-input` | none - consumed through the other families' adapters | Released, `0.1.6` on npm |
-| WebXR-Interactions | Interactivity: interactables, interactors, behaviours, targeting and feedback intents | `@realitycollective/webxr-interactions` | `threejs-interactions`, `babylon-interactions`, `iwsdk-interactions`, `xrblocks-interactions`, `native-interactions` | Released, `0.1.0` on npm |
-| WebXR-UIExtensions | Spatial UI: windows, docking, layout regions and controls | `@realitycollective/webxr-uiextensions` | `iwsdk-uiextensions`, `threejs-uiextensions`, `xrblocks-uiextensions`, `native-uiextensions` | Released, `0.1.0` on npm |
-| WebXR-Environment | The setting around the player - sky, fog, light - and the playback of sound | `@realitycollective/webxr-environment` | `threejs-environment`, `iwsdk-environment`, `xrblocks-environment`, `native-environment` | Released, `0.1.0` on npm |
+| WebXR-Input | Input contracts: normalised input sources, capability negotiation, the provider interface, eye gaze, and the pointer arbiter and display both families share | `@realitycollective/webxr-input` | none - consumed through the other families' adapters | Released, `0.1.8` on npm |
+| WebXR-Interactions | Interactivity: interactables, interactors, behaviours, targeting and feedback intents | `@realitycollective/webxr-interactions` | `threejs-interactions`, `babylon-interactions`, `iwsdk-interactions`, `xrblocks-interactions`, `native-interactions` | Released, `0.1.1` on npm |
+| WebXR-UIExtensions | Spatial UI: windows, docking, layout regions and controls | `@realitycollective/webxr-uiextensions` | `iwsdk-uiextensions`, `threejs-uiextensions`, `xrblocks-uiextensions`, `native-uiextensions` | Released, `0.1.1` on npm |
+| WebXR-Environment | The setting around the player - sky, fog, light - and the playback of sound | `@realitycollective/webxr-environment` | `threejs-environment`, `iwsdk-environment`, `xrblocks-environment`, `native-environment` | Released, `0.1.1` on npm |
 
 A fifth package, the [Service Framework](https://serviceframework.realitycollective.net/), provides dependency injection and the runtime session that these four families build on, and it is documented on its own site.
 
@@ -25,9 +25,9 @@ Each family ships an engine-free core and one adapter per platform, so this tabl
 | Family | three.js | Babylon.js | Meta IWSDK | Google XR Blocks | Native |
 | --- | --- | --- | --- | --- | --- |
 | WebXR-Input | none (contracts only) | none (contracts only) | none (contracts only) | none (contracts only) | none (contracts only) |
-| WebXR-Interactions | yes | yes, not yet run against a real Babylon app | yes, the reference | experimental | yes, untested on hardware |
-| WebXR-UIExtensions | yes, from 0.1.1 (preview); the 0.1.0 release shares the XR Blocks adapter | none, deferred: the panels render with uikit, which draws only into three.js | yes, the reference | experimental | yes, untested on hardware |
-| WebXR-Environment | yes | none, deferred to a later round | yes, the reference | experimental | yes, untested on hardware |
+| WebXR-Interactions | yes | yes, not yet run against a real Babylon app | yes, the reference | experimental | yes, tested on a Quest 3, one known issue |
+| WebXR-UIExtensions | yes, from 0.1.1 | none, deferred: the panels render with uikit, which draws only into three.js | yes, the reference | experimental | yes, tested on a Quest 3, one known issue |
+| WebXR-Environment | yes | none, deferred to a later round | yes, the reference | experimental | yes, tested on a Quest 3 |
 
 ## Install matrix
 
@@ -39,31 +39,22 @@ npm install @realitycollective/threejs-interactions
 npm install @realitycollective/babylon-interactions
 npm install @realitycollective/iwsdk-interactions
 npm install @realitycollective/xrblocks-interactions
+npm install @realitycollective/native-interactions
 
 # WebXR-UIExtensions
 npm install @realitycollective/iwsdk-uiextensions
+npm install @realitycollective/threejs-uiextensions
 npm install @realitycollective/xrblocks-uiextensions
+npm install @realitycollective/native-uiextensions
 
 # WebXR-Environment
 npm install @realitycollective/threejs-environment
 npm install @realitycollective/iwsdk-environment
 npm install @realitycollective/xrblocks-environment
+npm install @realitycollective/native-environment
 ```
 
-:::note Preview
-The native adapters are working extensions in the 0.1.1 previews, installed with the `preview` tag until 0.1.1 is released: UI Extensions `0.1.1-preview.1`, Interactions and Environment `0.1.1-preview.2`. The same previews add scene management to Environment, the held pose for grabbed physics objects to Interactions, a plain three.js binding to UI Extensions, and move the IWSDK reference to IWSDK 1.0. A native app also needs the service framework's native binding, `@realitycollective/service-framework-native`, for frames and sessions; see [Native as a platform](./concepts/05-native-platform.md).
-
-```bash
-# Native apps on OpenXR or visionOS
-npm install @realitycollective/native-interactions@preview
-npm install @realitycollective/native-uiextensions@preview
-npm install @realitycollective/native-environment@preview
-
-# Plain three.js UI Extensions
-npm install @realitycollective/threejs-uiextensions@preview
-```
-
-:::
+The `native-*` packages are for a native app on OpenXR or visionOS. A native app also needs the service framework's native binding, `@realitycollective/service-framework-native`, for frames and sessions; see [Native as a platform](./concepts/05-native-platform.md). The known issues on native are listed there.
 
 ## Live demos
 

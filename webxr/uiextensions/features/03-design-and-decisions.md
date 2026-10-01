@@ -69,7 +69,7 @@ UI Extensions sits above the WebXR-Input contracts and beside the Interactions f
 
 ### 10. Every host tears down the same way
 
-`WindowHost.dispose()` is a required member, from 0.1.1 (preview): close every window the host opened, release every subscription, safe to call twice.
+`WindowHost.dispose()` is a required member, from 0.1.1: close every window the host opened, release every subscription, safe to call twice.
 
 **Why:** no host could be torn down before this, so an app that rebuilt its UI leaked listeners and scene objects on every platform; a required method, checked by the conformance suite, is what keeps a fourth or fifth adapter from repeating that gap.
 
@@ -77,7 +77,7 @@ UI Extensions sits above the WebXR-Input contracts and beside the Interactions f
 
 ### `@realitycollective/webxr-uiextensions`
 
-The engine-free core. Windows (`WindowManager`, `WindowRecord`, `WindowChrome`), docking (`DockMode`, `planTransition`, `togglePinned`), layout regions (`RegionRegistry`, `slotOffset`, `captureDrop`), drag maths (`beginDrag`, `dragPosition`, `HoldToDrag`), hand menus (`evaluateHandMenu`, `handMenuPose`), near touch (`TouchPress`), the control models (`StepperModel`, `ToggleModel`, `ExpandableModel`, `LogModel`, `upgradePanel`), portable scenes (`SceneDescriptor`, `applyScene`, `validateScene`), and the adapter contract itself (`PanelHost`, `WindowHost`, `HeadPoseSource`, `HandPoseSource`, `windowHostContractCases()`).
+The engine-free core. Windows (`WindowManager`, `WindowRecord`, `WindowChrome`), docking (`DockMode`, `planTransition`, `togglePinned`), layout regions (`RegionRegistry`, `slotOffset`, `captureDrop`), drag maths (`beginDrag`, `dragPosition`, `HoldToDrag`), hand menus (`evaluateHandMenu`, `handMenuPose`), near touch (`TouchPress`), the control models (`StepperModel`, `ToggleModel`, `ExpandableModel`, `LogModel`, `upgradePanel`), portable scenes (`SceneDescriptor`, `applyScene`, `validateScene`), the follow, placement, hover, scroll and text-entry rules, panel pointer offers for the shared pointer arbiter, and the adapter contract itself (`PanelHost`, `WindowHost`, `HeadPoseSource`, `HandPoseSource`, `windowHostContractCases()`).
 
 ### `@realitycollective/iwsdk-uiextensions`
 
@@ -85,15 +85,15 @@ The reference adapter for Meta's Immersive Web SDK. Window entities carry IWSDK'
 
 ### `@realitycollective/threejs-uiextensions`
 
-From 0.1.1 (preview), the adapter for plain three.js and WebXR: `UixWindowHost` over `@pmndrs/uikit`, a pointer bridge that resolves a hit-tested ray, a proximity-tested grab or a fingertip touch into the same events every platform raises, WebXR input over `renderer.xr` with no SDK beyond three.js, and a cursor disc at every ray hit. It runs the core's follow, placement, pointer and drag rules, so it matches the IWSDK adapter's windowing, chrome, hand menus, regions, title-bar drag, touch press and focus bias.
+From 0.1.1, the adapter for plain three.js and WebXR: `UixWindowHost` over `@pmndrs/uikit`, a pointer bridge that resolves a hit-tested ray, a proximity-tested grab or a fingertip touch into the same events every platform raises, WebXR input over `renderer.xr` with no SDK beyond three.js, and a cursor disc at every ray hit. It runs the core's follow, placement, pointer and drag rules, so it matches the IWSDK adapter's windowing, chrome, hand menus, regions, title-bar drag, touch press and focus bias.
 
 ### `@realitycollective/xrblocks-uiextensions`
 
-The experimental adapter for Google XR Blocks, from 0.1.1 (preview) a thin subclass of the three.js adapter that supplies XR Blocks' own select, touch and hover callbacks in place of the WebXR pointer bridge, binding to plain three.js shapes rather than importing `xrblocks` itself. It follows the same core rules as IWSDK and three.js; XR Blocks draws its own cursor with no seam to observe it, which is the one rule this adapter cannot prove.
+The experimental adapter for Google XR Blocks, from 0.1.1 a thin subclass of the three.js adapter that supplies XR Blocks' own select, touch and ray input in place of the WebXR pointer bridge, binding to plain three.js shapes rather than importing `xrblocks` itself. It follows the same core rules as IWSDK and three.js; XR Blocks draws its own cursor with no seam to observe it, which is the one rule this adapter cannot prove.
 
 ### `@realitycollective/native-uiextensions`
 
-From 0.1.1 (preview), the adapter for a native app on OpenXR or visionOS that renders panels itself and installs `globalThis.__rcHost`. It owns no scene graph at all: `NativeWindowHost` builds proxy `UixElement`s over the host's `NativeElementNode` tree, so the same control upgraders run unchanged. From 0.1.1-preview.1 it runs every rule IWSDK's UI systems run and hands the host a pose per window and a property write per element; the host draws them and reports what each pointer measures. It is tested headless only, against an in-memory fake of the `ui` slice, and ships the host conformance kit a native app runs on its device.
+From 0.1.1, the adapter for a native app on OpenXR or visionOS that renders panels itself and installs `globalThis.__rcHost`. It owns no scene graph at all: `NativeWindowHost` builds proxy `UixElement`s over the host's `NativeElementNode` tree, so the same control upgraders run unchanged. It runs every rule IWSDK's UI systems run and hands the host a pose per window, a property write per element, hover state, scroll offsets and keyboard requests. The host draws them and reports what each pointer measures. It is tested against an in-memory fake of the `ui` slice, ships the host conformance kit a native app runs on its device, and has passed a play-through on a Meta Quest 3.
 
 ### `@realitycollective/uix-devtools`
 
@@ -115,7 +115,7 @@ packages/
     Examples/                   basic-window, controls, dock-regions (shipped in the npm tarball)
   threejs-uiextensions/      plain three.js / WebXR adapter: UixWindowHost, ScenePointerBridge, CursorVisual
   xrblocks-uiextensions/    Google XR Blocks adapter (experimental), a subclass of the three.js host
-  native-uiextensions/       native app adapter (OpenXR / visionOS, headless-tested only)
+  native-uiextensions/       native app adapter (OpenXR / visionOS)
     src/host.ts                 NativeWindowHost: WindowHost + SceneTarget
     src/element.ts               NativeUixElement: proxy UixElement over NativeElementNode
   uix-devtools/                 dev tooling (dev-only, never shipped)

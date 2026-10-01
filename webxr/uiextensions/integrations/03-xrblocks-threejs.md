@@ -6,25 +6,25 @@ description: The plain three.js and WebXR adapter, and the experimental XR Block
 
 # three.js and Google XR Blocks: @realitycollective/threejs-uiextensions and xrblocks-uiextensions
 
-From 0.1.1 (preview) these are two packages. `@realitycollective/threejs-uiextensions` is the binding for plain three.js and a raw WebXR session. `@realitycollective/xrblocks-uiextensions` is the experimental binding for [Google XR Blocks](https://github.com/google/xrblocks), a thin subclass of the three.js one that supplies XR Blocks' own input callbacks. In the 0.1.0 release there was one package, `xrblocks-uiextensions`, and a plain three.js app installed it; its window host had no XR-Blocks-specific code in it, so that host moved unchanged into the new package and every old import path still resolves through a re-export.
+From 0.1.1 these are two packages. `@realitycollective/threejs-uiextensions` is the binding for plain three.js and a raw WebXR session. `@realitycollective/xrblocks-uiextensions` is the experimental binding for [Google XR Blocks](https://github.com/google/xrblocks), a thin subclass of the three.js one that supplies XR Blocks' own input callbacks. In the 0.1.0 release there was one package, `xrblocks-uiextensions`, and a plain three.js app installed it; its window host had no XR-Blocks-specific code in it, so that host moved unchanged into the new package and every old import path still resolves through a re-export.
 
 ## What they bind
 
 The three.js binding is `UixWindowHost` over `@pmndrs/uikit` and uikitml, in any three.js scene: it takes a `scene` (any `Object3D`) and a `camera`, and imports nothing from `xrblocks`. `ScenePointerBridge` resolves a hit-tested ray, a proximity-tested grab or a fingertip touch into the same `pointerdown`, `pointerup`, `click`, `pointerenter` and `pointerleave` events and `TouchPress` samples every platform raises. `connectWebXrPointerInput` wires that bridge to a live WebXR session through `renderer.xr`: `selectstart`, `selectend`, `squeezestart` and `squeezeend` on three's own controller objects for ray and near grab, and a per-frame `index-finger-tip` joint poll for touch, with no engine SDK beyond three.js itself. `CursorVisual` draws a disc at each ray's current hit on a panel, oriented to the surface, shown only by whether the ray hits something. `webxrRayInputAccess` reads a title-bar ray drag's live ray from three's controller objects, so a drag rides the ray at a fixed grab distance, the same laser-distance math IWSDK and native use.
 
-The XR Blocks binding subclasses that host and passes `XrBlocksPointerBridge` through the host's `pointerBridgeFactory` option. It reads XR Blocks' own callbacks instead of the WebXR session: `onObjectTouching` and `onObjectTouchEnd` for a poke or a controller tip, `onSelectEnd` for a ray click, `onHoverEnter` and `onHoverExit` for hover, and `onSelectStart` on a title bar for a drag. XR Blocks' select and grab callbacks are already edge-triggered, so it needs no press state machine of its own.
+The XR Blocks binding subclasses that host and passes `XrBlocksPointerBridge` through the host's `pointerBridgeFactory` option. It reads XR Blocks' own callbacks instead of the WebXR session: `onObjectTouching` and `onObjectTouchEnd` for a poke or a controller tip, `onSelectEnd` for a ray click, and `onSelectStart` on a title bar for a drag. XR Blocks' select and grab callbacks are already edge-triggered, so it needs no press state machine of its own. Hover is not read from XR Blocks' `onHoverEnter` and `onHoverExit`, which are not per pointer and ignore the shared arbiter. Each frame the bridge raycasts the wired panels along every ray source from `xb.input.getFrame()`, offers the nearest hit as that source's ray candidate and raises `pointerenter` and `pointerleave` for what each source's ray owns. That call exists from XR Blocks 0.20.0, so the host refuses the input of an older XR Blocks once, at construction, naming the version it needs.
 
 ## Install
 
 ```bash
 # plain three.js and WebXR
-npm install @realitycollective/threejs-uiextensions@preview three
+npm install @realitycollective/threejs-uiextensions three
 
 # Google XR Blocks
-npm install @realitycollective/xrblocks-uiextensions@preview three
+npm install @realitycollective/xrblocks-uiextensions three
 ```
 
-Both peer on `three >=0.170.0`. The workspace pins `three` so XR Blocks and these adapters resolve to a single copy; see the package README's note on the `super-three` fork if versions drift apart.
+Both peer on `three >=0.170.0` and depend on `@pmndrs/uikit` `^1.0.76`, `@pmndrs/uikitml` `^0.1.12` and `@realitycollective/webxr-input` `^0.1.8`. The workspace pins `three` so XR Blocks and these adapters resolve to a single copy; see the package README's note on the `super-three` fork if versions drift apart.
 
 ## Setup on plain three.js
 
@@ -72,9 +72,15 @@ class MyScript extends xb.Script {
 
 The three.js half of the same surface as the IWSDK adapter: UIKitML panel hosting, window chrome with opt-in buttons, the `WindowManager`, portable scene descriptors, `onPanelReady`, follow mode, hand menus from a `HandPoseSource`, dock regions, title-bar drag by ray and by grab, touch press, and desktop mouse input through `@pmndrs/pointer-events`. Desktop locomotion through `DesktopControls` (WASD, jump, crouch, sprint) ships in the XR Blocks package. Unlike IWSDK, `supportsStandalonePanels` is `true` here, so `createPanel(config)` works directly for an unmanaged panel with no window chrome.
 
+## One pointer decision with the Interactions family
+
+An app that also uses interactables passes the shared `PointerArbiter` as `pointers`, to `connectUIExtensions` and to `connectWebXrPointerInput` on three.js, and to `connectUIExtensions` and `XrBlocksPointerBridge` on XR Blocks. The host then offers each source's nearest panel before it hovers, presses, squeezes or touches. On three.js that is each ray's hit, each fingertip's panel and each grip's panel, the grip within `PANEL_GRAB_RADIUS` (0.07 m). On XR Blocks it is the touch, grab and ray candidates. A pointer acts on a panel only while it owns its source, so one pointer per hand covers panels and objects, as on IWSDK.
+
+With a shared arbiter the Interactions binding draws every cursor, panel cursors included, and the window host draws none. Without `pointers`, in an app with windows alone, the host owns every source and draws its own cursors. See [the pointer arbiter and display](/webxr/docs/input/features/pointer-arbiter-and-display).
+
 ## Held to the reference
 
-From 0.1.1 (preview) both bindings run the core's rules rather than their own, so they behave as the IWSDK adapter does. Before that preview the XR Blocks host eased its follow with an exponential approach, had no angle limit or snap, did not move a `head-locked` window at all, clicked a ray on intersection, and had no title-bar drag.
+Both bindings run the core's rules rather than their own, so they behave as the IWSDK adapter does. If you used the XR Blocks host in `0.1.0`, note what changed: it used to ease its follow with an exponential approach, had no angle limit or snap, did not move a `head-locked` window at all, clicked a ray on intersection, and had no title-bar drag.
 
 | Rule | How it is applied here |
 | --- | --- |
@@ -82,7 +88,7 @@ From 0.1.1 (preview) both bindings run the core's rules rather than their own, s
 | a following region | IWSDK's `Follower` defaults: speed 1, tolerance 0.4 m, offset `[0, -0.2, -1.4]` |
 | touch press | the core `TouchPress`: press at 2 cm, release at 3 cm, never from behind, one press per front entry, from a fingertip or a controller tip |
 | ray click | on release over the pressed element, never on intersection |
-| hover | `pointerenter` and `pointerleave` under a pointer |
+| hover | the core `HoverTracker`: `pointerenter` and `pointerleave` once per change for each pointer, with an element's hover style held while any pointer is over it |
 | title-bar drag | a ray waits out the window's `dragDelay` (0.3 s); a grab on the title bar drags at once; both billboard while dragging by default, and a drop within a region's snap radius docks the window into it |
 | focus bias | the focused window is drawn 0.02 m nearer per window behind it, every frame, including a docked window |
 | title, controls and defaults | a window with no title is titled with its id, every panel's `data-uix` controls are upgraded (`controls: false` opts out), and the region and hand-menu defaults are the core's |

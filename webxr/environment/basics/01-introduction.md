@@ -18,7 +18,7 @@ Every slot in an environment is a **platform facility**: something the host engi
 
 ## Core and adapter
 
-The **core** package, `@realitycollective/webxr-environment`, holds the environment, audio and scene management logic as plain data, with no 3D engine code and no dependencies at all. An **adapter** translates that plain data onto one host: three.js, IWSDK, Google XR Blocks, or, from 0.1.1 (preview), a native app on OpenXR or visionOS that embeds a JavaScript engine such as Hermes. You install one adapter, and it re-exports the core, so you never install the core yourself.
+The **core** package, `@realitycollective/webxr-environment`, holds the environment, audio and scene management logic as plain data, with no 3D engine code and no dependencies at all. An **adapter** translates that plain data onto one host: three.js, IWSDK, Google XR Blocks, or, from 0.1.1, a native app on OpenXR or visionOS that embeds a JavaScript engine such as Hermes. You install one adapter, and it re-exports the core, so you never install the core yourself.
 
 ## The layering rule
 

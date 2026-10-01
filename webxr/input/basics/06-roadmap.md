@@ -10,11 +10,11 @@ This is a short page, because this package moves slowly by design. See [Evolving
 
 ## In place
 
-`@realitycollective/webxr-input` is released on npm, currently at version 0.1.x, and is consumed by the Interactions family's core today. The capability model, the input source snapshot, the provider interface, pointer streams and the conformance suite are all shipped, along with grip velocity (`linearVelocity`, `angularVelocity`, `velocityBetween`) and the presence capability for showing and hiding the user's own hand and controller visuals. The UI Extensions family's core has planned, but not yet completed, adoption of these pointer and head-pose types in place of its own local duplicates.
+`@realitycollective/webxr-input` is released on npm, currently at version 0.1.x, and is consumed by the Interactions family's core today. The capability model, the input source snapshot, the provider interface, pointer streams and the conformance suite are all shipped, along with grip velocity (`linearVelocity`, `angularVelocity`, `velocityBetween`) and the presence capability for showing and hiding the user's own hand and controller visuals. 0.1.7 added [eye gaze and pinch](../features/05-eye-gaze-and-pinch.md). 0.1.8 added [the pointer arbiter and pointer display](../features/04-pointer-arbiter-and-display.md), which the UI Extensions family's core depends on from its 0.1.1 release.
 
 ## Additive only from here
 
-Future changes to this package add optional fields and new capabilities rather than changing existing ones. Recent releases follow that pattern already: grip velocity, the presence capability and the conformance suite itself all arrived as additions on top of the 0.1.0 shapes, and the snapshot-ownership rule was written into the contract as a clarification enforced by a new conformance case, not a change to an existing one.
+Future changes to this package add optional fields and new capabilities rather than changing existing ones. Recent releases follow that pattern already: grip velocity, the presence capability, the eye-gaze capability, the pointer arbiter and the conformance suite itself all arrived as additions on top of the 0.1.0 shapes, and the snapshot-ownership rule was written into the contract as a clarification enforced by a new conformance case, not a change to an existing one.
 
 ## Not planned
 

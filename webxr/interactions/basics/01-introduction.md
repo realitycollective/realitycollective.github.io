@@ -23,14 +23,14 @@ An **adapter** is the only place an engine name is allowed to appear. It reads t
 ## The layering rule
 
 ```
-app → ONE adapter (threejs | babylon | iwsdk | xrblocks) → core (webxr-interactions) → contracts (webxr-input)
+app → ONE adapter (threejs | babylon | iwsdk | xrblocks | native) → core (webxr-interactions) → contracts (webxr-input)
 ```
 
 Arrows only point down. An app depends on exactly one adapter package, and that adapter re-exports the core, so the app never installs the core itself.
 
 ## When to use this family, and when not
 
-Reach for this family for buttons, levers, dials, sliders, grabbable objects and gaze-driven controls that need to behave the same way across engines. Do not reach for it for scene content or physics. Building meshes, prefabs and scene placement is the app's job, and a thrown object's flight after release is the app's ballistics too. The interaction layer only reports the grab and the release.
+Reach for this family for buttons, levers, dials, sliders, grabbable objects and gaze-driven controls that need to behave the same way across engines. Do not reach for it for scene content or a physics engine of its own. Building meshes, prefabs and scene placement is the app's job. Where an object has a physics body, the platform's engine simulates it, and the interaction layer only suspends it for a hold and hands it the release velocity. An object with no body has no flight after release, so that flight is the app's ballistics.
 
 ## Where this comes from
 

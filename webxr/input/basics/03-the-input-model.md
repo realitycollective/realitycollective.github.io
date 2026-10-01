@@ -10,7 +10,7 @@ Every frame, a provider hands you an array of `InputSourceSnapshot` objects, one
 
 ## Identity fields
 
-`id` is a stable string per session, such as `"left-hand"` or `"right-controller"`, but its exact format is not part of the contract. Never parse it: read `handedness` for the side an input source belongs to instead. `kind` says what kind of physical thing produced the source: `"controller"`, `"hand"`, `"gaze"`, `"pointer2d"` or `"other"`. `handedness` is `"left"`, `"right"` or `"none"`, the last for sources with no side, such as a mouse.
+`id` is a stable string per session, such as `"left-hand"` or `"right-controller"`, but its exact format is not part of the contract. Never parse it: read `handedness` for the side an input source belongs to instead. `kind` says what kind of physical thing produced the source: `"controller"`, `"hand"`, `"gaze"`, `"pointer2d"` or `"other"`. `handedness` is `"left"`, `"right"` or `"none"`, the last for sources with no side, such as a mouse. A provider with eye gaze samples one extra snapshot of kind `"gaze"`, whose `handedness` names the hand that owns its selection; see [Eye gaze and pinch](../features/05-eye-gaze-and-pinch.md).
 
 ## Pose and geometry
 
@@ -20,7 +20,20 @@ Geometry is plain data throughout, with no engine types anywhere: `Vec3Tuple` is
 
 ## Select, squeeze and grab
 
-`select` and `squeeze` are 0 to 1 scalars: the primary action (trigger, pinch strength, mouse button) and the secondary action (grip button). Consumers that need a boolean from a scalar use the shared hysteresis thresholds, `SELECT_PRESS_THRESHOLD` (0.7) and `SELECT_RELEASE_THRESHOLD` (0.3), so a value has to cross a higher bar to register a press than to release one. `nativeGrabbing` is a boolean flag that is true while the engine itself reports this source natively grabbing something, such as an IWSDK grabbable under physics. It is equivalent to a `grab` hint from `sampleHints()`, and a provider supplies one of the two, never both; `sampleHints()` is frame-fresh. `hapticsAvailable` reports whether this specific source can take a haptic pulse; the provider-level `capabilities.haptics` says whether any source can. A `pulse` intensity is 0..1, and a provider clamps it.
+`select` and `squeeze` are 0 to 1 scalars: the primary action and the secondary action. What each reports depends on `kind`, and the contract states it from 0.1.8:
+
+| `kind` | `select` | `squeeze` |
+| --- | --- | --- |
+| `"controller"` | The trigger's analog value, 0 at rest | The grip button's analog value, 0 at rest |
+| `"hand"` | 1 while the runtime reports its pinch gesture, otherwise 0. Never an analog pinch strength. | Always 0 |
+| `"gaze"` | The pinch of the hand that owns the gaze selection | 0 |
+| `"pointer2d"` | 1 while the primary button is down | Not stated by the contract |
+
+A hand's pinch is binary because the runtime already applies its own threshold to the gesture, as the browser's `selectstart` and `selectend` events do. A hand has no squeeze on the web, and its grab is its pinch through `select`. A provider that reported the analog pinch strength, or OpenXR's grasp value as squeeze, would hold a grab open on a relaxed hand. A conformance case checks this rule.
+
+Consumers that need a boolean from a scalar use the shared hysteresis thresholds, `SELECT_PRESS_THRESHOLD` (0.7) and `SELECT_RELEASE_THRESHOLD` (0.3), so a value has to cross a higher bar to register a press than to release one. `nativeGrabbing` is a boolean flag that is true while the engine itself reports this source natively grabbing something, such as an IWSDK grabbable under physics. It is equivalent to a `grab` hint from `sampleHints()`, and a provider supplies one of the two, never both; `sampleHints()` is frame-fresh. `hapticsAvailable` reports whether this specific source can take a haptic pulse; the provider-level `capabilities.haptics` says whether any source can. A `pulse` intensity is 0..1, and a provider clamps it.
+
+`selectorPose` is present only on the eye-gaze snapshot, while a hand's pinch owns its selection: that hand's ray-space pose, which lets a drag started by gaze follow the hand.
 
 ## Velocity
 
@@ -35,4 +48,5 @@ A snapshot, and every tuple inside it, belongs to whoever `sample()` handed it o
 - [Capabilities and negotiation](./04-capabilities.md)
 - [Pointer streams and velocity](../features/01-pointer-streams-and-velocity.md)
 - [Provider conformance](./05-provider-conformance.md)
+- [Eye gaze and pinch](../features/05-eye-gaze-and-pinch.md)
 - [API reference](pathname:///webxr/api/input/)

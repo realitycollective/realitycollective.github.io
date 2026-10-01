@@ -23,7 +23,7 @@ Four values, from `DockMode`:
 
 A window in a region is always world-locked, because the region places it: it cannot also follow the player. This is one rule, held by the core `WindowManager`, not by any adapter. Opening a window with `region` set, or calling `dockTo(id, regionId)` on an already-open window, makes it world-locked whatever `dockMode` was asked for. `dockTo` emits `regionChanged` first, and then, only if the dock mode actually changed, `dockChanged`, so a listener that reacts to both sees them in that order. Setting a follow mode with `setDockMode` or `togglePin` takes a docked window out of its region first, through `undock`, before applying the new mode.
 
-Every adapter lays out the same descriptor the same way because the manager owns this rule rather than each host reimplementing it: from 0.1.1 (preview), the XR Blocks host's own copy of the rule is gone, and the native host sends the native app the manager's resolved dock mode for a new window, not the one the `createWindow` options asked for.
+Every adapter lays out the same descriptor the same way because the manager owns this rule rather than each host reimplementing it: from 0.1.1, the XR Blocks host's own copy of the rule is gone, and the native host sends the native app the manager's resolved dock mode for a new window, not the one the `createWindow` options asked for.
 
 ## Layout regions
 
@@ -35,7 +35,9 @@ A `hand-locked` window is a hand menu: it rides a hand and shows while the palm 
 
 ## Hold-to-drag and near drag
 
-A title-bar press only becomes a drag after being held for a delay, 0.3 seconds by default, so a shorter press stays a click and title-bar buttons never fight the drag gesture. On the IWSDK adapter, a near grab, a controller squeeze, or a hand pinch while the hand is on the title bar, drags at once with no hold delay, because it is already a deliberate gesture. Turn it off with `registerUIExtensions(world, { nearDrag: false })`, leaving the far ray as the only way to move a window.
+A title-bar press only becomes a drag after being held for a delay, 0.3 seconds by default (`DEFAULT_DRAG_DELAY`), so a shorter press stays a click and title-bar buttons never fight the drag gesture. On the IWSDK adapter, a near grab, a controller squeeze, or a hand pinch while the hand is on the title bar, drags at once with no hold delay, because it is already a deliberate gesture. Turn it off with `registerUIExtensions(world, { nearDrag: false })`, leaving the far ray as the only way to move a window.
+
+From 0.1.1 the hold is a per-window option. Set `dragDelay`, in seconds, in the window options to change it for one window, on every adapter. While a window is dragged it turns to face the viewer. Set `billboardWhileDragging` to `false` in the window options to stop that. The focused window is also drawn 0.02 m nearer the viewer for each window behind it, `DEFAULT_FOCUS_BIAS`, so overlapping windows keep their order.
 
 ## More information
 

@@ -21,24 +21,22 @@ Start with the [introduction](./basics/01-introduction.md) for the concepts, or 
 - A bundler of your choice; the demos use Vite.
 - TypeScript is recommended but not required; the packages ship type declarations.
 
-Current release: `0.1.0` on npm, resolved by a bare `npm install`.
-
-:::note Preview
-The three.js binding, the native adapter, the IWSDK 1.0 reference and the platform synchronisation of 28 September 2026 are working extensions in `0.1.1-preview.1`, installed with `@preview`. Previews show where the family is heading and are not supported.
-:::
+Current release: `0.1.1` on npm, resolved by a bare `npm install`.
 
 ### Packages
 
-| Package | What it is | Peers |
+Every package ships at `0.1.1`.
+
+| Package | What it is | Peers and dependencies |
 | --- | --- | --- |
-| `@realitycollective/webxr-uiextensions` | Engine-free core: window manager, dock state, region layout, drag maths, control models and the adapter contract | `@realitycollective/webxr-input` |
-| `@realitycollective/iwsdk-uiextensions` | Meta IWSDK adapter, the reference implementation, with the full feature set | `@iwsdk/core >=0.5.0 <0.6.0`, `three >=0.170.0` |
-| `@realitycollective/xrblocks-uiextensions` | Google XR Blocks and plain three.js adapter, experimental | `three >=0.170.0` |
+| `@realitycollective/webxr-uiextensions` | Engine-free core: window manager, dock state, region layout, drag maths, follow and placement rules, hover, scroll and text entry rules, control models and the adapter contract | depends on `@realitycollective/webxr-input` `^0.1.8` |
+| `@realitycollective/iwsdk-uiextensions` | Meta IWSDK adapter, the reference implementation, with the full feature set | `@iwsdk/core >=1.0.0 <2.0.0`, `three >=0.170.0`; depends on `@pmndrs/handle` `^6.6.16` |
+| `@realitycollective/threejs-uiextensions` | Plain three.js and WebXR adapter, with the same window host, pointer rules and cursor as IWSDK over `@pmndrs/uikit` | `three >=0.170.0`; depends on `@pmndrs/uikit` `^1.0.76` and `@pmndrs/uikitml` `^0.1.12` |
+| `@realitycollective/xrblocks-uiextensions` | Google XR Blocks adapter, experimental: a thin subclass of the three.js adapter that reads XR Blocks' own input callbacks | `three >=0.170.0`; depends on `@pmndrs/uikit` `^1.0.76` and `@pmndrs/uikitml` `^0.1.12` |
+| `@realitycollective/native-uiextensions` | Native adapter, for an OpenXR or visionOS app that embeds a JavaScript engine such as Hermes | none |
 | `@realitycollective/uix-devtools` | Developer-only tooling: an edit-session gate, runtime UIKitML compilation and the `uix-dev` CLI | none; installed as a `devDependency` |
 
-:::note Preview
-In `0.1.1-preview.1` the IWSDK adapter peers on `@iwsdk/core >=1.0.0 <2.0.0`, and two packages join: `@realitycollective/threejs-uiextensions`, the plain three.js and WebXR adapter with the same window host, pointer rules and cursor as IWSDK over `@pmndrs/uikit`, and `@realitycollective/native-uiextensions`, for an OpenXR or visionOS app embedding a JavaScript engine such as Hermes. `xrblocks-uiextensions` becomes a thin subclass of the three.js adapter that reads XR Blocks' own input callbacks.
-:::
+If you are upgrading from `0.1.0`, the IWSDK adapter now peers on IWSDK 1.0 instead of `>=0.5.0 <0.6.0`, and the three.js and native adapters are new.
 
 Each adapter re-exports the whole core, so an app installs one package:
 
@@ -46,14 +44,14 @@ Each adapter re-exports the whole core, so an app installs one package:
 # Meta IWSDK apps (core re-exported)
 npm install @realitycollective/iwsdk-uiextensions
 
-# Plain three.js and WebXR apps (core re-exported), from 0.1.1 (preview)
-npm install @realitycollective/threejs-uiextensions@preview three
+# Plain three.js and WebXR apps (core re-exported), from 0.1.1
+npm install @realitycollective/threejs-uiextensions three
 
 # Google XR Blocks apps (core re-exported, experimental)
 npm install @realitycollective/xrblocks-uiextensions three
 
-# Native apps on OpenXR or visionOS (core re-exported), from 0.1.1 (preview)
-npm install @realitycollective/native-uiextensions@preview
+# Native apps on OpenXR or visionOS (core re-exported), from 0.1.1
+npm install @realitycollective/native-uiextensions
 
 # Writing headless logic, tests, or a new engine adapter
 npm install @realitycollective/webxr-uiextensions

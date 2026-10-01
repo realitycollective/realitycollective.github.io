@@ -1,12 +1,14 @@
 ---
 sidebar_position: 1
 title: Interaction playground
-description: A standalone three.js demo of the full station set, driven from one portable descriptor, runnable on desktop or a headset.
+description: The full station set, driven from one portable descriptor, on IWSDK, three.js, Babylon.js and XR Blocks, runnable on desktop or a headset.
 ---
 
 # Interaction playground
 
 Live: <DemoLink demo="interactions" />
+
+The playground runs the same stations, from the same descriptor and the same pointer display, on IWSDK, three.js, Babylon.js and XR Blocks. A launch screen detects the platform and pre-selects it, and `?engine=iwsdk|threejs|xrblocks|babylon&autostart=1` skips it. A Record button, or the R key, records a trace of what you play: choose the mechanic and the input, play it, press Stop, and a JSON file downloads. The native harness runs the same stations on a native host. Babylon.js shows no description panels, because it has no UI Extensions binding.
 
 Run it locally:
 
